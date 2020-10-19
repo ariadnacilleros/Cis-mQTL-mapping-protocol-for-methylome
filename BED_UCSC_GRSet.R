@@ -19,5 +19,5 @@ chr_vector <- str_remove(df$chr, "chr") #change chr name (e.g. chr1 --> 1)
 df$chr <- chr_vector
 colnames(df) <- c("#Chr", "start", "end", "ID", colnames(df)[5:391]) #define colnames
 
-write.table(x = df, file = "INMA_preprocessed_bed.txt", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(x = df, file = "preprocessed_bed.txt", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
 
