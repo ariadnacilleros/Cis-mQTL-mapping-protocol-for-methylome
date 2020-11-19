@@ -55,13 +55,13 @@ Remove individuals with 0.03 missing markers: \
 Check sex concordance: \
 `plink1.9 --bfile {filename}-ind --check-sex --out {filename}-ind`
 
-Split mothers and rest:\
+Split mothers and rest:
 ```
 plink1.9 --bfile {filename}-ind –keep {text file with mother IDs} --make-bed –out {file}-mothers
 plink1.9 --bfile {filename}-ind --remove {text file with mother IDs} --make-bed --out {file}-nomothers
 ```
 
-Calculate relatedness by IBD: \
+Calculate relatedness by IBD: 
 ```
 plink1.9 --bfile {file}-mothers --genome --make-bed --out {file}-mothers-IBD
 plink1.9 --bfile {file}-nomothers --genome --make-bed --out {file}-nomothers-IBD
@@ -75,17 +75,17 @@ Rscript plot-IBD.R {file}-nomothers-IBD
 Remove individuals PI_HAT > 0.18 w/less genotype:
 -	Open the file with related individual pairs (...fail-IBD-check.txt)
 -	Make a list of all samples involved (PIHAT018.txt)
-Select one sample per pair (with lower genotyping freq.) to remove: \
+Select one sample per pair (with lower genotyping freq.) to remove: 
 ```
 Rscript rm-pihat018.R {file}-fail-IBD-check.txt rmpihat018-mothers.txt
 Rscript rm-pihat018.R {file}-fail-IBD-check.txt rmpihat018-nomothers.txt
 ```
-Remove one from each pair:\
+Remove one from each pair:
 ```
 plink1.9 --bfile {file}-mothers-IBD --remove rmpihat018-mothers.txt --make-bed --out {file}-mothers-rmpihat
 plink1.9 --bfile {file}-nomothers-IBD --remove rmpihat018-nomothers.txt --make-bed --out {file}-nomothers-rmpihat
 ```
-Merge both files again: \
+Merge both files again: 
 ```
 echo {file}-mothers-rmpihat > mergelist2
 echo {file}-nomothers-rmpihat >> mergelist2
@@ -97,6 +97,6 @@ Calculate PCs:\
 Perform PCA:\
 `plink1.9 --bfile merged-cohorts-clean --extract {filename}-clean-prunned.prune.in --pca --out merged-cohorts-clean.PCs`
 
-Plot PCs with individuals information (e.g. sex):
+Plot PCs with individuals information (e.g. sex):\
 `Rscript plot-PCA.R`
 
