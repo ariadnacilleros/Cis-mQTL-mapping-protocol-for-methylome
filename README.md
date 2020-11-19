@@ -193,7 +193,7 @@ Zipp BED file: \
 Index BED file: \
 `tabix -p bed whole_genome_var_sorted.bed.gz`
 
-**Jump to 2.4. Calculate statistical power to filter genotype data**
+***Jump to 2.4. Calculate statistical power to filter genotype data***
 
 ### Step 2.3. Filter samples of genotype data
 Filter by methylation samples: \
@@ -202,9 +202,7 @@ Filter by methylation samples: \
 Obtain samples names for methylome filtering: \
 `bcftools query -l concat-allchr-metfilt.vcf  > samples_imp_vcf.txt`
 
-```diff
-Return to BED_UCSC_GRSet.R
-```
+***Return to BED_UCSC_GRSet.R***
 
 ### Step 2.4. Calculate statistical power to filter genotype data
 Calculate the statistical power of your data and decide the MAF to filter genotype: \
