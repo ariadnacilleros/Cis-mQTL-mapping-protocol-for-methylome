@@ -6,7 +6,7 @@
 
 ### Step 1.1. Pre-imputation quality control
 
-Conversion long format files to PLINK binary format file: 
+Conversion long format files to PLINK binary format file: \
 `plink1.9 --file {filename} --make-bed --out {filename}`
 
 Change rsIDs from SNPs to ‘chr:position’ format: 
