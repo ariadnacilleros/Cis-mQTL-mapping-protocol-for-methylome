@@ -202,7 +202,7 @@ Filter by methylation samples: \
 Obtain samples names for methylome filtering: \
 `bcftools query -l concat-allchr-metfilt.vcf  > samples_imp_vcf.txt`
 
-**Return to BED_UCSC_GRSet.R**
+**Return to BED_UCSC_GRSet.R** \textcolor{red}{red}{red}
 
 ### Step 2.4. Calculate statistical power to filter genotype data
 Calculate the statistical power of your data and decide the MAF to filter genotype: \
