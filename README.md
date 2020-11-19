@@ -100,3 +100,27 @@ Perform PCA:\
 Plot PCs with individuals information (e.g. sex):\
 `Rscript plot-PCA.R`
 
+#### Step 1.1.3. Prepare data for imputation
+```
+for i in {1..23};
+do
+  # Split chromosomes
+  plink1.9 --bfile merged-cohorts-clean --reference-allele Force-Allele1-{filename}.txt  \
+  --make-bed --chr $i --out merged-cohorts-clean-chr$i
+  # Make VCF files per chromosome
+  plink1.9 --bfile merged-cohorts-clean-chr$i --recode vcf --out chr$i
+  # Sort and compress VCF files
+  vcf-sort chr${i}.vcf | bgzip -c > chr$i.vcf.gz ;
+done
+```
+
+### Step 1.2. Impute genotype
+\
+-	Reference Panel: HRC r1. 2016 (GRCh37/hg19)
+-	Array Build: GRCh37/hg19
+-	rsq Filter: off
+-	Phasing: Eagle v2.4 (phased output)
+-	Population: EUR
+-	Mode: Quality Control & Imputation
+We will also check AES 256 encryption. 
+
