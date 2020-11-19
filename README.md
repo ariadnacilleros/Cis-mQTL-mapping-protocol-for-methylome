@@ -27,7 +27,6 @@ Add missing sex using excel sheet: \
 Merge sexual chromosomes: \
 `plink1.9 --bfile {filename} --merge-x no-fail --make-bed --out {filename}-mxy`
 \
-\
 
 #### Step 1.1.1. Filter SNPs
 
