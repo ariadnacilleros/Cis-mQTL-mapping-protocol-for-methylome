@@ -216,3 +216,25 @@ Compress and index VCF:
 bgzip Geno_imp/whole_genome_imp_maf.vcf	
 tabix -p vcf Geno_imp/whole_genome_imp_maf.vcf.gz
 ```
+
+## Step 3. Mapping FastQTL
+Change timestamps from index files: 
+```
+touch whole_genome_var_sorted.bed.gz.tbi
+touch whole_genome_imp_maf.vcf.gz.tbi
+```
+Mapping cis-mQTLs with FastQTL:
+```
+for j in $(seq 1 1000); do fastQTL --vcf Geno_imp/whole_genome_imp_maf.vcf.gz --bed EPIC/whole_genome_var_sorted.bed.gz --cov Covariates/COV.txt --permute 1000 10000 --seed 123456789 --out permutations.imp.${j}.txt.gz --chunk $j 1000;done
+```
+## Extra step: 
+Create file and write inside the name of the CpGs or SNPs: \
+`nano file.exc`
+Run FastQTL for chunk 807 excluding CpGs: 
+```
+fastQTL --vcf  whole_genome_imp_maf.vcf.gz  --bed whole_genome_var_sorted.bed.gz --cov COV.txt --permute 1000 10000 --seed 123456789 --out permutations.imp.807.txt.gz --chunk 807 1000 --exclude-phenotypes file.exc
+```
+Run FastQTL for chunk 807 excluding SNPs: 
+```
+fastQTL --vcf  whole_genome_imp_maf.vcf.gz  --bed whole_genome_var_sorted.bed.gz --cov COV.txt --permute 1000 10000 --seed 123456789 --out permutations.imp.807.txt.gz --chunk 807 1000 --exclude-sites file.exc
+```
