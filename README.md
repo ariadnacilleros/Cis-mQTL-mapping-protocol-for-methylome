@@ -115,12 +115,60 @@ done
 ```
 
 ### Step 1.2. Impute genotype
-\
 -	Reference Panel: HRC r1. 2016 (GRCh37/hg19)
 -	Array Build: GRCh37/hg19
 -	rsq Filter: off
 -	Phasing: Eagle v2.4 (phased output)
 -	Population: EUR
--	Mode: Quality Control & Imputation
+-	Mode: Quality Control & Imputation \
 We will also check AES 256 encryption. 
 
+### Step 1.3. Post-imputation quality control
+To download the imputed genotype data from the server, use the commands indicated in the website from it (e.g.  curl -sL https://imputationserver.sph.umich.edu/get/...). \
+Decompress downloaded folders with the corresponding password (email):
+```
+for i in {1..22}; do unzip -P 'PASSWORD' chr_${i}; done
+unzip -P 'PASSWORD' chr_X
+```
+Decompress info files: 
+```
+for i in {1..22}; do bgzip -d chr${i}.info.gz; done
+bgzip -d chrX.info.gz
+```
+Execute Will Rayner’s post-imputation QC: 
+```
+perl vcfparse.pl -d {directory path with imputed VCF files} -o {output directory name}
+perl ic.pl -d {output directory from vcfparse} -r HRC.r1-1.GRCh37.wgs.mac5.sites.tab -o {output directory name}
+```
+Filter by Rsq chromosomes from 1 to 22: 
+```
+for i in {1..22};
+do
+wc -l chr${i}.info
+awk '{if($7 > 0.9) {print $1}}' chr${i}.info | tail -n +2 >filt${i}.snps
+wc -l filt${i}.snps
+vcftools --gzvcf  chr${i}.dose.vcf.gz --snps filt${i}.snps --recode --out chr-filtered-${i} &
+done
+```
+Filter by Rsq chromosome X:
+```
+i=X
+wc -l chr${i}.info
+awk '{if($7 > 0.9) {print $1}}' chr${i}.info | tail -n +2 > filt${i}.snps
+wc -l filt${i}.snps
+vcftools --gzvcf chr${i}.dose.vcf.gz --snps filt${i}.snps --recode --out chr-filtered-${i}
+```
+Concatenate VCF files into one file: 
+```
+for i in {1..22};
+do
+echo chr-filtered-${i}.recode.vcf >> tmp.concat
+done
+echo chr-filtered-X.recode.vcf >> tmp.concat
+```
+Convert final file into VCF: \
+`bcftools concat -f tmp.concat -o concat-allchr.vcf`
+
+### Step 1.4. Prepare covariates file for FastQTL mapping
+In this case our covariate for this analysis is the sex of the samples, and as we said, we took it from an excel sample sheet. Into the following R script you will see the commands that we used, but depending in you input, they could change, but the output text file should have the same format. \
+`covariates.R`
