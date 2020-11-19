@@ -10,7 +10,7 @@ Conversion long format files to PLINK binary format file: \
 `plink1.9 --file {filename} --make-bed --out {filename}`
 
 Change rsIDs from SNPs to ‘chr:position’ format: \
-`Rscript change-rsid.R`
+[change-rsid.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/change-rsid.R)
 
 Calculate frequencies: \
 `plink1.9 --bfile {filename} --freq --out {filename}`
