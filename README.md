@@ -180,11 +180,14 @@ Alexandra Binder’s R package to be defined.
 
 ### Step 2.2. Prepare BED file for FastQTL mapping
 In the next R script, you will find the commands used for us to obtain the final text file filtered with all the annotation data of the CpGs and the samples, to use them as examples or guidelines: \
-`BED_UCSC_GRSet.R`
+`BED_UCSC_GRSet.R` 
+
 Sort BED file: \
-`(head -n1 whole_genome_imp_var_bed.txt && sort -k1,1V -k2,2n -k3,3n <(tail -n+2 whole_genome_imp_var_bed.txt)) > whole_genome_var_sorted.bed`
+`(head -n1 whole_genome_imp_var_bed.txt && sort -k1,1V -k2,2n -k3,3n <(tail -n+2 whole_genome_imp_var_bed.txt)) > whole_genome_var_sorted.bed` 
+
 Zipp BED file: \
-`bgzip whole_genome_var_sorted.bed`
+`bgzip whole_genome_var_sorted.bed` 
+
 Index BED file: \
 `tabix -p bed whole_genome_var_sorted.bed.gz`
 **Jump to 2.4. Calculate statistical power to filter genotype data**
@@ -192,15 +195,19 @@ Index BED file: \
 ### Step 2.3. Filter samples of genotype data
 Filter by methylation samples: \
 `bcftools view -S IID_methylome.txt --force-samples concat-allchr.vcf -o concat-allchr-metfilt.vcf`
+
 Obtain samples names for methylome filtering: \
 `bcftools query -l concat-allchr-metfilt.vcf  > samples_imp_vcf.txt`
+
 **Return to BED_UCSC_GRSet.R**
 
 ### Step 2.4. Calculate statistical power to filter genotype data
-Calculate the statistical power of your data and decide the MAF to filter genotype: 
+Calculate the statistical power of your data and decide the MAF to filter genotype: \
 `power.R`
-Filter VCF by the MAF selected by you from the power.pdf plot. For example, in our case we choose 8% of MAF: 
+
+Filter VCF by the MAF selected by you from the power.pdf plot. For example, in our case we choose 8% of MAF: \
 `plink2 --vcf concat-allchr-metfilt.vcf --maf 0.08 --recode vcf --out whole_genome_imp_maf`
+
 Compress and index VCF: 
 ```
 bgzip Geno_imp/whole_genome_imp_maf.vcf	
