@@ -121,6 +121,7 @@ done
 -	Phasing: Eagle v2.4 (phased output)
 -	Population: EUR
 -	Mode: Quality Control & Imputation \
+
 We will also check AES 256 encryption. 
 
 ### Step 1.3. Post-imputation quality control
