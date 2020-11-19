@@ -22,7 +22,7 @@ Execute Will Rayner’s bash script output: \
 `bash Run-plink.sh`
 
 Add missing sex using excel sheet: \
-`Rscript add-sex.R`
+[add-sex.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/add-sex.R)
 
 Merge sexual chromosomes: \
 `plink1.9 --bfile {filename} --merge-x no-fail --make-bed --out {filename}-mxy` 
@@ -44,7 +44,7 @@ Calculate heterozygosity: \
 `plink1.9 --bfile {file}-marker --het`
 
 Plot missing call rate vs heterozygosity and subset individuals with > ± 4 x standard deviation (SD): \
-`RScript imiss-vs-het.R` 
+[imiss-vs-het.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/imiss-vs-het.R) 
 
 Remove selected individuals (> ± 4 x SD): \
 `plink1.9 --bfile {filename}-marker --remove filter-het.txt --make-bed --out {filename}-rmhet` 
@@ -114,7 +114,7 @@ do
 done
 ```
 
-### Step 1.2. Impute genotype
+### Step 1.2. Impute genotype in [Michigan Imputation Server](https://imputationserver.sph.umich.edu/index.html#!)
 -	Reference Panel: HRC r1. 2016 (GRCh37/hg19)
 -	Array Build: GRCh37/hg19
 -	rsq Filter: off
@@ -172,7 +172,7 @@ Convert final file into VCF: \
 
 ### Step 1.4. Prepare covariates file for FastQTL mapping
 In this case our covariate for this analysis is the sex of the samples, and as we said, we took it from an excel sample sheet. Into the following R script you will see the commands that we used, but depending in you input, they could change, but the output text file should have the same format. \
-`covariates.R`
+[covariates.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/covariates.R)
 
 ## Step 2. Methylome data quality control
 ### Step 2.1. Betas quality control 
@@ -217,7 +217,7 @@ bgzip Geno_imp/whole_genome_imp_maf.vcf
 tabix -p vcf Geno_imp/whole_genome_imp_maf.vcf.gz
 ```
 
-## Step 3. Mapping FastQTL
+## Step 3. Mapping [FastQTL](http://fastqtl.sourceforge.net/)
 Change timestamps from index files: 
 ```
 touch whole_genome_var_sorted.bed.gz.tbi
