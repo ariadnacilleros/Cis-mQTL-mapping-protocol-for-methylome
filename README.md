@@ -27,8 +27,6 @@ Add missing sex using excel sheet: \
 Merge sexual chromosomes: \
 `plink1.9 --bfile {filename} --merge-x no-fail --make-bed --out {filename}-mxy` 
 
-\
-
 #### Step 1.1.1. Filter SNPs
 
 Calculate frequencies: \
@@ -40,4 +38,65 @@ Calculate missing call rate: \
 Remove markers by MAF/geno (missing call rate)/HWE thresholds: \
 `plink2 --bfile {filename}-mxy --geno 0.05 --hwe 1e-06 --maf 0.01 --make-bed --out {filename}-marker`
 
+#### Step 1.1.2. Filter samples
+
+Calculate heterozygosity: \
+`plink1.9 --bfile {file}-marker --het`
+
+Plot missing call rate vs heterozygosity and subset individuals with > ± 4 x standard deviation (SD): \
+`RScript imiss-vs-het.R` 
+
+Remove selected individuals (> ± 4 x SD): \
+`plink1.9 --bfile {filename}-marker --remove filter-het.txt --make-bed --out {filename}-rmhet` 
+
+Remove individuals with 0.03 missing markers: \
+`plink1.9 --bfile {filename}-rmhet --mind 0.03 --make-bed --out {filename}-ind`
+
+Check sex concordance: \
+`plink1.9 --bfile {filename}-ind --check-sex --out {filename}-ind`
+
+Split mothers and rest:\
+```
+plink1.9 --bfile {filename}-ind –keep {text file with mother IDs} --make-bed –out {file}-mothers
+plink1.9 --bfile {filename}-ind --remove {text file with mother IDs} --make-bed --out {file}-nomothers
+```
+
+Calculate relatedness by IBD: \
+```
+plink1.9 --bfile {file}-mothers --genome --make-bed --out {file}-mothers-IBD
+plink1.9 --bfile {file}-nomothers --genome --make-bed --out {file}-nomothers-IBD
+```
+
+Plot IBD values and subset individuals with PI_HAT > 0.18:
+```
+Rscript plot-IBD.R {file}-mothers-IBD
+Rscript plot-IBD.R {file}-nomothers-IBD
+```
+Remove individuals PI_HAT > 0.18 w/less genotype:
+-	Open the file with related individual pairs (...fail-IBD-check.txt)
+-	Make a list of all samples involved (PIHAT018.txt)
+Select one sample per pair (with lower genotyping freq.) to remove: \
+```
+Rscript rm-pihat018.R {file}-fail-IBD-check.txt rmpihat018-mothers.txt
+Rscript rm-pihat018.R {file}-fail-IBD-check.txt rmpihat018-nomothers.txt
+```
+Remove one from each pair:\
+```
+plink1.9 --bfile {file}-mothers-IBD --remove rmpihat018-mothers.txt --make-bed --out {file}-mothers-rmpihat
+plink1.9 --bfile {file}-nomothers-IBD --remove rmpihat018-nomothers.txt --make-bed --out {file}-nomothers-rmpihat
+```
+Merge both files again: \
+```
+echo {file}-mothers-rmpihat > mergelist2
+echo {file}-nomothers-rmpihat >> mergelist2
+plink1.9 --merge-list mergelist2 –out merged-cohorts-clean
+```
+Calculate PCs:\
+`plink1.9 --bfile merged-cohorts-clean --indep-pairwise 50 5 0.2 --out merged-cohorts-clean-prunned`
+
+Perform PCA:\
+`plink1.9 --bfile merged-cohorts-clean --extract {filename}-clean-prunned.prune.in --pca --out merged-cohorts-clean.PCs`
+
+Plot PCs with individuals information (e.g. sex):
+`Rscript plot-PCA.R`
 
