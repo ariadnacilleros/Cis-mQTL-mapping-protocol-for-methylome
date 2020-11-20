@@ -2,7 +2,9 @@
 
 (Introduction)
 
+<p align="center">
 <img src="https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/Imp_scheme_vertical.jpg" width="500">
+</p>
 
 ## Step 1. Genotype data quality control 
 
