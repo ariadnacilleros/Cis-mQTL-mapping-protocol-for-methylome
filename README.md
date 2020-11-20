@@ -74,7 +74,8 @@ Rscript plot-IBD.R {file}-nomothers-IBD
 ```
 Remove individuals PI_HAT > 0.18 w/less genotype:
 -	Open the file with related individual pairs (...fail-IBD-check.txt)
--	Make a list of all samples involved (PIHAT018.txt) \
+-	Make a list of all samples involved (PIHAT018.txt) 
+
 Select one sample per pair (with lower genotyping freq.) to remove with [rm-pihat018.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/rm-pihat018.R): 
 ```
 Rscript rm-pihat018.R {file}-fail-IBD-check.txt {filename}.imiss rmpihat018-mothers.txt
