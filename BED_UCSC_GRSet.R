@@ -70,7 +70,7 @@ for (i in 5:391){
 colnames(df) <- c("#Chr", "start", "end", "ID", names_vector)
 
 
-#Jump to step 2.3.Filter samples of genotype data(Wiki), and filter genotype data and obtain the name of the samples
+#Jump to step 2.3.Filter samples of genotype data, and filter genotype data and obtain the name of the samples
 
 
 ##C.Filter samples and SNPs
