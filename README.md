@@ -2,7 +2,7 @@
 
 (Introduction)
 
-![](Imp_scheme_vertical.jpg){:height="700px" width="400px"}
+![](Imp_scheme_vertical.jpg){:class="img-responsive"}
 
 
 ## Step 1. Genotype data quality control 
