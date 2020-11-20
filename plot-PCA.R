@@ -17,7 +17,7 @@ recode2 <- recode(df1$ethnic_origin, '2' = 'Asiatic', '3' = 'Black', '4' = 'Arab
                   '13' = 'Both parents white, but at least one not European')
 df1[,ethnic_origin:=recode2]
 
-pcs <- fread('PIHAT-clean.PCs.eigenvec') #upload PCs data
+pcs <- fread('clean-PIHAT-prunned.eigenvec') #upload PCs data
 names(pcs) <- c('FID', 'IID', paste0('PC', 1:20)) #change colum names
 
 p <- merge(df1, pcs, all.y = T) #merge both dataframes: pheno data + PCs
