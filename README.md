@@ -2,7 +2,7 @@
 
 (Introduction)
 
-![](Imp_scheme_vertical.jpg | width=100)
+![](Imp_scheme_vertical.jpg = 250x250)
 
 
 ## Step 1. Genotype data quality control 
