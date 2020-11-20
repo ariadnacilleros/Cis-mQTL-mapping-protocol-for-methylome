@@ -212,7 +212,17 @@ Mapping cis-mQTLs with FastQTL:
 for j in $(seq 1 1000); do fastQTL --vcf Geno_imp/whole_genome_imp_maf.vcf.gz --bed EPIC/whole_genome_var_sorted.bed.gz --cov Covariates/COV.txt --permute 1000 10000 --seed 123456789 --out permutations.imp.${j}.txt.gz --chunk $j 1000;done
 ```
 ## Extra step: 
-Create file and write inside the name of the CpGs or SNPs: \
+In the case of having an error in one chunk due to low variable CpGs and/or SNPs like that: 
+```
+  * Number of variants in cis = 28499
+  * Best correlation = 0.5440
+  * Number of permutations = 53 / 1000
+gsl: beta.c:44: ERROR: domain error
+Default GSL error handler invoked.
+Aborted
+```
+
+Create file and write inside the name of the problematic CpGs or SNPs: \
 `nano file.exc`
 
 Run FastQTL for chunk 807 excluding CpGs: 
