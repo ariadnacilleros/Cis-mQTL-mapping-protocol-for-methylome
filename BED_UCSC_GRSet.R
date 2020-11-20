@@ -1,10 +1,12 @@
-setwd("")#set your wd
 #Steps to perform before: 
 #1)Load .IDAT files
 #2)Obtain betas 
 #3)Quality control
 #For these steps you can use minfi Package for example.
 #Output must be a GenomicRatioSet object!
+
+#This script will help you to annotate the CpGs, filter them, filter the samples and obtain the correct format
+# for FastQTL. Once you have the total number of samples, line 73 (approx), you will need to perform the Step 2.3. of the protocol before continuing. 
 
 library(minfi)
 library(stringr)
