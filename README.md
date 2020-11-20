@@ -9,8 +9,8 @@
 Conversion long format files to PLINK binary format file: \
 `plink1.9 --file {filename} --make-bed --out {filename}`
 
-Change rsIDs from SNPs to ‘chr:position’ format: \
-[change-rsid.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/change-rsid.R)
+Change rsIDs from SNPs to ‘chr:position’ format with [change-rsid.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/change-rsid.R): \
+`Rscript change-rsid.R {filename}.bim`
 
 Calculate frequencies: \
 `plink1.9 --bfile {filename} --freq --out {filename}`
@@ -21,7 +21,7 @@ Execute Will Rayner’s script: \
 Execute Will Rayner’s bash script output: \
 `bash Run-plink.sh`
 
-Add missing sex using excel sheet: \
+Add missing sex using an excel sheet: \
 [add-sex.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/add-sex.R)
 
 Merge sexual chromosomes: \
@@ -43,8 +43,8 @@ Remove markers by MAF/geno (missing call rate)/HWE thresholds: \
 Calculate heterozygosity: \
 `plink1.9 --bfile {file}-marker --het`
 
-Plot missing call rate vs heterozygosity and subset individuals with > ± 4 x standard deviation (SD): \
-[imiss-vs-het.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/imiss-vs-het.R) 
+Plot missing call rate vs heterozygosity and subset individuals with > ± 4 x standard deviation (SD) using [imiss-vs-het.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/imiss-vs-het.R): \
+`Rscript imiss-vs-het.R {filename}.imiss {filename}.het`
 
 Remove selected individuals (> ± 4 x SD): \
 `plink1.9 --bfile {filename}-marker --remove filter-het.txt --make-bed --out {filename}-rmhet` 
@@ -67,7 +67,7 @@ plink1.9 --bfile {file}-mothers --genome --make-bed --out {file}-mothers-IBD
 plink1.9 --bfile {file}-nomothers --genome --make-bed --out {file}-nomothers-IBD
 ```
 
-Plot IBD values and subset individuals with PI_HAT > 0.18:
+Plot IBD values and subset individuals with PI_HAT > 0.18 with [plot-IBD.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/plot-IBD.R):
 ```
 Rscript plot-IBD.R {file}-mothers-IBD
 Rscript plot-IBD.R {file}-nomothers-IBD
@@ -77,8 +77,8 @@ Remove individuals PI_HAT > 0.18 w/less genotype:
 -	Make a list of all samples involved (PIHAT018.txt)
 Select one sample per pair (with lower genotyping freq.) to remove: 
 ```
-Rscript rm-pihat018.R {file}-fail-IBD-check.txt rmpihat018-mothers.txt
-Rscript rm-pihat018.R {file}-fail-IBD-check.txt rmpihat018-nomothers.txt
+Rscript rm-pihat018.R {file}-fail-IBD-check.txt {filename}.imiss rmpihat018-mothers.txt
+Rscript rm-pihat018.R {file}-fail-IBD-check.txt {filename}.imiss rmpihat018-nomothers.txt
 ```
 Remove one from each pair:
 ```
@@ -98,7 +98,7 @@ Perform PCA:\
 `plink1.9 --bfile merged-cohorts-clean --extract {filename}-clean-prunned.prune.in --pca --out merged-cohorts-clean.PCs`
 
 Plot PCs with individuals information (e.g. sex):\
-`Rscript plot-PCA.R`
+[plot-PCA.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/plot-PCA.R)
 
 #### Step 1.1.3. Prepare data for imputation
 ```
@@ -171,7 +171,7 @@ Convert final file into VCF: \
 `bcftools concat -f tmp.concat -o concat-allchr.vcf`
 
 ### Step 1.4. Prepare covariates file for FastQTL mapping
-In this case our covariate for this analysis is the sex of the samples, and as we said, we took it from an excel sample sheet. Into the following R script you will see the commands that we used, but depending in you input, they could change, but the output text file should have the same format. \
+In this case our covariate for this analysis is the sex of the samples, and as we said, we took it from an excel sample sheet. Into the following R script you will see the commands that we used, but depending in your input, they could change, but the output text file should have the same format. \
 [covariates.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/covariates.R)
 
 ## Step 2. Methylome data quality control
@@ -205,8 +205,8 @@ Obtain samples names for methylome filtering: \
 ***Return to BED_UCSC_GRSet.R***
 
 ### Step 2.4. Calculate statistical power to filter genotype data
-Calculate the statistical power of your data and decide the MAF to filter genotype: \
-`power.R`
+Calculate the statistical power of your data and decide the MAF to filter genotype, but you will need to change some parameters depending on your data: \
+[power.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/power.R)
 
 Filter VCF by the MAF selected by you from the power.pdf plot. For example, in our case we choose 8% of MAF: \
 `plink2 --vcf concat-allchr-metfilt.vcf --maf 0.08 --recode vcf --out whole_genome_imp_maf`
