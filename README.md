@@ -21,7 +21,7 @@ Execute Will Rayner’s script: \
 Execute Will Rayner’s bash script output: \
 `bash Run-plink.sh`
 
-Add missing sex using an excel sheet: \
+Add missing sex like in the following R script but adapt it to your inputs: \
 [add-sex.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/add-sex.R)
 
 Merge sexual chromosomes: \
@@ -74,8 +74,8 @@ Rscript plot-IBD.R {file}-nomothers-IBD
 ```
 Remove individuals PI_HAT > 0.18 w/less genotype:
 -	Open the file with related individual pairs (...fail-IBD-check.txt)
--	Make a list of all samples involved (PIHAT018.txt)
-Select one sample per pair (with lower genotyping freq.) to remove: 
+-	Make a list of all samples involved (PIHAT018.txt) \
+Select one sample per pair (with lower genotyping freq.) to remove with [rm-pihat018.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/rm-pihat018.R): 
 ```
 Rscript rm-pihat018.R {file}-fail-IBD-check.txt {filename}.imiss rmpihat018-mothers.txt
 Rscript rm-pihat018.R {file}-fail-IBD-check.txt {filename}.imiss rmpihat018-nomothers.txt
@@ -182,7 +182,7 @@ Alexandra Binder’s R package to be defined.
 In the next R script, you will find the commands used for us to obtain the final text file filtered with all the annotation data of the CpGs and the samples, to use them as examples or guidelines: \
 `BED_UCSC_GRSet.R` 
 
-Sort BED file: \
+Sort BED file: 
 ```
 (head -n1 whole_genome_imp_var_bed.txt && sort -k1,1V -k2,2n -k3,3n <(tail -n+2 whole_genome_imp_var_bed.txt)) > whole_genome_var_sorted.bed
 ```
@@ -205,7 +205,7 @@ Obtain samples names for methylome filtering: \
 ***Return to BED_UCSC_GRSet.R***
 
 ### Step 2.4. Calculate statistical power to filter genotype data
-Calculate the statistical power of your data and decide the MAF to filter genotype, but you will need to change some parameters depending on your data: \
+Calculate the statistical power of your data and decide the MAF to filter genotype, but you will need to change some parameters depending on your statistics: \
 [power.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/power.R)
 
 Filter VCF by the MAF selected by you from the power.pdf plot. For example, in our case we choose 8% of MAF: \
