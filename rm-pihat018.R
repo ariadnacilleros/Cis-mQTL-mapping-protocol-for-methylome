@@ -5,7 +5,7 @@ indfile <- fread(arg[1], sep = '\t')
 
 
 ind <- c(rbind(indfile[, IID1], indfile[,IID2]))
-geno <- fread('example.imiss') #CHANGE FILE'S NAME WITH .IMISS FILE FROM STEP 1.1.1.
+geno <- fread(arg[2], sep = '\t') 
 merged <- merge(as.data.frame(ind), geno, by.x = 'ind', by.y = 'IID', sort = F)
 
 
@@ -27,4 +27,4 @@ for (i in loophelp){
 }
 
 outdf <- data.frame('FID' = fids, 'IID' = iids)
-fwrite(outdf, arg[2], sep = '\t', col.names = F)
+fwrite(outdf, arg[3], sep = '\t', col.names = F)
