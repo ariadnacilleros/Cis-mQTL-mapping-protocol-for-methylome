@@ -17,39 +17,39 @@ recode2 <- recode(df1$ethnic_origin, '2' = 'Asiatic', '3' = 'Black', '4' = 'Arab
                   '13' = 'Both parents white, but at least one not European')
 df1[,ethnic_origin:=recode2]
 
-pcs <- fread('merged-cohorts-clean.PCs.eigenvec') #upload PCs data
+pcs <- fread('PIHAT-clean.PCs.eigenvec') #upload PCs data
 names(pcs) <- c('FID', 'IID', paste0('PC', 1:20)) #change colum names
 
 p <- merge(df1, pcs, all.y = T) #merge both dataframes: pheno data + PCs
 
 #Plot PCs and pheno variables 
 
-pdf('qc/merged-cohorts-clean-PC1vsPC2-cohort.pdf')
+pdf('PIHAT-clean-PC1vsPC2-cohort.pdf')
 qplot(PC1, PC2, colour = cohort8_name,
       data = p, alpha = 0.2) + theme_light()
 dev.off()
 
-pdf('qc/merged-cohorts-clean-PC3vsPC4-cohort.pdf')
+pdf('PIHAT-clean-PC3vsPC4-cohort.pdf')
 qplot(PC3, PC4, colour = cohort8_name,
       data = p, alpha = 0.2) + theme_light()
 dev.off()
 
-pdf('qc/merged-cohorts-clean-PC1vsPC2-ethn.pdf')
+pdf('PIHAT-clean-PC1vsPC2-ethn.pdf')
 qplot(PC1, PC2, colour = ethnic_origin,
       data = p) + theme_light()
 dev.off()
 
-pdf('qc/merged-cohorts-clean-PC3vsPC4-ethn.pdf')
+pdf('PIHAT-clean-PC3vsPC4-ethn.pdf')
 qplot(PC3, PC4, colour = ethnic_origin,
       data = p) + theme_light()
 dev.off()
 
-pdf('qc/merged-cohorts-clean-PC1vsPC2-sex.pdf')
+pdf('PIHAT-clean-PC1vsPC2-sex.pdf')
 qplot(PC1, PC2, colour = sex,
       data = p) + theme_light()
 dev.off()
 
-pdf('qc/merged-cohorts-clean-PC3vsPC4-sex.pdf')
+pdf('PIHAT-clean-PC3vsPC4-sex.pdf')
 qplot(PC3, PC4, colour = sex,
       data = p) + theme_light()
 dev.off()
