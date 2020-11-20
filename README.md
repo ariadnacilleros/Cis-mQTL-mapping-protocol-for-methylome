@@ -21,7 +21,7 @@ Execute Will Rayner’s script: \
 Execute Will Rayner’s bash script output: \
 `bash Run-plink.sh`
 
-Add missing sex like in the following R script but adapt it to your inputs: \
+Add missing sex like in the following R script, but adapt it to your inputs: \
 [add-sex.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/add-sex.R)
 
 Merge sexual chromosomes: \
