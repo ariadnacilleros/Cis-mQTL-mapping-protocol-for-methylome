@@ -1,6 +1,8 @@
-# Add sex to GIP & AST cohort
+# This script add the sex of the samples,
+# but you will need to adapt it for your inputs. 
+
 fam <- read.delim('example.fam', header = F) #CHANGE FILE'S NAME
-subs <- read.csv('pheno_example_data.csv', sep = ';') #CHANGE FILE'S NAME
+subs <- read.csv('pheno_example_data.csv', sep = ';') #CHANGE FILE'S NAME WITH SEX INFO
 subs$sex[subs$sex == 1] <- 2
 subs$sex[subs$sex == 0] <- 1
 subs <- subs[, c(2,8)]
