@@ -1,3 +1,7 @@
+#This filw will plot the Prinipal Components by different 
+# pheno traits: sex, ethnicity, cohort.
+# You will need to adapt the scripy considering your inputs. 
+
 library(dplyr)
 library(ggplot2)
 library(data.table)
