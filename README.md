@@ -19,7 +19,7 @@ Change rsIDs from SNPs to ‘chr:position’ format with [change-rsid.R](https:/
 Calculate frequencies: \
 `plink1.9 --bfile {filename} --freq --out {filename}`
 
-Execute Will Rayner’s script: \
+Execute [pre-imputation Will Rayner’s script](https://www.well.ox.ac.uk/~wrayner/tools/): \
 `perl HRC-1000G-check-bim.pl -b {filename}.bim -f {filename}.frq -r HRC.r1-1.GRCh37.wgs.mac5.sites.tab -h -v`
 
 Execute Will Rayner’s bash script output: \
@@ -120,7 +120,7 @@ Decompress info files:
 for i in {1..22}; do bgzip -d chr${i}.info.gz; done
 bgzip -d chrX.info.gz
 ```
-Execute Will Rayner’s post-imputation QC: 
+Execute [Will Rayner’s post-imputation QC](https://www.well.ox.ac.uk/~wrayner/tools/Post-Imputation.html): 
 ```
 perl vcfparse.pl -d {directory path with imputed VCF files} -o {output directory name}
 perl ic.pl -d {output directory from vcfparse} -r HRC.r1-1.GRCh37.wgs.mac5.sites.tab -o {output directory name}
