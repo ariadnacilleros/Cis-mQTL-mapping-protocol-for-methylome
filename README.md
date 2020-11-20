@@ -1,8 +1,9 @@
 # Cis-eQTL mapping protocol for methylome
 
 (Introduction)
-![GitHub Logo](Imp_scheme_vertical.jpg)
-Format: ![Alt Text](url)
+
+![](Imp_scheme_vertical.jpg | width=100)
+
 
 ## Step 1. Genotype data quality control 
 
