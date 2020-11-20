@@ -2,7 +2,7 @@
 
 (Introduction)
 
-![test](Imp_scheme_vertical.jpg | width=48)
+![test](Imp_scheme_vertical.jpg)
 
 ## Step 1. Genotype data quality control 
 
