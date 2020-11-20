@@ -13,10 +13,8 @@ class(processedOut$mset)
 #GenomicRatioSet: class holding M or/and Beta values together with associated genomic coordinates
 
 #Change sample's name: 
-#In our case we stablished a pattern for sample's name: FID_IID 
-#FID = cohort (GIP, VAL, SAB...)
-#IID = C_number (C_0428,...)
-#Ex: GIP_C_0428
+#In our case we stablished a pattern for sample's name (FID_IID), but you don't need to do it if 
+# the name of your samples is already the same between datasets!!
 
 ##A.Standarize samples between genotype and methylome
 #A.1.Obtain the samples data
