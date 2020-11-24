@@ -1,6 +1,6 @@
 # Cis-eQTL mapping protocol for methylome
 
-(Introduction)
+In this GitHub repository you will find the protocol elavorated by Immunogenetics Research Lab (IRLab) from the University of the Vasque Country for PACE consortium, to map placental cis-mQTLs using command-line program FastQTL. On the one hand, all the commands and scripts used for us are available in the Readme, but you will need to custom them depending on your data. On the other hand, in the Wiki you will find each step explained in more detail. For this pipeline, you need to have installed: [R and RStudio](https://rstudio-education.github.io/hopr/starting.html), [Plink1.9](https://www.cog-genomics.org/plink/1.9/) and [Plink2](https://www.cog-genomics.org/plink/2.0/), [FastQTL](http://fastqtl.sourceforge.net/), [bcftools](http://samtools.github.io/bcftools/bcftools.html) and [vcftools](http://vcftools.sourceforge.net/index.html).
 
 <p align="center">
 <img src="https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/Imp_scheme_vertical.jpg" width="500">
@@ -45,7 +45,7 @@ Remove markers by MAF/geno (missing call rate)/HWE thresholds: \
 #### Step 1.1.2. Filter samples
 
 Calculate heterozygosity: \
-`plink1.9 --bfile {file}-marker --het`
+`plink1.9 --bfile {filename}-marker --het`
 
 Plot missing call rate vs heterozygosity and subset individuals with > ± 4 x standard deviation (SD) using [imiss-vs-het.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/imiss-vs-het.R): \
 `Rscript imiss-vs-het.R {filename}.imiss {filename}.het`
@@ -60,20 +60,20 @@ Check sex concordance: \
 `plink1.9 --bfile {filename}-ind --check-sex --out {filename}-ind`
 
 Calculate relatedness by IBD: \
-`plink1.9 --bfile {filename}-ind --genome --make-bed --out {file}-IBD`
+`plink1.9 --bfile {filename}-ind --genome --make-bed --out {filename}-IBD`
 
 Plot IBD values and subset individuals with PI_HAT > 0.18 with [plot-IBD.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/plot-IBD.R): \
-`Rscript plot-IBD.R {file}-IBD`
+`Rscript plot-IBD.R {filename}-IBD`
 
 Remove individuals PI_HAT > 0.18 w/less genotype:
 -	Open the file with related individual pairs (...fail-IBD-check.txt)
 -	Make a list of all samples involved (PIHAT018.txt) 
 
 Select one sample per pair (with lower genotyping freq.) to remove with [rm-pihat018.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/rm-pihat018.R): \
-`Rscript rm-pihat018.R {file}-fail-IBD-check.txt {filename}.imiss rmpihat018.txt`
+`Rscript rm-pihat018.R {filename}-fail-IBD-check.txt {filename}.imiss rmpihat018.txt`
 
 Remove one from each pair: \
-`plink1.9 --bfile {file}-IBD --remove rmpihat018.txt --make-bed --out clean-PIHAT`
+`plink1.9 --bfile {filename}-IBD --remove rmpihat018.txt --make-bed --out clean-PIHAT`
 
 Calculate PCs:\
 `plink1.9 --bfile clean-PIHAT --indep-pairwise 50 5 0.2 --out clean-PIHAT-prunned`
