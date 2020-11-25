@@ -197,8 +197,8 @@ Filter VCF by the MAF selected by you from the power.pdf plot. For example, in o
 
 Compress and index VCF: 
 ```
-bgzip Geno_imp/whole_genome_imp_maf.vcf	
-tabix -p vcf Geno_imp/whole_genome_imp_maf.vcf.gz
+bgzip whole_genome_imp_maf.vcf	
+tabix -p vcf whole_genome_imp_maf.vcf.gz
 ```
 
 ## Step 3. Mapping [FastQTL](http://fastqtl.sourceforge.net/)
@@ -209,8 +209,11 @@ touch whole_genome_imp_maf.vcf.gz.tbi
 ```
 Mapping cis-mQTLs with FastQTL:
 ```
-for j in $(seq 1 1000); do fastQTL --vcf Geno_imp/whole_genome_imp_maf.vcf.gz --bed EPIC/whole_genome_var_sorted.bed.gz --cov Covariates/COV.txt --permute 1000 10000 --seed 123456789 --out permutations.imp.${j}.txt.gz --chunk $j 1000;done
+for j in $(seq 1 1000); do fastQTL --vcf whole_genome_imp_maf.vcf.gz --bed whole_genome_var_sorted.bed.gz --cov COV.txt --permute 1000 10000 --seed 123456789 --out permutations.imp.${j}.txt.gz --chunk $j 1000;done
 ```
+Zipp all chunks into one file: \
+`zcat permutations.imp.*.txt.gz | gzip -c > permutations.all.chunks.txt.gz`
+
 ## Extra step: 
 In the case of having an error in one chunk due to low variable CpGs and/or SNPs like that: 
 ```
