@@ -1,6 +1,6 @@
-# Cis-eQTL mapping protocol for methylome
+# Cis-mQTL mapping protocol for placental methylome
 
-In this GitHub repository, you will find the protocol elaborated by Immunogenetics Research Lab (IRLab) from the University of the Vasque Country for PACE consortium, to map placental cis-mQTLs using command-line program FastQTL. On the one hand, all the commands and scripts used for us are available in the Readme, but you will need to custom them depending on your data. On the other hand, in the Wiki you will find each step explained in more detail. For this pipeline, you need to have installed: [R and RStudio](https://rstudio-education.github.io/hopr/starting.html), [Plink1.9](https://www.cog-genomics.org/plink/1.9/) and [Plink2](https://www.cog-genomics.org/plink/2.0/), [FastQTL](http://fastqtl.sourceforge.net/), [bcftools](http://samtools.github.io/bcftools/bcftools.html) and [vcftools](http://vcftools.sourceforge.net/index.html).
+In this GitHub repository, you will find the protocol elaborated by the Immunogenetics Research Lab (IRLab) from the University of the Basque Country (UPV/EHU), to map placental cis-mQTLs using the command-line program FastQTL. On the one hand, all the commands and scripts used are available in the Readme, but you will need to custom them depending on your data. On the other hand, in the Wiki you will find each step explained in more detail. To complete the pipeline, you need to have installed: [R and RStudio](https://rstudio-education.github.io/hopr/starting.html), [Plink1.9](https://www.cog-genomics.org/plink/1.9/) and [Plink2](https://www.cog-genomics.org/plink/2.0/), [FastQTL](http://fastqtl.sourceforge.net/), [bcftools](http://samtools.github.io/bcftools/bcftools.html) and [vcftools](http://vcftools.sourceforge.net/index.html).
 
 <p align="center">
 <img src="https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/Imp_scheme_vertical.jpg" width="500">
@@ -8,12 +8,12 @@ In this GitHub repository, you will find the protocol elaborated by Immunogeneti
 
 ## Step 1. Genotype data quality control 
 
-### Step 1.1. Pre-imputation quality control
+### Step 1.1. Quality control of genotype data
 
-Conversion long format files to PLINK binary format file: \
+Conversion of long format files to PLINK binary format file: \
 `plink1.9 --file {filename} --make-bed --out {filename}`
 
-Change rsIDs from SNPs to ‘chr:position’ format with [change-rsid.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/change-rsid.R): \
+Change rsIDs of SNPs to ‘chr:position’ format with [change-rsid.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/change-rsid.R): \
 `Rscript change-rsid.R {filename}.bim`
 
 Calculate frequencies: \
@@ -59,7 +59,7 @@ Remove individuals with 0.03 missing markers: \
 Check sex concordance: \
 `plink1.9 --bfile {filename}-ind --check-sex --out {filename}-ind`
 
-Calculate relatedness by IBD: \
+Calculate relatedness by [Identity-by-descent (IBD)](https://www.cog-genomics.org/plink/1.9/ibd): \
 `plink1.9 --bfile {filename}-ind --genome --make-bed --out {filename}-IBD`
 
 Plot IBD values and subset individuals with PI_HAT > 0.18 with [plot-IBD.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/plot-IBD.R): \
@@ -109,7 +109,7 @@ done
 We will also check AES 256 encryption. 
 
 ### Step 1.3. Post-imputation quality control
-To download the imputed genotype data from the server, use the commands indicated in the website from it (e.g.  curl -sL https://imputationserver.sph.umich.edu/get/...). \
+To download the imputed genotype data from the server, use the commands indicated in the website (e.g.  curl -sL https://imputationserver.sph.umich.edu/get/...). \
 Decompress downloaded folders with the corresponding password (email):
 ```
 for i in {1..22}; do unzip -P 'PASSWORD' chr_${i}; done
@@ -125,7 +125,7 @@ Execute [Will Rayner’s post-imputation QC](https://www.well.ox.ac.uk/~wrayner/
 perl vcfparse.pl -d {directory path with imputed VCF files} -o {output directory name}
 perl ic.pl -d {output directory from vcfparse} -r HRC.r1-1.GRCh37.wgs.mac5.sites.tab -o {output directory name}
 ```
-Filter by Rsq chromosomes from 1 to 22: 
+Filter SNPs by Rsq from chromosome 1 to 22: 
 ```
 for i in {1..22};
 do
@@ -135,7 +135,7 @@ wc -l filt${i}.snps
 vcftools --gzvcf  chr${i}.dose.vcf.gz --snps filt${i}.snps --recode --out chr-filtered-${i} &
 done
 ```
-Filter by Rsq chromosome X:
+Filter SNPs by Rsq from chromosome X:
 ```
 i=X
 wc -l chr${i}.info
