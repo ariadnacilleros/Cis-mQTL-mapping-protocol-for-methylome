@@ -164,7 +164,7 @@ In this case our covariate for this analysis is the sex of the samples, and as w
 Alexandra Binder’s R package to be defined. 
 
 ### Step 2.2. Prepare BED file for FastQTL mapping
-In the next R script, you will find the commands used to obtain the final text file filtered with all the annotation data of the CpGs and the samples. And as it is explained on the wiki, we perform a CpG filtering for two reasons, on the one hand, we filter the total ammount of CpGs to reduce the number of tests for the power calculation, because as many CpGs or tests we have, higher will be the MAF threshold and smaller the total amount of SNPs remaining after the filtering. And on the other hand, we discard low variable CpGs by removing the ones bellow the first quartile (25%), because if not, together with SNPs with low MAF, will reproduce an error on the beta approximation from FastQTL.\
+In the next R script, you will find the commands used to obtain the final text file filtered with all the annotation data of the CpGs and the samples. And as it is explained on the wiki, we perform a CpG filtering for two reasons, on the one hand, we filter the total ammount of CpGs to reduce the number of tests for the power calculation. And on the other hand, we discard low variable CpGs by removing the ones bellow the first quartile (25%), because if not, together with SNPs with low MAF, will reproduce an error on the beta approximation from FastQTL.\
 [BED_UCSC_GRSet.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/BED_UCSC_GRSet.R)
 
 Sort BED file: 
