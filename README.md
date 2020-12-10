@@ -1,12 +1,11 @@
 # Cis-mQTL mapping protocol for placental methylome
 
 In this GitHub repository, you will find the protocol elaborated by the Immunogenetics Research Lab (IRLab) from the University of the Basque Country (UPV/EHU), to map placental cis-mQTLs using the command-line program FastQTL. On the one hand, all the commands and scripts used are available in the Readme, but you will need to custom them depending on your data. On the other hand, in the Wiki you will find each step explained in more detail. To complete the pipeline, you need to have installed: [R and RStudio](https://rstudio-education.github.io/hopr/starting.html), [Plink1.9](https://www.cog-genomics.org/plink/1.9/) and [Plink2](https://www.cog-genomics.org/plink/2.0/), [FastQTL](http://fastqtl.sourceforge.net/), [bcftools](http://samtools.github.io/bcftools/bcftools.html) and [vcftools](http://vcftools.sourceforge.net/index.html).
+**In case that you already performed the genotype imputation by Michigan Server and the preprocessment of the methylome by Alexandra Binder’s R package, you can jump to Step 2.2.**
 
 <p align="center">
 <img src="https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/Imp_scheme_vertical.jpg" width="500">
 </p>
-
-*In case that you already performed the genotype imputation by Michigan Server and the preprocessment of the methylome by Alexandra Binder’s R package, you can jump to Step 2.2.*
 
 ## Step 1. Genotype data quality control 
 
