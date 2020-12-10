@@ -168,14 +168,14 @@ In the next R script, you will find the commands used for us to obtain the final
 
 Sort BED file: 
 ```
-(head -n1 whole_genome_imp_var_bed.txt && sort -k1,1V -k2,2n -k3,3n <(tail -n+2 whole_genome_imp_var_bed.txt)) > whole_genome_var_sorted.bed
+(head -n1 methylome_var_bed.txt && sort -k1,1V -k2,2n -k3,3n <(tail -n+2 methylome_var_bed.txt)) > methylome_var_sorted.bed
 ```
 
 Zipp BED file: \
-`bgzip whole_genome_var_sorted.bed` 
+`bgzip methylome_var_sorted.bed` 
 
 Index BED file: \
-`tabix -p bed whole_genome_var_sorted.bed.gz`
+`tabix -p bed methylome_var_sorted.bed.gz`
 
 ***Jump to 2.4. Calculate statistical power to filter genotype data***
 
@@ -204,12 +204,12 @@ tabix -p vcf whole_genome_imp_maf.vcf.gz
 ## Step 3. Mapping [FastQTL](http://fastqtl.sourceforge.net/)
 Change timestamps from index files: 
 ```
-touch whole_genome_var_sorted.bed.gz.tbi
+touch methylome_var_sorted.bed.gz.tbi
 touch whole_genome_imp_maf.vcf.gz.tbi
 ```
 Mapping cis-mQTLs with FastQTL:
 ```
-for j in $(seq 1 1000); do fastQTL --vcf whole_genome_imp_maf.vcf.gz --bed whole_genome_var_sorted.bed.gz --cov COV.txt --permute 1000 10000 --seed 123456789 --out permutations.imp.${j}.txt.gz --chunk $j 1000;done
+for j in $(seq 1 1000); do fastQTL --vcf whole_genome_imp_maf.vcf.gz --bed methylome_var_sorted.bed.gz --cov COV.txt --permute 1000 10000 --seed 123456789 --out permutations.imp.${j}.txt.gz --chunk $j 1000;done
 ```
 Zipp all chunks into one file: \
 `zcat permutations.imp.*.txt.gz | gzip -c > permutations.all.chunks.txt.gz`
@@ -230,9 +230,9 @@ Create file and write inside the name of the problematic CpGs or SNPs: \
 
 Run FastQTL for chunk 807 excluding CpGs: 
 ```
-fastQTL --vcf  whole_genome_imp_maf.vcf.gz  --bed whole_genome_var_sorted.bed.gz --cov COV.txt --permute 1000 10000 --seed 123456789 --out permutations.imp.807.txt.gz --chunk 807 1000 --exclude-phenotypes file.exc
+fastQTL --vcf  whole_genome_imp_maf.vcf.gz  --bed methylome_var_sorted.bed.gz --cov COV.txt --permute 1000 10000 --seed 123456789 --out permutations.imp.807.txt.gz --chunk 807 1000 --exclude-phenotypes file.exc
 ```
 Run FastQTL for chunk 807 excluding SNPs: 
 ```
-fastQTL --vcf  whole_genome_imp_maf.vcf.gz  --bed whole_genome_var_sorted.bed.gz --cov COV.txt --permute 1000 10000 --seed 123456789 --out permutations.imp.807.txt.gz --chunk 807 1000 --exclude-sites file.exc
+fastQTL --vcf  whole_genome_imp_maf.vcf.gz  --bed methylome_var_sorted.bed.gz --cov COV.txt --permute 1000 10000 --seed 123456789 --out permutations.imp.807.txt.gz --chunk 807 1000 --exclude-sites file.exc
 ```
