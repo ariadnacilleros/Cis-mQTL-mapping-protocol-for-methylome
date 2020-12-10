@@ -99,7 +99,7 @@ df_filt_imp_var_sex_SNP_CpG_cross <- subset(df_filt_imp_var_sex_SNP_CpG, !(ID %i
 #Take the total number of CpGs remaining to calculate the statistical power 
 
 #WRITE BED FILE IN TEXT FILE
-write.table(x = df_filt_imp_var_sex_SNP_CpG_cross, file = "/data/Genomics_projects/Placenta_FastQTL/EPIC/whole_genome_imp_var_bed.txt", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
+write.table(x = df_filt_imp_var_sex_SNP_CpG_cross, file = "/data/Genomics_projects/Placenta_FastQTL/EPIC/methylome_var_bed.txt", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
 
 
 
