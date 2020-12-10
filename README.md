@@ -164,7 +164,7 @@ In this case our covariate for this analysis is the sex of the samples, and as w
 Alexandra Binder’s R package to be defined. 
 
 ### Step 2.2. Prepare BED file for FastQTL mapping
-In the next R script, you will find the commands used for us to obtain the final text file filtered with all the annotation data of the CpGs and the samples to use them as examples or guidelines, **but in the middle of it you will need to perform Step 2.3**: \
+In the next R script, you will find the commands used to obtain the final text file filtered with all the annotation data of the CpGs and the samples: \
 [BED_UCSC_GRSet.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/BED_UCSC_GRSet.R)
 
 Sort BED file: 
@@ -184,16 +184,16 @@ Index BED file: \
 Filter by methylation samples: \
 `bcftools view -S IID_methylome.txt --force-samples concat-allchr.vcf -o concat-allchr-metfilt.vcf`
 
-Obtain samples names for methylome filtering: \
+Obtain sample names for methylome filtering: \
 `bcftools query -l concat-allchr-metfilt.vcf  > samples_imp_vcf.txt`
 
 ***Return to BED_UCSC_GRSet.R***
 
 ### Step 2.4. Calculate statistical power to filter genotype data
-Calculate the statistical power of your data and decide the MAF to filter genotype, but you will need to change some parameters depending on your statistics: \
+Calculate the statistical power of your data and decide the MAF to filter genotype data. You will need to change some parameters depending on your statistics: \
 [power.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/power.R)
 
-Filter VCF by the MAF selected by you from the power.pdf plot. For example, in our case we choose 8% of MAF: \
+Filter VCF by the MAF selected (power.pdf plot). For example, in our case we choose 8% of MAF: \
 `plink2 --vcf concat-allchr-metfilt.vcf --maf 0.08 --recode vcf --out whole_genome_imp_maf`
 
 Compress and index VCF: 
@@ -216,7 +216,7 @@ Zipp all chunks into one file: \
 `zcat permutations.imp.*.txt.gz | gzip -c > permutations.all.chunks.txt.gz`
 
 ## Extra step: 
-In the case of having an error in one chunk due to low variable CpGs and/or SNPs like that: 
+In the case of having an error in one chunk due to low variable CpGs and/or SNPs like the following: 
 ```
   * Number of variants in cis = 28499
   * Best correlation = 0.5440
