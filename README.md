@@ -144,7 +144,7 @@ awk '{if($7 > 0.9) {print $1}}' chr${i}.info | tail -n +2 > filt${i}.snps
 wc -l filt${i}.snps
 vcftools --gzvcf chr${i}.dose.vcf.gz --snps filt${i}.snps --recode --out chr-filtered-${i}
 ```
-Concatenate VCF files into one file: 
+Record the name of all the VCFs file to concatenate: 
 ```
 for i in {1..22};
 do
@@ -152,7 +152,7 @@ echo chr-filtered-${i}.recode.vcf >> tmp.concat
 done
 echo chr-filtered-X.recode.vcf >> tmp.concat
 ```
-Convert final file into VCF: \
+Concatenate VCF files into one file: \
 `bcftools concat -f tmp.concat -o concat-allchr.vcf`
 
 ### Step 1.4. Prepare covariates file for FastQTL mapping
