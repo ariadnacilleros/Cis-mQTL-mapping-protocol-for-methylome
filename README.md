@@ -164,7 +164,7 @@ In this case our covariate for this analysis is the sex of the samples, and as w
 Alexandra Binder’s R package to be defined. 
 
 ### Step 2.2. Prepare BED file for FastQTL mapping
-In the next R script, you will find the commands used for us to obtain the final text file filtered with all the annotation data of the CpGs and the samples to use them as examples or guidelines, but in the middle of it you will need to perform Step 2.3: \
+In the next R script, you will find the commands used for us to obtain the final text file filtered with all the annotation data of the CpGs and the samples to use them as examples or guidelines, **but in the middle of it you will need to perform Step 2.3**: \
 [BED_UCSC_GRSet.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/BED_UCSC_GRSet.R)
 
 Sort BED file: 
