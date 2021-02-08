@@ -1,6 +1,7 @@
-#This script will plot the missing call rate vs heterozygosity
-# and will write a text file with the names of the samples with 
-# an heterozygosity > +/- 4 x Standard Deviation 
+#Objective: Plot the missing call rate vs heterozygosity and write a text file with the names of the samples with an heterozygosity > +/- 4 x Standard Deviation 
+#Version: 02-08-2021
+#Contact: acilleros001@ikasle.ehu.eus
+
 library('geneplotter')
 
 arg <- commandArgs(trailingOnly = T)
