@@ -1,6 +1,8 @@
 # Cis-mQTL mapping protocol for placental methylome
 
-In this GitHub repository, you will find the protocol elaborated by the Immunogenetics Research Lab (IRLab) from the University of the Basque Country (UPV/EHU), to map placental cis-mQTLs using the command-line program FastQTL. On the one hand, all the commands and scripts used are available in the Readme, but be careful, you will need to custom some of them, mainly the Rscripts ejecuted from RStudio and not from command line. **Also, during the pipeline, we will be creating new directories for the outputs, but you should always work from outside of them!** On the other hand, in the Wiki you will find each step explained in more detail. To complete the pipeline, you need to have installed: [R and RStudio](https://rstudio-education.github.io/hopr/starting.html), [Plink1.9](https://www.cog-genomics.org/plink/1.9/) and [Plink2](https://www.cog-genomics.org/plink/2.0/), [TensorQTL](https://github.com/broadinstitute/tensorqtl), [bcftools](http://samtools.github.io/bcftools/bcftools.html) and [vcftools](http://vcftools.sourceforge.net/index.html).
+In this GitHub repository, you will find the protocol elaborated by the Immunogenetics Research Lab (IRLab) from the University of the Basque Country (UPV/EHU), to map placental cis-mQTLs using the command-line program FastQTL. On the one hand, all the commands and scripts used are available in the Readme, but be careful, you will need to custom some of them, mainly the Rscripts ejecuted from RStudio and not from command line. **Also, during the pipeline, we will be creating new directories for the outputs, but you should always work from outside of them! Have a look at the diagram bellow.** 
+
+On the other hand, in the Wiki you will find each step explained in more detail. To complete the pipeline, you need to have installed: [R and RStudio](https://rstudio-education.github.io/hopr/starting.html), [Plink1.9](https://www.cog-genomics.org/plink/1.9/) and [Plink2](https://www.cog-genomics.org/plink/2.0/), [TensorQTL and its dependencies](https://github.com/broadinstitute/tensorqtl), [bcftools](http://samtools.github.io/bcftools/bcftools.html) and [vcftools](http://vcftools.sourceforge.net/index.html).
 
 **In case that you already performed the genotype imputation by Michigan Server and the preprocessment of the methylome by Alexandra Binder’s R package, you can jump to Step 2.2.**
 
@@ -98,7 +100,7 @@ Plot PCs with individuals information (e.g. sex):\
 
 #### Step 1.1.3. Prepare data for imputation
 
-Make directory for chromosome files:\ 
+Make directory for chromosome files: \ 
 `mkdir chr`
 
 Obtain VCF file per chromosome:
@@ -126,130 +128,162 @@ done
 We will also check AES 256 encryption. 
 
 ### Step 1.3. Post-imputation quality control
-To download the imputed genotype data from the server, use the commands indicated in the website (e.g.  curl -sL https://imputationserver.sph.umich.edu/get/...). \
+To download the imputed genotype data from the server, use the commands indicated in the [website](https://imputationserver.readthedocs.io/en/latest/getting-started/#download-results) (e.g.  curl -sL https://imputationserver.sph.umich.edu/get/...) inside the following folder: \
+```
+mkdir chr_imp
+cd chr_imp
+```
+Once you donwloaded the files inside `chr_imp` folder, get out from it by: \
+`cd ../`
+
 Decompress downloaded folders with the corresponding password (email):
 ```
-for i in {1..22}; do unzip -P 'PASSWORD' chr_${i}; done
-unzip -P 'PASSWORD' chr_X
+for i in {1..22}; do unzip -P 'PASSWORD' chr_imp/chr_${i}; done
+unzip -P 'PASSWORD' chr_imp/chr_X
 ```
 Decompress info files: 
 ```
-for i in {1..22}; do bgzip -d chr${i}.info.gz; done
-bgzip -d chrX.info.gz
+for i in {1..22}; do bgzip -d chr_imp/chr${i}.info.gz; done
+bgzip -d chr_imp/chrX.info.gz
 ```
-Execute [Will Rayner’s post-imputation QC](https://www.well.ox.ac.uk/~wrayner/tools/Post-Imputation.html): 
+Execute [Will Rayner’s post-imputation QC](https://www.well.ox.ac.uk/~wrayner/tools/Post-Imputation.html). Have a look at the dependencies required in the previous link: 
 ```
-perl vcfparse.pl -d {directory path with imputed VCF files} -o {output directory name}
-perl ic.pl -d {output directory from vcfparse} -r HRC.r1-1.GRCh37.wgs.mac5.sites.tab -o {output directory name}
+mkdir qc-vcfparse
+perl vcfparse.pl -d chr_imp -o qc-vcfparse
+perl ic.pl -d qc-vcfparse -r HRC.r1-1.GRCh37.wgs.mac5.sites.tab -o qc-ic
 ```
 Filter SNPs by Rsq from chromosome 1 to 22: 
 ```
+mkdir qc-results
 for i in {1..22};
 do
-wc -l chr${i}.info
-awk '{if($7 > 0.9) {print $1}}' chr${i}.info | tail -n +2 >filt${i}.snps
-wc -l filt${i}.snps
-vcftools --gzvcf  chr${i}.dose.vcf.gz --snps filt${i}.snps --recode --out chr-filtered-${i} &
+wc -l chr_imp/chr${i}.info
+awk '{if($7 > 0.9) {print $1}}' chr_imp/chr${i}.info | tail -n +2 > qc-results/filt${i}.snps
+wc -l qc-results/filt${i}.snps
+vcftools --gzvcf  chr_imp/chr${i}.dose.vcf.gz --snps qc-results/filt${i}.snps --recode --out qc-results/chr-filtered-${i} &
 done
 ```
 Filter SNPs by Rsq from chromosome X:
 ```
 i=X
-wc -l chr${i}.info
-awk '{if($7 > 0.9) {print $1}}' chr${i}.info | tail -n +2 > filt${i}.snps
-wc -l filt${i}.snps
-vcftools --gzvcf chr${i}.dose.vcf.gz --snps filt${i}.snps --recode --out chr-filtered-${i}
+wc -l chr_imp/chr${i}.info
+awk '{if($7 > 0.9) {print $1}}' chr_imp/chr${i}.info | tail -n +2 > qc-results/filt${i}.snps
+wc -l qc-results/filt${i}.snps
+vcftools --gzvcf chr_imp/chr${i}.dose.vcf.gz --snps qc-results/filt${i}.snps --recode --out qc_results/chr-filtered-${i}
 ```
 Record the name of all the VCFs file to concatenate: 
 ```
+mkdir qc-results/tmp-concat
 for i in {1..22};
 do
-echo chr-filtered-${i}.recode.vcf >> tmp.concat
+echo qc-results/chr-filtered-${i}.recode.vcf >> qc-results/tmp-concat/tmp.concat
 done
-echo chr-filtered-X.recode.vcf >> tmp.concat
+echo qc-results/chr-filtered-X.recode.vcf >> qc-results/tmp-concat/tmp.concat
 ```
 Concatenate VCF files into one file: \
-`bcftools concat -f tmp.concat -o concat-allchr.vcf`
+`bcftools concat -f qc-results/tmp-concat/tmp.concat -o qc-results/concat-allchr.vcf`
 
-### Step 1.4. Prepare covariates file for FastQTL mapping
-In this case our covariate for this analysis is the sex of the samples, and as we said, we took it from an excel sample sheet. Into the following R script you will see the commands that we used, but depending in your input, they could change, but the output text file should have the same format. \
-[covariates.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/covariates.R)
+Obtain the final list of samples of the genotype: \
+`bcftools query -l qc-results/concat-allchr.vcf >> qc-results/sample_list_geno.txt`
 
 ## Step 2. Methylome data quality control
 ### Step 2.1. Betas quality control 
 Alexandra Binder’s R package to be defined. 
 
 ### Step 2.2. Prepare BED file for FastQTL mapping
-In the next R script, you will find the commands used to obtain the final text file filtered with all the annotation data of the CpGs and the samples. And as it is explained on the wiki, we perform a CpG filtering for two reasons, on the one hand, we filter the total ammount of CpGs to reduce the number of tests for the power calculation. And on the other hand, we discard low variable CpGs by removing the ones bellow the first quartile (25%), because if not, together with SNPs with low MAF, will reproduce an error on the beta approximation from FastQTL.\
-[BED_UCSC_GRSet.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/BED_UCSC_GRSet.R)
+In the next R script, you will find the commands used to obtain the final text file filtered with all the annotation data of the CpGs and the samples. As you will see the following script contain the main commands used by our group to obtain a bed file for our data in text file, using the data contained in an ExpressionSet R object which is the output from Alexandran Binder's R package. Some of the commands can be used directly, but others will need an adaptation to your data or won't be needed. The main steps are: 
+- Have the same sample names between methylation and genotype. *Important: on the genotype, we understand as sample names the IID, not the FID_IID!*
+- Remove duplicates (in case of necessity). 
+- Have the same samples between methylation and genotype. 
+- Filter CpGs with cross-hybridizing potential, with SNPs (European MAF < 5%) and the ones located in sexual chromosomes. *Important: you will find the SNPs list files on this repository.*
+- Annotate the CpGs by chr, start and end. 
+
+For the output of these steps, we will create a new directory: \
+`mkdir EPIC` 
+
+The output of this step should be a text file with the CpGs on the rows and the chr, start, end, CpG ID and beta values per sample on the columns. Here you have an [example]().\
+[GSet_to_BED.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/BED_UCSC_GRSet.R)
 
 Sort BED file: 
 ```
-(head -n1 methylome_var_bed.txt && sort -k1,1V -k2,2n -k3,3n <(tail -n+2 methylome_var_bed.txt)) > methylome_var_sorted.bed
+(head -n1 EPIC/methylome_BED.txt && sort -k1,1V -k2,2n -k3,3n <(tail -n+2 EPIC/methylome_BED.txt)) > EPIC/methylome_sorted.bed
 ```
 
 Zipp BED file: \
-`bgzip methylome_var_sorted.bed` 
+`bgzip EPIC/methylome_sorted.bed` 
 
 Index BED file: \
-`tabix -p bed methylome_var_sorted.bed.gz`
+`tabix -p bed EPIC/methylome_sorted.bed.gz`
 
-***Jump to 2.4. Calculate statistical power to filter genotype data***
+## Step 3. Obtain final format for genotype data
 
-### Step 2.3. Filter samples of genotype data
-Filter by methylation samples: \
-`bcftools view -S IID_methylome.txt --force-samples concat-allchr.vcf -o concat-allchr-metfilt.vcf`
+Create folder for the final version of the genotype: \
+`mkdir whole_genome_definitive`
 
-Obtain sample names for methylome filtering: \
-`bcftools query -l concat-allchr-metfilt.vcf  > samples_imp_vcf.txt`
+Filter VCF by the 5% MAF and by the final list of samples: \
+`plink2 --vcf qc-results/concat-allchr.vcf --maf 0.05 --keep EPIC/final_list_samples.txt --make-bed --out whole_genome_definitive/whole_genome_maf05_filt_samples`
+*Sometimes --keep doesn't work and keeps all the samples except the ones listes in final_list_samples.txt, if this is the case, change --keep by --remove:*
+`plink2 --vcf qc-results/concat-allchr.vcf --maf 0.05 --remove EPIC/final_list_samples.txt --make-bed --out whole_genome_definitive/whole_genome_maf05_filt_samples`
 
-***Return to BED_UCSC_GRSet.R***
+Be careful, when PLINK converts a VCF to a binary PLINK file set, it subsets the name of the samples from the VCF into FID and IID on the binary plink file (.bim, .fam, .bed) by searching a separator which by default is _ . In case of having troubles with it, we leave here a link to [costumize the read of the sample names by PLINK](https://www.cog-genomics.org/plink/2.0/input#sample_id_convert) or [how to change the name of the samples once you already have the binary PLINK file set](https://www.cog-genomics.org/plink/1.9/data#update_indiv). In our case we always set [--const-fid](https://www.cog-genomics.org/plink/1.9/input#double_id) flag which allows you to set FID as 0 in all the samples and the IID as the whole sample name coming from the VCF. Remember that to run TensorQTL, you should match the IID from PLINK with the sample name on the BED file from the methylome. 
 
-### Step 2.4. Calculate statistical power to filter genotype data
-Calculate the statistical power of your data and decide the MAF to filter genotype data. You will need to change some parameters depending on your statistics: \
-[power.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/power.R)
+## Step 4. Prepare covariates file for TensorQTL mapping
+In this analysis the covariates that we are going to use are the sex of the samples and the first five Principal Components of our genotype. Therefore, first of all we will need to perform a Principal Component Analysis (PCA) with PLINK: 
 
-Filter VCF by the MAF selected (power.pdf plot). For example, in our case we choose 8% of MAF: \
-`plink2 --vcf concat-allchr-metfilt.vcf --maf 0.08 --recode vcf --out whole_genome_imp_maf`
-
-Compress and index VCF: 
 ```
-bgzip whole_genome_imp_maf.vcf	
-tabix -p vcf whole_genome_imp_maf.vcf.gz
-```
+mkdir covariates
 
-## Step 3. Mapping [FastQTL](http://fastqtl.sourceforge.net/)
-Change timestamps from index files: 
-```
-touch methylome_var_sorted.bed.gz.tbi
-touch whole_genome_imp_maf.vcf.gz.tbi
-```
-Mapping cis-mQTLs with FastQTL:
-```
-for j in $(seq 1 1000); do fastQTL --vcf whole_genome_imp_maf.vcf.gz --bed methylome_var_sorted.bed.gz --cov COV.txt --permute 1000 10000 --seed 123456789 --out permutations.imp.${j}.txt.gz --chunk $j 1000;done
-```
-Zipp all chunks into one file: \
-`zcat permutations.imp.*.txt.gz | gzip -c > permutations.all.chunks.txt.gz`
+plink --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --indep-pairwise 50 5 0.2 --out covariates/whole_genome_maf05_filt_samples_prunned --double-id
 
-## Extra step: 
-In the case of having an error in one chunk due to low variable CpGs and/or SNPs like the following: 
-```
-  * Number of variants in cis = 28499
-  * Best correlation = 0.5440
-  * Number of permutations = 53 / 1000
-gsl: beta.c:44: ERROR: domain error
-Default GSL error handler invoked.
-Aborted
+plink --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --extract covariates/whole_genome_maf05_filt_samples_prunned.prune.in --pca --out covariates/whole_genome_maf05_filt_samples_prunned.PCs --double-id 
+
 ```
 
-Create file and write inside the name of the problematic CpGs or SNPs: \
-`nano file.exc`
+The format file for the covariates should be a text file in which the first line corresponds to the IID of the sample, being the next rows the others covariates as in this (example)[]. In the following script are the main commands used to obtain the text file: \
+[covariates.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/covariates.R)
+*An extra step that could be done is to compute the sex of the samples from the genotype by [--check-sex](https://www.cog-genomics.org/plink/1.9/basic_stats#check_sex) and compare if this one match with your notes.*
 
-Run FastQTL for chunk 807 excluding CpGs: 
+## Step 3. Mapping with [TensorQTL](https://github.com/broadinstitute/tensorqtl)
+
+Change timestamps from index files: \
+`touch whole_genome_definitive/whole_genome_maf05_filt_samples.bed.gz.tbi`
+
+Create a folder for TensorQTL results: \ç
+`mkdir tensorQTL`
+
+Open python3 module: \
+`python3`
+
+Mapping cis-mQTLs using covariates with TensorQTL: 
 ```
-fastQTL --vcf  whole_genome_imp_maf.vcf.gz  --bed methylome_var_sorted.bed.gz --cov COV.txt --permute 1000 10000 --seed 123456789 --out permutations.imp.807.txt.gz --chunk 807 1000 --exclude-phenotypes file.exc
-```
-Run FastQTL for chunk 807 excluding SNPs: 
-```
-fastQTL --vcf  whole_genome_imp_maf.vcf.gz  --bed methylome_var_sorted.bed.gz --cov COV.txt --permute 1000 10000 --seed 123456789 --out permutations.imp.807.txt.gz --chunk 807 1000 --exclude-sites file.exc
+#Load packages: 
+import pandas as pd
+import torch
+import tensorqtl
+from tensorqtl import genotypeio, cis, trans
+print('PyTorch {}'.format(torch.__version__))
+print('Pandas {}'.format(pd.__version__))
+
+#Define paths to data
+plink_prefix_path = 'whole_genome_definitive/whole_genome_maf05_filt_samples'
+expression_bed = 'EPIC/methylome_sorted.bed.gz'
+covariates_file = 'covariates/covariates_sex_PC5.txt'
+
+#Load phenotypes and covariates
+phenotype_df, phenotype_pos_df = tensorqtl.read_phenotype_bed(expression_bed)
+covariates_df = pd.read_csv(covariates_file, sep='\t', index_col=0).T
+
+#PLINK reader for genotypes
+pr = genotypeio.PlinkReader(plink_prefix_path)
+genotype_df = pr.load_genotypes()
+variant_df = pr.bim.set_index('snp')[['chrom', 'pos']]
+
+#Sort phenotype sample names
+phenotype_df = phenotype_df.reindex(sorted(phenotype_df.columns), axis=1)
+
+#Run TensorQTL
+cis_df = cis.map_cis(genotype_df, variant_df, phenotype_df, phenotype_pos_df, covariates_df=covariates_df, seed=123456789)
+
+#Write TensorQTL results
+
 ```
