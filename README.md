@@ -34,7 +34,7 @@ plink1.9 --bfile inter/TEMP4 --a2-allele inter/Force-Allele1-whole_genome-HRC.tx
 
 Make a directory for Quality Control: 
 ```
-mkdir qc/
+mkdir qc
 ```
 
 Add missing sex like in the following R script, but adapt it to your inputs: \
@@ -98,7 +98,7 @@ Plot PCs with individuals information (e.g. sex):\
 
 #### Step 1.1.3. Prepare data for imputation
 
-Make directory for chromosome files: \ 
+Make directory for chromosome files:\ 
 `mkdir chr`
 
 Obtain VCF file per chromosome:
