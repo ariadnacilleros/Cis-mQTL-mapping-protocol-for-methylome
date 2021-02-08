@@ -1,6 +1,5 @@
-
-# This script converts Variant ID column from a PLINK's map file
-# to "chr:position" format, using chromosome and position columns
+#Objective: Convert Variant ID column from a PLINK's map file to "chr:position" format, using chromosome and position columns
+#Version: 02-08-2021
 
 # OVERRIDES .BIM FILES
 
