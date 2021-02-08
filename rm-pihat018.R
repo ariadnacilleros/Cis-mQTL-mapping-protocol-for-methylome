@@ -1,6 +1,8 @@
-#This script will read the list of pair samples with a PI-HAT > 0.18 (-fail-IBD-check.txt),
-# and will create a new text file (rmpihat018.txt) with the name of the samples, from each 
+#Objective: Read the list of pair samples with a PI-HAT > 0.18 (-fail-IBD-check.txt),
+# and create a new text file (rmpihat018.txt) with the name of the samples, from each 
 # pair, whose missing call rate (.imiss) is higher than its pair.
+#Version: 08-02-2021
+#Contact: acilleros001@ikasle.ehu.eus
 
 library(data.table)
 arg <- commandArgs(trailingOnly = T)
