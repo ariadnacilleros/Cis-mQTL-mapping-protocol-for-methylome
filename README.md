@@ -22,7 +22,7 @@ Calculate frequencies: \
 Execute [pre-imputation Will Rayner’s script](https://www.well.ox.ac.uk/~wrayner/tools/): \
 `perl HRC-1000G-check-bim.pl -b inter/whole_genome.bim -f inter/whole_genome.frq -r HRC.r1-1.GRCh37.wgs.mac5.sites.tab -h -v`
 
-Execute Will Rayner’s bash script output: \
+Execute Will Rayner’s bash script output: 
 ```
 plink1.9 --bfile inter/whole_genome --exclude inter/Exclude-whole_genome-HRC.txt --make-bed --out inter/TEMP1
 plink1.9 --bfile inter/TEMP1 --update-map inter/Chromosome-whole_genome-HRC.txt --update-chr --make-bed --out inter/TEMP2
