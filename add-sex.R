@@ -1,5 +1,5 @@
 # Objective of the script: Add the sex of the samples. 
-# Last version: 08-02-2021
+# Version: 08-02-2021
 # Contact: acilleros001@ikasle.ehu.eus
 
 #Step 1: Read the fam file from our genotype data
