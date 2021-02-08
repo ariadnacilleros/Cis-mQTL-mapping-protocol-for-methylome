@@ -1,5 +1,5 @@
 #Objective: Plot the Prinipal Components by different pheno traits: sex, ethnicity, cohort.
-#Version: 02-08-2021
+#Version: 08-02-2021
 #Contact: acilleros001@ikasle.ehu.eus
 
 library(dplyr)
