@@ -3,7 +3,7 @@
 # Contact: acilleros001@ikasle.ehu.eus
 
 #Step 1: Read the fam file from our genotype data
-fam <- read.delim('whole_genome.fam', header = F) 
+fam <- read.delim('inter/whole_genome-updated.fam', header = F) 
 #Step 2: Read or upload the data were is contained information regarding the sex of the samples
 subs <- read.csv('pheno_example_data.csv', sep = ';') #CHANGE FILE'S NAME WITH SEX INFO
 
@@ -26,5 +26,5 @@ tmp <- tmp[str_order(tmp$V2, numeric = T),]
 tmp <- tmp[str_order(tmp$V1, numeric = T),]
 
 #Step 7: obtain the new version of the fam file with the sex uploaded
-write.table(tmp, file = 'whole_genome.fam', col.names = F, 
+write.table(tmp, file = 'inter/whole_genome-updated.fam', col.names = F, 
             row.names = F, quote = F, sep = '\t')
