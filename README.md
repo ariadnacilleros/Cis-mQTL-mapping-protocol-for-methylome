@@ -77,35 +77,40 @@ Plot IBD values and subset individuals with PI_HAT > 0.18 with [plot-IBD.R](http
 `Rscript plot-IBD.R qc/wg-updated-IBD`
 
 Remove individuals PI_HAT > 0.18 w/less genotype:
--	Open the file with related individual pairs (...fail-IBD-check.txt)
+-	Open the file with related individual pairs (qc/wg-updated-IBD-fail-IBD-check.txt)
 -	Make a list of all samples involved (PIHAT018.txt) 
 
 Select one sample per pair (with lower genotyping freq.) to remove with [rm-pihat018.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/rm-pihat018.R): \
-`Rscript rm-pihat018.R qc/wg-updated-IBD-fail-IBD-check.txt {filename}.imiss rmpihat018.txt`
+`Rscript rm-pihat018.R qc/wg-updated-IBD-fail-IBD-check.txt qc/wg-updated-mxy.imiss rmpihat018.txt`
 
 Remove one from each pair: \
-`plink1.9 --bfile {filename}-IBD --remove rmpihat018.txt --make-bed --out clean-PIHAT`
+`plink1.9 --bfile qc/wg-updated-IBD --remove rmpihat018.txt --make-bed --out qc/clean-PIHAT`
 
 Calculate PCs:\
-`plink1.9 --bfile clean-PIHAT --indep-pairwise 50 5 0.2 --out clean-PIHAT-prunned`
+`plink1.9 --bfile qc/clean-PIHAT --indep-pairwise 50 5 0.2 --out qc/clean-PIHAT-prunned`
 
 Perform PCA:\
-`plink1.9 --bfile clean-PIHAT --extract {filename}-clean-prunned.prune.in --pca --out clean-PIHAT.PCs`
+`plink1.9 --bfile qc/clean-PIHAT --extract qc/clean-PIHAT-prunned.prune.in --pca --out qc/clean-PIHAT.PCs`
 
 Plot PCs with individuals information (e.g. sex):\
 [plot-PCA.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/plot-PCA.R)
 
 #### Step 1.1.3. Prepare data for imputation
+
+Make directory for chromosome files: \ 
+`mkdir chr`
+
+Obtain VCF file per chromosome:
 ```
 for i in {1..23};
 do
   # Split chromosomes
-  plink1.9 --bfile clean-PIHAT --reference-allele Force-Allele1-{filename}.txt  \
-  --make-bed --chr $i --out clean-PIHAT-chr$i
+  plink1.9 --bfile qc/clean-PIHAT --reference-allele inter/Force-Allele1-whole_genome-HRC.txt  \
+  --make-bed --chr $i --out chr/clean-PIHAT-chr$i
   # Make VCF files per chromosome
-  plink1.9 --bfile clean-PIHAT-chr$i --recode vcf --out chr$i
+  plink1.9 --bfile chr/clean-PIHAT-chr$i --recode vcf --out chr/chr$i
   # Sort and compress VCF files
-  vcf-sort chr${i}.vcf | bgzip -c > chr$i.vcf.gz ;
+  vcf-sort chr/chr${i}.vcf | bgzip -c > chr/chr$i.vcf.gz ;
 done
 ```
 
