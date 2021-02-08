@@ -6,7 +6,7 @@
 arg <- commandArgs(trailingOnly = T)
 data <- read.table(paste0(arg, '.genome'), header = T)
 
-#Step 2: plot histogram
+#Step 2: Plot histogram
 namepdf <- paste0(arg,'-hist.pdf')
 pdf(namepdf)
 hist(
@@ -14,7 +14,7 @@ hist(
   xlab = 'Estimated mean pairwise IBD', main = '')
 dev.off()
 
-#Step 3: elavorate a list if samples with a PI-HAT > 0.18
+#Step 3: Elaborate a list if samples with a PI-HAT > 0.18
 out <- data[data$PI_HAT > 0.18,]
 nametable <- paste0(arg, '-fail-IBD-check.txt')
 write.table(out, nametable, sep = '\t', quote = F, row.names = F)
