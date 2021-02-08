@@ -7,7 +7,7 @@ In this GitHub repository, you will find the protocol elaborated by the Immunoge
 
 ### Step 1.1. Quality control of genotype data
 
-Create a directory for the bfiles: 
+Create a directory for the bfiles: \
 `mkdir inter`
 
 Conversion of long format files to PLINK binary format file: \
