@@ -203,7 +203,7 @@ In the next R script, you will find the commands used to obtain the final text f
 - Have the same sample names between methylation and genotype. *Important: on the genotype, we understand as sample names the IID, not the FID_IID!*
 - Remove duplicates (in case of necessity). 
 - Have the same samples between methylation and genotype. 
-- Filter CpGs with cross-hybridizing potential, with SNPs (European MAF < 5%) and the ones located in sexual chromosomes. *Important: you will find the SNPs list files on this repository.*
+- Filter CpGs with cross-hybridizing potential, with SNPs (European MAF < 5%) and the ones located in sexual chromosomes. *Important: here are the links to download the CpG lists [1-s2.0-S221359601630071X-mmc1.txt](https://ars.els-cdn.com/content/image/1-s2.0-S221359601630071X-mmc1.txt), [1-s2.0-S221359601630071X-mmc2.tx](https://ars.els-cdn.com/content/image/1-s2.0-S221359601630071X-mmc2.txt),[1-s2.0-S221359601630071X-mmc3.txt](https://ars.els-cdn.com/content/image/1-s2.0-S221359601630071X-mmc3.txt)*
 - Annotate the CpGs by chr, start and end. 
 
 For the output of these steps, we will create a new directory: \
