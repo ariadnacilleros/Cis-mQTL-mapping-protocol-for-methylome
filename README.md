@@ -24,6 +24,12 @@ Change rsIDs of SNPs to ‘chr:position’ format with [change-rsid.R](https://g
 Calculate frequencies: \
 `plink1.9 --bfile inter/whole_genotype --freq --out inter/whole_genotype`
 
+Download and unzip [Haplotype Reference Consortium (HRC) site list](http://www.haplotype-reference-consortium.org/site): 
+```
+wget ftp://ngs.sanger.ac.uk/production/hrc/HRC.r1-1/HRC.r1-1.GRCh37.wgs.mac5.sites.tab.gz
+gunzip HRC.r1-1.GRCh37.wgs.mac5.sites.tab.gz
+```
+
 Execute [pre-imputation Will Rayner’s script](https://www.well.ox.ac.uk/~wrayner/tools/): 
 ```
 perl HRC-1000G-check-bim.pl -b inter/whole_genome.bim -f inter/whole_genome.frq -r HRC.r1-1.GRCh37.wgs.mac5.sites.tab -h -v
