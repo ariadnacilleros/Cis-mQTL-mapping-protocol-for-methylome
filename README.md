@@ -202,7 +202,7 @@ In the next R script, you will find the commands used to obtain the final text f
 For the output of these steps, we will create a new directory: \
 `mkdir EPIC` 
 
-The output of this step should be a text file with the CpGs on the rows and the chr, start, end, CpG ID and beta values per sample on the columns. Here you have an [example]().\
+The output of this step should be a text file with the CpGs on the rows and the chr, start, end, CpG ID and beta values per sample on the columns. Here you have an [example](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/example_bed_file_format.txt).\
 [GSet_to_BED.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/BED_UCSC_GRSet.R)
 
 Sort BED file: 
