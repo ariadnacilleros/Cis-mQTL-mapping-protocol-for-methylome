@@ -257,7 +257,7 @@ The format file for the covariates should be a text file in which the first line
 
 An extra step that could be done is to compute the sex of the samples from the genotype by [--check-sex](https://www.cog-genomics.org/plink/1.9/basic_stats#check_sex) and compare if this one match with your notes. It is not clear if TensorQTL takes into count the sex of the samples provided by the .fam file of the binary PLINK set, in case that you want to take it into count for your analysis, we recommend you to have it described in both places, covariates text file and .fam file. 
 
-## Step 3. Mapping with [TensorQTL](https://github.com/broadinstitute/tensorqtl)
+## Step 5. Mapping with [TensorQTL](https://github.com/broadinstitute/tensorqtl)
 
 Change timestamps from index files: \
 `touch whole_genome_definitive/whole_genome_maf05_filt_samples.bed.gz.tbi`
