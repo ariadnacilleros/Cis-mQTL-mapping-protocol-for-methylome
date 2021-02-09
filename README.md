@@ -228,12 +228,12 @@ Index BED file: \
 Create folder for the final version of the genotype: \
 `mkdir whole_genome_definitive`
 
-Filter VCF by the 5% MAF and by the final list of samples: \
+Filter VCF by the 5% MAF and by the final list of samples: 
 ```
 plink2 --vcf qc-results/concat-allchr.vcf --maf 0.05 --keep EPIC/final_list_samples.txt --make-bed --out whole_genome_definitive/whole_genome_maf05_filt_samples
 ```
 
-*Sometimes --keep doesn't work and keeps all the samples except the ones listes in final_list_samples.txt, if this is the case, change --keep by --remove:* \
+*Sometimes --keep doesn't work and keeps all the samples except the ones listes in final_list_samples.txt, if this is the case, change --keep by --remove:* 
 ```
 plink2 --vcf qc-results/concat-allchr.vcf --maf 0.05 --remove EPIC/final_list_samples.txt --make-bed --out whole_genome_definitive/whole_genome_maf05_filt_samples
 ```
