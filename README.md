@@ -1,12 +1,12 @@
 # Cis-mQTL mapping protocol for placental methylome
 
-In this GitHub repository, you will find the protocol elaborated by the Immunogenetics Research Lab (IRLab) from the University of the Basque Country (UPV/EHU), to map placental cis-mQTLs using the command-line program FastQTL. On the one hand, all the commands and scripts used are available in the Readme, but be careful, you will need to custom some of them, mainly the Rscripts ejecuted from RStudio and not from command line. **Also, during the pipeline, we will be creating new directories for the outputs, but you should always work from outside of them! Have a look at the [diagram bellow](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/directory_diagram.PNG).** 
+In this GitHub repository, you will find the protocol elaborated by the Immunogenetics Research Lab (IRLab) from the University of the Basque Country (UPV/EHU), to map placental cis-mQTLs using the command-line program FastQTL. On the one hand, all the commands and scripts used are available in the Readme but be careful, you will need to custom some of them, mainly the Rscripts executed from RStudio and not from the command line. **Also, during the pipeline, we will be creating new directories for the outputs, but you should always work from outside of them! Have a look at the [diagram below](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/directory_diagram.PNG).** 
 
 ![Image of the working directory](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/directory_diagram.PNG)
 
-On the other hand, in the Wiki you will find each step explained in more detail. To complete the pipeline, you need to have installed: [R and RStudio](https://rstudio-education.github.io/hopr/starting.html), [Plink1.9](https://www.cog-genomics.org/plink/1.9/) and [Plink2](https://www.cog-genomics.org/plink/2.0/), [TensorQTL and its dependencies](https://github.com/broadinstitute/tensorqtl), [bcftools](http://samtools.github.io/bcftools/bcftools.html) and [vcftools](http://vcftools.sourceforge.net/index.html).
+On the other hand, in the Wiki, you will find each step explained in more detail. To complete the pipeline, you need to have installed: [R and RStudio](https://rstudio-education.github.io/hopr/starting.html), [Plink1.9](https://www.cog-genomics.org/plink/1.9/) and [Plink2](https://www.cog-genomics.org/plink/2.0/), [TensorQTL and its dependencies](https://github.com/broadinstitute/tensorqtl), [bcftools](http://samtools.github.io/bcftools/bcftools.html) and [vcftools](http://vcftools.sourceforge.net/index.html).
 
-**In case that you already performed the genotype imputation by Michigan Server and the preprocessment of the methylome by Alexandra Binder’s R package, you can jump to Step 2.2.**
+**In case that you already performed the genotype imputation by the Michigan Server and the preprocessing of the methylome by Alexandra Binder’s R package, you can jump to Step 2.2.**
 
 ## Step 1. Genotype data quality control 
 
@@ -86,10 +86,10 @@ Remove individuals PI_HAT > 0.18 w/less genotype:
 -	Make a list of all samples involved (PIHAT018.txt) 
 
 Select one sample per pair (with lower genotyping freq.) to remove with [rm-pihat018.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/rm-pihat018.R): \
-`Rscript rm-pihat018.R qc/wg-updated-IBD-fail-IBD-check.txt qc/wg-updated-mxy.imiss rmpihat018.txt`
+`Rscript rm-pihat018.R qc/wg-updated-IBD-fail-IBD-check.txt qc/wg-updated-mxy.imiss qc/rmpihat018.txt`
 
 Remove one from each pair: \
-`plink1.9 --bfile qc/wg-updated-IBD --remove rmpihat018.txt --make-bed --out qc/clean-PIHAT`
+`plink1.9 --bfile qc/wg-updated-IBD --remove qc/rmpihat018.txt --make-bed --out qc/clean-PIHAT`
 
 Calculate PCs:\
 `plink1.9 --bfile qc/clean-PIHAT --indep-pairwise 50 5 0.2 --out qc/clean-PIHAT-prunned`
@@ -194,7 +194,7 @@ Obtain the final list of samples of the genotype: \
 Alexandra Binder’s R package to be defined. 
 
 ### Step 2.2. Prepare BED file for FastQTL mapping
-In the next R script, you will find the commands used to obtain the final text file filtered with all the annotation data of the CpGs and the samples. As you will see the following script contain the main commands used by our group to obtain a bed file for our data in text file, using the data contained in an ExpressionSet R object which is the output from Alexandran Binder's R package. Some of the commands can be used directly, but others will need an adaptation to your data or won't be needed. The main steps are: 
+In the next R script, you will find the commands used to obtain the final text file filtered with all the annotation data of the CpGs and the samples. As you will see the following script contains the main commands used by our group to obtain a bed file for our data in a text file, using the data contained in an ExpressionSet R object which is the output from Alexandran Binder's R package. Some of the commands can be used directly, but others will need an adaptation to your data or won't be needed. The main steps are: 
 - Have the same sample names between methylation and genotype. *Important: on the genotype, we understand as sample names the IID, not the FID_IID!*
 - Remove duplicates (in case of necessity). 
 - Have the same samples between methylation and genotype. 
@@ -229,10 +229,10 @@ Filter VCF by the 5% MAF and by the final list of samples: \
 *Sometimes --keep doesn't work and keeps all the samples except the ones listes in final_list_samples.txt, if this is the case, change --keep by --remove:* \
 `plink2 --vcf qc-results/concat-allchr.vcf --maf 0.05 --remove EPIC/final_list_samples.txt --make-bed --out whole_genome_definitive/whole_genome_maf05_filt_samples`
 
-Be careful, when PLINK converts a VCF to a binary PLINK file set, it subsets the name of the samples from the VCF into FID and IID on the binary plink file (.bim, .fam, .bed) by searching a separator which by default is _ . In case of having troubles with it, we leave here a link to [costumize the read of the sample names by PLINK](https://www.cog-genomics.org/plink/2.0/input#sample_id_convert) or [how to change the name of the samples once you already have the binary PLINK file set](https://www.cog-genomics.org/plink/1.9/data#update_indiv). In our case we always set [--const-fid](https://www.cog-genomics.org/plink/1.9/input#double_id) flag which allows you to set FID as 0 in all the samples and the IID as the whole sample name coming from the VCF. Remember that to run TensorQTL, you should match the IID from PLINK with the sample name on the BED file from the methylome. 
+Be careful, when PLINK converts a VCF to a binary PLINK file set, it subsets the name of the samples from the VCF into FID and IID on the binary plink file (.bim, .fam, .bed) by searching a separator which by default is _ . In case of having troubles with it, we leave here a link to [costumize the read of the sample names by PLINK](https://www.cog-genomics.org/plink/2.0/input#sample_id_convert) or [how to change the name of the samples once you already have the binary PLINK file set](https://www.cog-genomics.org/plink/1.9/data#update_indiv). In our case, we always set [--const-fid](https://www.cog-genomics.org/plink/1.9/input#double_id) flag which allows you to set FID as 0 in all the samples and the IID as the whole sample name coming from the VCF. Remember that to run TensorQTL, you should match the IID from PLINK with the sample name on the BED file from the methylome. 
 
 ## Step 4. Prepare covariates file for TensorQTL mapping
-In this analysis the covariates that we are going to use are the sex of the samples and the first five Principal Components of our genotype. Therefore, first of all we will need to perform a Principal Component Analysis (PCA) with PLINK: 
+In this analysis, the covariates that we are going to use are the sex of the samples and the first five Principal Components of our genotype. Therefore, we will need to perform a Principal Component Analysis (PCA) with PLINK: 
 
 ```
 mkdir covariates
@@ -243,16 +243,16 @@ plink --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --extract 
 
 ```
 
-The format file for the covariates should be a text file in which the first line corresponds to the IID of the sample, being the next rows the others covariates as in this (example)[https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/example_covariates_file.txt]. In the following script are the main commands used to obtain the text file: \
+The format file for the covariates should be a text file in which the first line corresponds to the IID of the sample, being the next rows the other covariates as in this (example)[https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/example_covariates_file.txt]. In the following script are the main commands used to obtain the text file: \
 [covariates.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/covariates.R)
-An extra step that could be done is to compute the sex of the samples from the genotype by [--check-sex](https://www.cog-genomics.org/plink/1.9/basic_stats#check_sex) and compare if this one match with your notes. It is not clear if TensorQTL takes in count the sex of the samples provided by the .fam file of the binary PLINK set, in case that you want to take it in count for you analysis, we recomend you to have it described in both places, covariates text file and .fam file. 
+An extra step that could be done is to compute the sex of the samples from the genotype by [--check-sex](https://www.cog-genomics.org/plink/1.9/basic_stats#check_sex) and compare if this one match with your notes. It is not clear if TensorQTL takes into count the sex of the samples provided by the .fam file of the binary PLINK set, in case that you want to take it into count for your analysis, we recommend you to have it described in both places, covariates text file and .fam file. 
 
 ## Step 3. Mapping with [TensorQTL](https://github.com/broadinstitute/tensorqtl)
 
 Change timestamps from index files: \
 `touch whole_genome_definitive/whole_genome_maf05_filt_samples.bed.gz.tbi`
 
-Create a folder for TensorQTL results: \ç
+Create a folder for TensorQTL results: \
 `mkdir tensorQTL`
 
 Open python3 module: \
