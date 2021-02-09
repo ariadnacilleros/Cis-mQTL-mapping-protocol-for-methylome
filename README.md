@@ -98,13 +98,15 @@ Calculate PCs:\
 Perform PCA:\
 `plink1.9 --bfile qc/clean-PIHAT --extract qc/clean-PIHAT-prunned.prune.in --pca --out qc/clean-PIHAT.PCs`
 
-Plot PCs with individuals information (e.g. sex):\
+Plot PCs with individuals information (e.g. sex), the following script contains the main commands, but you should adapt to your data:\
 [plot-PCA.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/plot-PCA.R)
 
 #### Step 1.1.3. Prepare data for imputation
 
-Make directory for chromosome files: \ 
-`mkdir chr`
+Make directory for chromosome files:  
+```
+mkdir chr
+```
 
 Obtain VCF file per chromosome:
 ```
@@ -225,10 +227,14 @@ Create folder for the final version of the genotype: \
 `mkdir whole_genome_definitive`
 
 Filter VCF by the 5% MAF and by the final list of samples: \
-`plink2 --vcf qc-results/concat-allchr.vcf --maf 0.05 --keep EPIC/final_list_samples.txt --make-bed --out whole_genome_definitive/whole_genome_maf05_filt_samples`
+```
+plink2 --vcf qc-results/concat-allchr.vcf --maf 0.05 --keep EPIC/final_list_samples.txt --make-bed --out whole_genome_definitive/whole_genome_maf05_filt_samples
+```
 
 *Sometimes --keep doesn't work and keeps all the samples except the ones listes in final_list_samples.txt, if this is the case, change --keep by --remove:* \
-`plink2 --vcf qc-results/concat-allchr.vcf --maf 0.05 --remove EPIC/final_list_samples.txt --make-bed --out whole_genome_definitive/whole_genome_maf05_filt_samples`
+```
+plink2 --vcf qc-results/concat-allchr.vcf --maf 0.05 --remove EPIC/final_list_samples.txt --make-bed --out whole_genome_definitive/whole_genome_maf05_filt_samples
+```
 
 Be careful, when PLINK converts a VCF to a binary PLINK file set, it subsets the name of the samples from the VCF into FID and IID on the binary plink file (.bim, .fam, .bed) by searching a separator which by default is _ . In case of having troubles with it, we leave here a link to [costumize the read of the sample names by PLINK](https://www.cog-genomics.org/plink/2.0/input#sample_id_convert) or [how to change the name of the samples once you already have the binary PLINK file set](https://www.cog-genomics.org/plink/1.9/data#update_indiv). In our case, we always set [--const-fid](https://www.cog-genomics.org/plink/1.9/input#double_id) flag which allows you to set FID as 0 in all the samples and the IID as the whole sample name coming from the VCF. Remember that to run TensorQTL, you should match the IID from PLINK with the sample name on the BED file from the methylome. 
 
