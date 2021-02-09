@@ -269,7 +269,7 @@ Open python3 module: \
 
 Mapping cis-mQTLs using covariates with TensorQTL: 
 ```
-#Load packages: 
+#Load packages
 import pandas as pd
 import torch
 import tensorqtl
