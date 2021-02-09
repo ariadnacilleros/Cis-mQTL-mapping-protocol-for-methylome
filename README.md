@@ -159,7 +159,7 @@ Decompress info files:
 for i in {1..22}; do bgzip -d chr_imp/chr${i}.info.gz; done
 bgzip -d chr_imp/chrX.info.gz
 ```
-Execute [Will Rayner’s post-imputation QC](https://www.well.ox.ac.uk/~wrayner/tools/Post-Imputation.html). Have a look at the dependencies required in the previous link: 
+Execute [Will Rayner’s post-imputation QC](https://www.well.ox.ac.uk/~wrayner/tools/Post-Imputation.html) which scripts you will find available on the repository, but it is preferable to have a look at the documentation of the previous link and install the whole package to avoid errors: 
 ```
 mkdir qc-vcfparse
 mkdir qc-ic
