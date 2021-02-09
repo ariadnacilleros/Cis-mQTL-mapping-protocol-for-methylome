@@ -241,7 +241,7 @@ plink --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --extract 
 
 ```
 
-The format file for the covariates should be a text file in which the first line corresponds to the IID of the sample, being the next rows the others covariates as in this (example)[]. In the following script are the main commands used to obtain the text file: \
+The format file for the covariates should be a text file in which the first line corresponds to the IID of the sample, being the next rows the others covariates as in this (example)[https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/example_covariates_file.txt]. In the following script are the main commands used to obtain the text file: \
 [covariates.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/covariates.R)
 *An extra step that could be done is to compute the sex of the samples from the genotype by [--check-sex](https://www.cog-genomics.org/plink/1.9/basic_stats#check_sex) and compare if this one match with your notes.*
 
