@@ -208,7 +208,7 @@ For the output of these steps, we will create a new directory: \
 `mkdir EPIC` 
 
 The output of this step should be a text file with the CpGs on the rows and the chr, start, end, CpG ID and beta values per sample on the columns. Here you have an [example](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/example_bed_file_format.txt).\
-[GSet_to_BED.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/BED_UCSC_GRSet.R)
+[GSet_to_BED.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/GSet_to_BED.R)
 
 Sort BED file: 
 ```
@@ -251,7 +251,7 @@ plink --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --extract 
 ```
 
 The format file for the covariates should be a text file in which the first line corresponds to the IID of the sample, being the next rows the other covariates as in this (example)[https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/example_covariates_file.txt]. In the following script are the main commands used to obtain the text file: \
-[covariates.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/covariates.R)
+[covariates_sex_PC5.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/covariates_sex_PC5.R)
 An extra step that could be done is to compute the sex of the samples from the genotype by [--check-sex](https://www.cog-genomics.org/plink/1.9/basic_stats#check_sex) and compare if this one match with your notes. It is not clear if TensorQTL takes into count the sex of the samples provided by the .fam file of the binary PLINK set, in case that you want to take it into count for your analysis, we recommend you to have it described in both places, covariates text file and .fam file. 
 
 ## Step 3. Mapping with [TensorQTL](https://github.com/broadinstitute/tensorqtl)
