@@ -34,6 +34,7 @@ plink1.9 --bfile inter/TEMP1 --update-map inter/Chromosome-whole_genome-HRC.txt 
 plink1.9 --bfile inter/TEMP2 --update-map inter/Position-whole_genome-HRC.txt --make-bed --out inter/TEMP3
 plink1.9 --bfile inter/TEMP3 --flip inter/Strand-Flip-whole_genome-HRC.txt --make-bed --out inter/TEMP4
 plink1.9 --bfile inter/TEMP4 --a2-allele inter/Force-Allele1-whole_genome-HRC.txt --make-bed --out inter/whole_genome-updated
+rm inter/TEMP*
 ```
 
 Make a directory for Quality Control: 
