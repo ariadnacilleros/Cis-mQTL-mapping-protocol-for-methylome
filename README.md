@@ -149,6 +149,7 @@ bgzip -d chr_imp/chrX.info.gz
 Execute [Will Rayner’s post-imputation QC](https://www.well.ox.ac.uk/~wrayner/tools/Post-Imputation.html). Have a look at the dependencies required in the previous link: 
 ```
 mkdir qc-vcfparse
+mkdir qc-ic
 perl vcfparse.pl -d chr_imp -o qc-vcfparse
 perl ic.pl -d qc-vcfparse -r HRC.r1-1.GRCh37.wgs.mac5.sites.tab -o qc-ic
 ```
