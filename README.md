@@ -310,5 +310,5 @@ phenotype_df = phenotype_df.reindex(sorted(phenotype_df.columns), axis=1)
 cis_df = cis.map_cis(genotype_df, variant_df, phenotype_df, phenotype_pos_df, covariates_df=covariates_df, seed=123456789)
 
 #Write TensorQTL results
-
+cis_df.to_csv('tensorQTL/cis_tensorQTL_maf05_PC5_sex.txt', header=True, index=True, sep='\t')
 ```
