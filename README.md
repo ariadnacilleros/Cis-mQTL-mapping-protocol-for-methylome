@@ -251,6 +251,12 @@ plink2 --vcf qc-results/concat-allchr.vcf --maf 0.05 --remove EPIC/final_list_sa
 
 Be careful, when PLINK converts a VCF to a binary PLINK file set, it subsets the name of the samples from the VCF into FID and IID on the binary plink file (.bim, .fam, .bed) by searching a separator which by default is _ . In case of having troubles with it, we leave here a link to [costumize the read of the sample names by PLINK](https://www.cog-genomics.org/plink/2.0/input#sample_id_convert) or [how to change the name of the samples once you already have the binary PLINK file set](https://www.cog-genomics.org/plink/1.9/data#update_indiv). In our case, we always set [--const-fid](https://www.cog-genomics.org/plink/1.9/input#double_id) flag which allows you to set FID as 0 in all the samples and the IID as the whole sample name coming from the VCF. Remember that to run TensorQTL, you should match the IID from PLINK with the sample name on the BED file from the methylome. 
 
+An extra step that we will perform at this point is to calculate the homozygous and heterozygous counts for each SNP: 
+```
+plink --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --freqx --out whole_genome_definitive/whole_genome_maf05_filt_samples
+```
+
+
 ## Step 4. Prepare covariates file for TensorQTL mapping
 In this analysis, the covariates that we are going to use are the sex of the samples and the first five Principal Components of our genotype. Therefore, we will need to perform a Principal Component Analysis (PCA) with PLINK: 
 
@@ -267,11 +273,6 @@ The format file for the covariates should be a text file in which the first line
 [covariates_sex_PC5.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/covariates_sex_PC5.R)
 
 An extra step that could be done is to compute the sex of the samples from the genotype by [--check-sex](https://www.cog-genomics.org/plink/1.9/basic_stats#check_sex) and compare if this one matches with your notes. It is not clear if TensorQTL takes into count the sex of the samples provided by the .fam file of the binary PLINK set, in case that you want to take it into count for your analysis, we recommend you to have it described in both places, covariates text file and .fam file. 
-
-An extra step that we will perform at this point is to calculate the homozygous and heterozygous counts for each SNP: 
-```
-plink --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --freqx --out whole_genome_definitive/whole_genome_maf05_filt_samples
-```
 
 ## Step 5. Mapping with [TensorQTL](https://github.com/broadinstitute/tensorqtl)
 
