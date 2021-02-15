@@ -216,6 +216,7 @@ wget https://ars.els-cdn.com/content/image/1-s2.0-S221359601630071X-mmc2.txt
 wget https://ars.els-cdn.com/content/image/1-s2.0-S221359601630071X-mmc3.txt
 ```
 - Annotate the CpGs by chr, start and end. 
+**In the last lines of the script, you will find the code to obtain the variability information of the CpGs that will be subset and sent to us once the mapping has been done.**
 
 For the output of these steps, we will create a new directory: \
 `mkdir EPIC` 
