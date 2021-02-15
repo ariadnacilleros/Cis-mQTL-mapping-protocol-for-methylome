@@ -43,7 +43,7 @@ df$chr <- chr_vector
 #will correspond to the basename of the array, therefore at this point we changed them 
 #by the correct sample names, which should be the same as the genotype.
 colnames(df)[1:4] <- c("#Chr", "start", "end", "ID")
-for (i in 5:377){
+for (i in 5:ncol(df)){ 
   colnames(df)[i] <- no_duplicates[no_duplicates$Basename == colnames(df)[i], "Sample_Name"]
 }
 
@@ -68,5 +68,19 @@ df_filt_sex_snp_cross <- subset(df_filt_sex_snp_cross, !(ID %in% nonCpG_cross$V1
 #Step 9: Obtain the final dataframe inside a text file following a BED structure format
 write.table(x = df_filt_sex_snp_cross, file = "./methylome_BED.txt", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
 
+#Step 10: Calculate the variance of the probes
+#Step 10.1: Method difference between 10 and 90 percentiles
+Variation<-function(x) {quantile(x, c(0.9), na.rm=T)[[1]]-quantile(x, c(0.1), na.rm=T)[[1]]} #define function
+#apply the function per row (cpg)
+diff_percent <-as.numeric(lapply(1:nrow(df_filt_sex_snp_cross), function(x) Variation(df_filt_sex_snp_cross[x,5:ncol(df_filt_sex_snp_cross)])))
+names(diff_percent) <- df_filt_sex_snp_cross$ID
+df_diff_percent <- data.frame(diff_percent, row.names = names(diff_percent)) #create dataframe for the values
 
+#Step 10.2: Method variances
+variances <- as.vector(apply(df_filt_sex_snp_cross[,5:ncol(df_filt_sex_snp_cross)], 1, FUN = var)) #calculate varainces per row (cpg)
+names(variances) <- df_filt_sex_snp_cross$ID
+df_variances <- data.frame(variances, row.names = names(variances)) #create dataframe for the values
 
+#Step 10.3: Write variability stats into a text file 
+df <- merge(df_diff_percent, df_variances, by ="row.names")
+write.table(file = "EPIC/all_cpg_variances.txt", x = df, sep = "\t", quote = F, row.names = F, col.names = T, dec = ".", na = "NA")
