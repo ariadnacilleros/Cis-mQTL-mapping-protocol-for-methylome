@@ -316,6 +316,17 @@ phenotype_df = phenotype_df.reindex(sorted(phenotype_df.columns), axis=1)
 #Run TensorQTL
 cis_df = cis.map_cis(genotype_df, variant_df, phenotype_df, phenotype_pos_df, covariates_df=covariates_df, seed=123456789)
 
-#Write TensorQTL results
-cis_df.to_csv('tensorQTL/cis_tensorQTL_maf05_PC5_sex.txt', header=True, index=True, sep='\t')
+#Write TensorQTL results in a text file named like cis_tensorQTL_maf05_PC5_sex_(your cohort).txt, e.g. cis_tensorQTL_maf05_PC5_sex_INMA.txt
+cis_df.to_csv('tensorQTL/cis_tensorQTL_maf05_PC5_sex_INMA.txt', header=True, index=True, sep='\t')
 ```
+Once the mapping has been complete you can close the python module by executing `exit()`
+
+## Step 6. Send the results
+
+Finally, by using the following RScript, you will correct the results by multiple-testing (Bonferroni) and create two files, one of them will contain the genotype counts and the MAF of the mQTL-participating SNPs, and the other will store the variability information of the mQTL-participating CpGs. The name of these two files should be maf_counts_table_snps_(your cohort abbreviation).txt for the SNPs, and variance_table_cpgs_(your cohort abbreviation).txt. In the case of the INMA cohort, the names should be maf_counts_table_snps_INMA.txt and variance_table_cpgs_INMA.txt. 
+[analyse_results.R]()
+
+Send to us the following files: 
+- TensorQTL results (cis_tensorQTL_maf05_PC5_sex_INMA.txt)
+- mQTL-participating CpGs variability information (variance_table_cpgs_INMA.txt)
+- mQTL-participating SNPs MAF and frequency information (maf_counts_table_snps_INMA.txt)
