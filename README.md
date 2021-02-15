@@ -70,7 +70,7 @@ Remove markers by MAF/geno (missing call rate)/HWE thresholds: \
 #### Step 1.1.2. Filter samples
 
 Calculate heterozygosity: \
-`plink1.9 --bfile qc/wg-updated-marker --het --out qc/wg-updated-marker.het`
+`plink1.9 --bfile qc/wg-updated-marker --het --out qc/wg-updated-marker`
 
 Plot missing call rate vs heterozygosity and subset individuals with > ± 4 x standard deviation (SD) using [imiss-vs-het.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/imiss-vs-het.R): \
 `Rscript imiss-vs-het.R qc/wg-updated-mxy.imiss qc/wg-updated-marker.het`
