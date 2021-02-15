@@ -1,3 +1,8 @@
+#Objective: analyse results and extract the necessary tables to send 
+#Latest version: 14-02-21
+#Contact: acilleros001@ikasle.ehu.eus
+
+#set your working directory inside covariates folder
 setwd("./covariates/")
 
 #Step 1: Load file with the sex of each sample
