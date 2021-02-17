@@ -18,8 +18,11 @@ Create a directory for the bfiles: \
 Conversion of long format files to PLINK binary format file: \
 `plink1.9 --file {your filename} --make-bed --out inter/whole_genotype`
 
-Change rsIDs of SNPs to ‘chr:position’ format with [change-rsid.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/change-rsid.R): \
-`Rscript change-rsid.R inter/whole_genotype.bim`
+To know if the sex of the samples is reported on the [fam file](https://www.cog-genomics.org/plink/1.9/formats#fam): \
+`head inter/whole_genotype.fam`
+
+If the fifth column of the file contains only 0, you will need to add the sex of the samples adapting the following script to the sample sheet that you may have with the sex of the samples reported:
+[add-sex.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/add-sex.R) 
 
 Calculate frequencies: \
 `plink1.9 --bfile inter/whole_genotype --freq --out inter/whole_genotype`
@@ -45,27 +48,27 @@ plink1.9 --bfile inter/TEMP4 --a2-allele inter/Force-Allele1-whole_genome-HRC.tx
 rm inter/TEMP*
 ```
 
-Make a directory for Quality Control: 
-```
-mkdir qc
-```
+Change rsIDs of SNPs to ‘chr:position’ format with [change-rsid.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/change-rsid.R): \
+`Rscript change-rsid.R inter/whole_genotype-updated.bim`
 
-Add missing sex like in the following R script, but adapt it to your inputs: \
-[add-sex.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/add-sex.R)
+Obtain the genotyping sex from the samples: 
+`plink --bfile inter/whole_genotype-updated.bim --check-sex --out inter/whole_genotype-updated`
 
-Merge sexual chromosomes: \
-`plink1.9 --bfile inter/whole_genome-updated --merge-x no-fail --make-bed --out qc/wg-updated-mxy` 
+Add the sex of the samples with unknown (linea 88-89) 
 
 #### Step 1.1.1. Filter SNPs
 
+Make a directory for Quality Control: \
+`mkdir qc`
+
 Calculate frequencies: \
-`plink1.9 --bfile qc/wg-updated-mxy --freq --out qc/wg-updated-mxy`
+`plink1.9 --bfile inter/whole_genotype-updated --freq --out inter/whole_genotype-updated`
 
 Calculate missing call rate: \
-`plink1.9 --bfile qc/wg-updated-mxy --missing --out qc/wg-updated-mxy`
+`plink1.9 --bfile inter/whole_genotype-updated --missing --out inter/whole_genotype-updated`
 
 Remove markers by MAF/geno (missing call rate)/HWE thresholds: \
-`plink2 --bfile qc/wg-updated-mxy --geno 0.05 --hwe 1e-06 --maf 0.01 --make-bed --out qc/wg-updated-marker`
+`plink2 --bfile inter/whole_genotype-updated --geno 0.05 --hwe 1e-06 --maf 0.01 --make-bed --out qc/wg-updated-marker`
 
 #### Step 1.1.2. Filter samples
 
@@ -73,29 +76,28 @@ Calculate heterozygosity: \
 `plink1.9 --bfile qc/wg-updated-marker --het --out qc/wg-updated-marker`
 
 Plot missing call rate vs heterozygosity and subset individuals with > ± 4 x standard deviation (SD) using [imiss-vs-het.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/imiss-vs-het.R): \
-`Rscript imiss-vs-het.R qc/wg-updated-mxy.imiss qc/wg-updated-marker.het`
+`Rscript imiss-vs-het.R inter/whole_genotype-updated.imiss qc/wg-updated-marker.het`
 
 Remove selected individuals (> ± 4 x SD): \
-`plink1.9 --bfile qc/wg-updated-marker --remove filter-het.txt --make-bed --out qc/wg-updated-rmhet` 
+`plink1.9 --bfile qc/wg-updated-marker --remove filter-het.txt --make-bed --out qc/wg-updated-marker-rmhet` 
+
+Calculate missing call rate: \
+`plink --bfile qc/wg-updated-marker-rmhet --missing --out qc/wg-updated-marker-rmhet`
 
 Remove individuals with 0.03 missing markers: \
-`plink1.9 --bfile qc/wg-updated-rmhet --mind 0.03 --make-bed --out qc/wg-updated-ind`
+`plink1.9 --bfile qc/wg-updated-marker-rmhet --mind 0.03 --make-bed --out qc/wg-updated-marker-rmhet-ind`
 
-Check sex concordance: \
-`plink1.9 --bfile qc/wg-updated-ind --check-sex --out qc/wg-updated-ind`
+Check sex concordance: **Sergi** \ 
+`plink --bfile ${filename}-ind --remove rm-sex-inconsistency.txt --make-bed --out ${filename}-rmsex`
 
 Calculate relatedness by [Identity-by-descent (IBD)](https://www.cog-genomics.org/plink/1.9/ibd): \
-`plink1.9 --bfile qc/wg-updated-ind --genome --make-bed --out qc/wg-updated-IBD`
+`plink1.9 --bfile qc/wg-updated-marker-rmhet-ind --genome --make-bed --out qc/wg-updated-marker-rmhet-ind`
 
 Plot IBD values and subset individuals with PI_HAT > 0.18 with [plot-IBD.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/plot-IBD.R): \
-`Rscript plot-IBD.R qc/wg-updated-IBD`
-
-Remove individuals PI_HAT > 0.18 w/less genotype:
--	Open the file with related individual pairs (qc/wg-updated-IBD-fail-IBD-check.txt)
--	Make a list of all samples involved (PIHAT018.txt) 
+`Rscript plot-IBD.R qc/wg-updated-marker-rmhet-ind`
 
 Select one sample per pair (with lower genotyping freq.) to remove with [rm-pihat018.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/rm-pihat018.R): \
-`Rscript rm-pihat018.R qc/wg-updated-IBD-fail-IBD-check.txt qc/wg-updated-mxy.imiss qc/rmpihat018.txt`
+`Rscript rm-pihat018.R qc/wg-updated-marker-rmhet-ind-fail-IBD-check.txt qc/wg-updated-marker-rmhet.imiss qc/rmpihat018.txt`
 
 Remove one from each pair: \
 `plink1.9 --bfile qc/wg-updated-IBD --remove qc/rmpihat018.txt --make-bed --out qc/clean-PIHAT`
@@ -154,11 +156,35 @@ Decompress downloaded folders with the corresponding password (email):
 for i in {1..22}; do unzip -P 'PASSWORD' chr_imp/chr_${i}; done
 unzip -P 'PASSWORD' chr_imp/chr_X
 ```
-Decompress info files: 
+Removing zips: \
+`rm -r chr_imp/*.zip`
+
+Create folder for filtered VCFs: 
+`mkdir imputed-rsq09`
+
+Filter SNPs by Rsq(R2) > 0.9: 
 ```
-for i in {1..22}; do bgzip -d chr_imp/chr${i}.info.gz; done
-bgzip -d chr_imp/chrX.info.gz
+for i in {1..22};
+do
+bcftools filter -i 'R2>0.9' -o imputed-rsq09/chr${i}.vcf.gz -Oz chr_imp/chr${i}.dose.vcf.gz &
+done
+bcftools filter -i 'R2>0.9' -o imputed-rsq09/chrX.vcf.gz -Oz chr_imp/chrX.dose.vcf.gz
 ```
+
+Make a list of the VCF files to be concatenated: 
+```
+for i in {1..22};
+do
+echo imputed-rsq09/chr${i}.vcf.gz >> imputed-rsq09/tmp-concat.txt
+done
+echo imputed-rsq09/chrX.vcf.gz >> imputed-rsq09/tmp-concat.txt
+```
+
+Concatenate VCF files: 
+```
+bcftools concat -f imputed-rsq09/tmp-concat.txt --threads 16 -o imputed-rsq09/chrALL.vcf.gz -Oz imputed-rsq09/tmp-concat.txt
+```
+
 Execute [Will Rayner’s post-imputation QC](https://www.well.ox.ac.uk/~wrayner/tools/Post-Imputation.html) which scripts you will find available on the repository, but it is preferable to have a look at the documentation of the previous link and install the whole package to avoid errors: 
 ```
 mkdir qc-vcfparse
@@ -166,39 +192,11 @@ mkdir qc-ic
 perl vcfparse.pl -d chr_imp -o qc-vcfparse
 perl ic.pl -d qc-vcfparse -r HRC.r1-1.GRCh37.wgs.mac5.sites.tab -o qc-ic
 ```
-Filter SNPs by Rsq from chromosome 1 to 22: 
-```
-mkdir qc-results
-for i in {1..22};
-do
-wc -l chr_imp/chr${i}.info
-awk '{if($7 > 0.9) {print $1}}' chr_imp/chr${i}.info | tail -n +2 > qc-results/filt${i}.snps
-wc -l qc-results/filt${i}.snps
-vcftools --gzvcf  chr_imp/chr${i}.dose.vcf.gz --snps qc-results/filt${i}.snps --recode --out qc-results/chr-filtered-${i} &
-done
-```
-Filter SNPs by Rsq from chromosome X:
-```
-i=X
-wc -l chr_imp/chr${i}.info
-awk '{if($7 > 0.9) {print $1}}' chr_imp/chr${i}.info | tail -n +2 > qc-results/filt${i}.snps
-wc -l qc-results/filt${i}.snps
-vcftools --gzvcf chr_imp/chr${i}.dose.vcf.gz --snps qc-results/filt${i}.snps --recode --out qc_results/chr-filtered-${i}
-```
-Record the name of all the VCFs file to concatenate: 
-```
-mkdir qc-results/tmp-concat
-for i in {1..22};
-do
-echo qc-results/chr-filtered-${i}.recode.vcf >> qc-results/tmp-concat/tmp.concat
-done
-echo qc-results/chr-filtered-X.recode.vcf >> qc-results/tmp-concat/tmp.concat
-```
-Concatenate VCF files into one file: \
-`bcftools concat -f qc-results/tmp-concat/tmp.concat -o qc-results/concat-allchr.vcf`
 
 Obtain the final list of samples of the genotype: \
-`bcftools query -l qc-results/concat-allchr.vcf >> qc-results/sample_list_geno.txt`
+`bcftools query -l imputed-rsq09/chrALL.vcf.gz >> imputed-rsq09/sample_list_geno.txt`
+
+
 
 ## Step 2. Methylome data quality control
 ### Step 2.1. Betas quality control 
