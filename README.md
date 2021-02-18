@@ -13,12 +13,15 @@ On the other hand, in the Wiki, you will find each step explained in more detail
 ### Step 1.1. Quality control of genotype data
 
 Create a directory for the bfiles: \
+
 `mkdir inter`
 
 Conversion of long format files to PLINK binary format file: \
+
 `plink1.9 --file {your filename} --make-bed --out inter/whole_genotype`
 
 To know if the sex of the samples is reported on the [fam file](https://www.cog-genomics.org/plink/1.9/formats#fam): \
+
 `head inter/whole_genotype.fam`
 
 If the fifth column of the file contains only 0, you will need to add the sex of the samples adapting the following script to the sample sheet that you may have with the sex of the samples reported:
@@ -101,8 +104,10 @@ Calculate relatedness by [Identity-by-descent (IBD)](https://www.cog-genomics.or
 Plot IBD values and subset individuals with PI_HAT > 0.18 with [plot-IBD.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/plot-IBD.R): \
 `Rscript plot-IBD.R qc/wg-updated-marker-rmhet-ind`
 
-Select one sample per pair (with lower genotyping freq.) to remove with [rm-pihat018.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/rm-pihat018.R): \
-`Rscript rm-pihat018.R qc/wg-updated-marker-rmhet-ind-fail-IBD-check.txt qc/wg-updated-marker-rmhet.imiss qc/rmpihat018.txt`
+Select one sample per pair (with lower genotyping freq.) to remove with [rm-pihat018.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/rm-pihat018.R): 
+```
+Rscript rm-pihat018.R qc/wg-updated-marker-rmhet-ind-fail-IBD-check.txt qc/wg-updated-marker-rmhet.imiss qc/rmpihat018.txt
+```
 
 Remove one from each pair: \
 `plink1.9 --bfile qc/wg-updated-IBD --remove qc/rmpihat018.txt --make-bed --out qc/clean-PIHAT`
