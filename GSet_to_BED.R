@@ -18,7 +18,7 @@ pheno <- data.frame(pData(processedOut$mset))
 no_duplicates <- pheno[-c(168,300,340),]
 
 #Step 3: Filter samples. 
-samples_geno <- read.table("../qc-results/sample_list_geno.txt", quote="\"", comment.char="")
+samples_geno <- read.table("../imputed-rsq09/sample_list_geno.txt", quote="\"", comment.char="")
 final_list_samples <- intersect(samples_geno$V1, no_duplicates$Sample_Name)
 write.table(x = final_list_samples, file = "./final_list_samples.txt", sep="\t", row.names = F, col.names = F)
 no_duplicates <- no_duplicates[no_duplicates$Sample_Name %in% final_list_samples, ]
