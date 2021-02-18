@@ -24,7 +24,7 @@ To know if the sex of the samples is reported on the [fam file](https://www.cog-
 
 `head inter/whole_genotype.fam`
 
-If the fifth column of the file contains only 0, you will need to add the sex of the samples adapting the following script to the sample sheet that you may have with the sex of the samples reported:
+If the fifth column of the file contains only 0, you will need to add the sex of the samples adapting the following script to the sample sheet that you may have with the sex of the samples reported: \
 [add-sex.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/add-sex.R) 
 
 Calculate frequencies: 
