@@ -83,7 +83,6 @@ Remove individuals with 0.03 missing markers: \
 `plink1.9 --bfile qc/wg-updated-marker-rmhet --mind 0.03 --make-bed --out qc/wg-updated-marker-rmhet-ind`
 
 Obtain the genotyping sex from the samples: \ 
-
 `plink1.9 --bfile qc/wg-updated-marker-rmhet-ind --check-sex --out qc/wg-updated-marker-rmhet-ind`
 
 On the previous step, once we have calculated the sex of the samples by [--check-sex](https://www.cog-genomics.org/plink/1.9/basic_stats#check_sex) flag, we should see the consistency that our reported sex has with the new one. 
