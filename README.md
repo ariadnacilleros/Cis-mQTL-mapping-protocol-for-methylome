@@ -51,11 +51,6 @@ rm inter/TEMP*
 Change rsIDs of SNPs to ‘chr:position’ format with [change-rsid.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/change-rsid.R): \
 `Rscript change-rsid.R inter/whole_genotype-updated.bim`
 
-Obtain the genotyping sex from the samples: 
-`plink --bfile inter/whole_genotype-updated.bim --check-sex --out inter/whole_genotype-updated`
-
-Add the sex of the samples with unknown (linea 88-89) 
-
 #### Step 1.1.1. Filter SNPs
 
 Make a directory for Quality Control: \
@@ -87,8 +82,13 @@ Calculate missing call rate: \
 Remove individuals with 0.03 missing markers: \
 `plink1.9 --bfile qc/wg-updated-marker-rmhet --mind 0.03 --make-bed --out qc/wg-updated-marker-rmhet-ind`
 
-Check sex concordance: **Sergi** \ 
-`plink --bfile ${filename}-ind --remove rm-sex-inconsistency.txt --make-bed --out ${filename}-rmsex`
+Obtain the genotyping sex from the samples: 
+`plink --bfile qc/wg-updated-marker-rmhet-ind --check-sex --out qc/wg-updated-marker-rmhet-ind`
+
+On the previous step, once we have calculated the sex of the samples by [--check-sex](https://www.cog-genomics.org/plink/1.9/basic_stats#check_sex) flag, we should see the consistency that our reported sex has with the new one. 
+`awk '{if ($3 != $4) print $1,"\t",$2,"\t",$3,"\t",$4}' qc/wg-updated-marker-rmhet-ind.sexcheck >> qc/sex_inconsistencies.txt`
+
+In case of having sex inconcistencies, before removing them, we recommend you to talk with the technician who obtained the samples and see if there could be a mistake. In the case that you don’t reach any conclusion with the technician, you could reassign the sex of the sample in the .fam file with [--make-just-fam](https://www.cog-genomics.org/plink/2.0/data#make_just_pvar) flag or discard the sample using [--remove](https://www.cog-genomics.org/plink/1.9/filter#indiv) flag from PLINK.
 
 Calculate relatedness by [Identity-by-descent (IBD)](https://www.cog-genomics.org/plink/1.9/ibd): \
 `plink1.9 --bfile qc/wg-updated-marker-rmhet-ind --genome --make-bed --out qc/wg-updated-marker-rmhet-ind`
@@ -240,7 +240,7 @@ Create folder for the final version of the genotype: \
 
 Filter VCF by the 5% MAF and by the final list of samples: 
 ```
-plink2 --vcf qc-results/concat-allchr.vcf --maf 0.05 --keep EPIC/final_list_samples.txt --make-bed --out whole_genome_definitive/whole_genome_maf05_filt_samples
+plink2 --vcf  imputed-rsq09/chrALL.vcf.gz --maf 0.05 --keep EPIC/final_list_samples.txt --make-bed --out whole_genome_definitive/whole_genome_maf05_filt_samples
 ```
 
 *Sometimes --keep doesn't work and keeps all the samples except the ones listes in final_list_samples.txt, if this is the case, change --keep by --remove:* 
