@@ -12,22 +12,23 @@ On the other hand, in the Wiki, you will find each step explained in more detail
 
 ### Step 1.1. Quality control of genotype data
 
-Create a directory for the bfiles: \
+Create a directory for the bfiles: 
 
 `mkdir inter`
 
-Conversion of long format files to PLINK binary format file: \
+Conversion of long format files to PLINK binary format file: 
 
 `plink1.9 --file {your filename} --make-bed --out inter/whole_genotype`
 
-To know if the sex of the samples is reported on the [fam file](https://www.cog-genomics.org/plink/1.9/formats#fam): \
+To know if the sex of the samples is reported on the [fam file](https://www.cog-genomics.org/plink/1.9/formats#fam): 
 
 `head inter/whole_genotype.fam`
 
 If the fifth column of the file contains only 0, you will need to add the sex of the samples adapting the following script to the sample sheet that you may have with the sex of the samples reported:
 [add-sex.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/add-sex.R) 
 
-Calculate frequencies: \
+Calculate frequencies: 
+
 `plink1.9 --bfile inter/whole_genotype --freq --out inter/whole_genotype`
 
 Download and unzip [Haplotype Reference Consortium (HRC) site list](http://www.haplotype-reference-consortium.org/site): 
@@ -51,38 +52,48 @@ plink1.9 --bfile inter/TEMP4 --a2-allele inter/Force-Allele1-whole_genome-HRC.tx
 rm inter/TEMP*
 ```
 
-Change rsIDs of SNPs to ‘chr:position’ format with [change-rsid.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/change-rsid.R): \
+Change rsIDs of SNPs to ‘chr:position’ format with [change-rsid.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/change-rsid.R): 
+
 `Rscript change-rsid.R inter/whole_genotype-updated.bim`
 
 #### Step 1.1.1. Filter SNPs
 
-Make a directory for Quality Control: \
+Make a directory for Quality Control: 
+
 `mkdir qc`
 
-Calculate frequencies: \
+Calculate frequencies: 
+
 `plink1.9 --bfile inter/whole_genotype-updated --freq --out inter/whole_genotype-updated`
 
-Calculate missing call rate: \
+Calculate missing call rate: 
+
 `plink1.9 --bfile inter/whole_genotype-updated --missing --out inter/whole_genotype-updated`
 
-Remove markers by MAF/geno (missing call rate)/HWE thresholds: \
-`plink2 --bfile inter/whole_genotype-updated --geno 0.05 --hwe 1e-06 --maf 0.01 --make-bed --out qc/wg-updated-marker`
+Remove markers by MAF/geno (missing call rate)/HWE thresholds: 
+
+`plink1.9 --bfile inter/whole_genotype-updated --geno 0.05 --hwe 1e-06 --maf 0.01 --make-bed --out qc/wg-updated-marker`
 
 #### Step 1.1.2. Filter samples
 
-Calculate heterozygosity: \
+Calculate heterozygosity: 
+
 `plink1.9 --bfile qc/wg-updated-marker --het --out qc/wg-updated-marker`
 
-Plot missing call rate vs heterozygosity and subset individuals with > ± 4 x standard deviation (SD) using [imiss-vs-het.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/imiss-vs-het.R): \
+Plot missing call rate vs heterozygosity and subset individuals with > ± 4 x standard deviation (SD) using [imiss-vs-het.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/imiss-vs-het.R): 
+
 `Rscript imiss-vs-het.R inter/whole_genotype-updated.imiss qc/wg-updated-marker.het`
 
-Remove selected individuals (> ± 4 x SD): \
+Remove selected individuals (> ± 4 x SD): 
+
 `plink1.9 --bfile qc/wg-updated-marker --remove filter-het.txt --make-bed --out qc/wg-updated-marker-rmhet` 
 
-Calculate missing call rate: \
+Calculate missing call rate: 
+
 `plink1.9 --bfile qc/wg-updated-marker-rmhet --missing --out qc/wg-updated-marker-rmhet`
 
-Remove individuals with 0.03 missing markers: \
+Remove individuals with 0.03 missing markers: 
+
 `plink1.9 --bfile qc/wg-updated-marker-rmhet --mind 0.03 --make-bed --out qc/wg-updated-marker-rmhet-ind`
 
 Obtain the genotyping sex from the samples: 
@@ -98,10 +109,12 @@ awk '{if ($3 != $4) print $1,"\t",$2,"\t",$3,"\t",$4}' qc/wg-updated-marker-rmhe
 In case of having sex inconcistencies, before removing them, we recommend you to talk with the technician who obtained the samples and see if there could be a mistake. In the case that you don’t reach any conclusion with the technician, you could reassign the sex of the sample in the .fam file with [--make-just-fam](https://www.cog-genomics.org/plink/2.0/data#make_just_pvar) flag or discard the sample using [--remove](https://www.cog-genomics.org/plink/1.9/filter#indiv) flag from PLINK.
 
 
-Calculate relatedness by [Identity-by-descent (IBD)](https://www.cog-genomics.org/plink/1.9/ibd): \
+Calculate relatedness by [Identity-by-descent (IBD)](https://www.cog-genomics.org/plink/1.9/ibd): 
+
 `plink1.9 --bfile qc/wg-updated-marker-rmhet-ind --genome --make-bed --out qc/wg-updated-marker-rmhet-ind`
 
-Plot IBD values and subset individuals with PI_HAT > 0.18 with [plot-IBD.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/plot-IBD.R): \
+Plot IBD values and subset individuals with PI_HAT > 0.18 with [plot-IBD.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/plot-IBD.R): 
+
 `Rscript plot-IBD.R qc/wg-updated-marker-rmhet-ind`
 
 Select one sample per pair (with lower genotyping freq.) to remove with [rm-pihat018.R](https://github.com/ariadnacilleros/Cis-eQTL-mapping-protocol-for-methylome/blob/main/rm-pihat018.R): 
@@ -109,13 +122,16 @@ Select one sample per pair (with lower genotyping freq.) to remove with [rm-piha
 Rscript rm-pihat018.R qc/wg-updated-marker-rmhet-ind-fail-IBD-check.txt qc/wg-updated-marker-rmhet.imiss qc/rmpihat018.txt
 ```
 
-Remove one from each pair: \
+Remove one from each pair: 
+
 `plink1.9 --bfile qc/wg-updated-IBD --remove qc/rmpihat018.txt --make-bed --out qc/clean-PIHAT`
 
-Calculate PCs:\
+Calculate PCs:
+
 `plink1.9 --bfile qc/clean-PIHAT --indep-pairwise 50 5 0.2 --out qc/clean-PIHAT-prunned`
 
-Perform PCA:\
+Perform PCA:
+
 `plink1.9 --bfile qc/clean-PIHAT --extract qc/clean-PIHAT-prunned.prune.in --pca --out qc/clean-PIHAT.PCs`
 
 Plot PCs with individuals information (e.g. sex), the following script contains the main commands, but you should adapt to your data:\
@@ -123,10 +139,9 @@ Plot PCs with individuals information (e.g. sex), the following script contains 
 
 #### Step 1.1.3. Prepare data for imputation
 
-Make directory for chromosome files:  
-```
-mkdir chr
-```
+Make directory for chromosome files:
+
+`mkdir chr`
 
 Obtain VCF file per chromosome:
 ```
@@ -158,7 +173,8 @@ To download the imputed genotype data from the server, use the commands indicate
 mkdir chr_imp
 cd chr_imp
 ```
-Once you donwloaded the files inside `chr_imp` folder, get out from it by: \
+Once you donwloaded the files inside `chr_imp` folder, get out from it by: 
+
 `cd ../`
 
 Decompress downloaded folders with the corresponding password (email):
@@ -166,10 +182,12 @@ Decompress downloaded folders with the corresponding password (email):
 for i in {1..22}; do unzip -P 'PASSWORD' chr_imp/chr_${i}; done
 unzip -P 'PASSWORD' chr_imp/chr_X
 ```
-Removing zips: \
+Removing zips: 
+
 `rm -r chr_imp/*.zip`
 
 Create folder for filtered VCFs: 
+
 `mkdir imputed-rsq09`
 
 Filter SNPs by Rsq(R2) > 0.9: 
@@ -203,7 +221,8 @@ perl vcfparse.pl -d chr_imp -o qc-vcfparse
 perl ic.pl -d qc-vcfparse -r HRC.r1-1.GRCh37.wgs.mac5.sites.tab -o qc-ic
 ```
 
-Obtain the final list of samples of the genotype: \
+Obtain the final list of samples of the genotype: 
+
 `bcftools query -l imputed-rsq09/chrALL.vcf.gz >> imputed-rsq09/sample_list_geno.txt`
 
 
@@ -226,7 +245,8 @@ wget https://ars.els-cdn.com/content/image/1-s2.0-S221359601630071X-mmc3.txt
 - Annotate the CpGs by chr, start and end. 
 **In the last lines of the script, you will find the code to obtain the variability information of the CpGs that will be subset and sent to us once the mapping has been done.**
 
-For the output of these steps, we will create a new directory: \
+For the output of these steps, we will create a new directory: 
+
 `mkdir EPIC` 
 
 The output of this step should be a text file with the CpGs on the rows and the chr, start, end, CpG ID and beta values per sample on the columns. Here you have an [example](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/example_bed_file_format.txt).\
@@ -237,17 +257,20 @@ Sort BED file:
 (head -n1 EPIC/methylome_BED.txt && sort -k1,1V -k2,2n -k3,3n <(tail -n+2 EPIC/methylome_BED.txt)) > EPIC/methylome_sorted.bed
 ```
 
-Zipp BED file: \
+Zipp BED file: 
+
 `bgzip EPIC/methylome_sorted.bed` 
 
-Index BED file: \
+Index BED file: 
+
 `tabix -p bed EPIC/methylome_sorted.bed.gz`
 
 
 
 ## Step 3. Obtain final format for genotype data
 
-Create folder for the final version of the genotype: \
+Create folder for the final version of the genotype: 
+
 `mkdir whole_genome_definitive`
 
 Filter VCF by the 5% MAF and by the final list of samples: 
@@ -264,7 +287,7 @@ Be careful, when PLINK converts a VCF to a binary PLINK file set, it subsets the
 
 An extra step that we will perform at this point is to calculate the homozygous and heterozygous counts for each SNP: 
 ```
-plink --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --freqx --out whole_genome_definitive/whole_genome_maf05_filt_samples
+plink1.9 --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --freqx --out whole_genome_definitive/whole_genome_maf05_filt_samples
 ```
 
 
@@ -287,13 +310,16 @@ An extra step that could be done is to compute the sex of the samples from the g
 
 ## Step 5. Mapping with [TensorQTL](https://github.com/broadinstitute/tensorqtl)
 
-Change timestamps from index files: \
+Change timestamps from index files: 
+
 `touch whole_genome_definitive/whole_genome_maf05_filt_samples.bed.gz.tbi`
 
-Create a folder for TensorQTL results: \
+Create a folder for TensorQTL results: 
+
 `mkdir tensorQTL`
 
-Open python3 module: \
+Open python3 module: 
+
 `python3`
 
 Mapping cis-mQTLs using covariates with TensorQTL: 
@@ -326,17 +352,18 @@ phenotype_df = phenotype_df.reindex(sorted(phenotype_df.columns), axis=1)
 #Run TensorQTL
 cis_df = cis.map_cis(genotype_df, variant_df, phenotype_df, phenotype_pos_df, covariates_df=covariates_df, seed=123456789)
 
-#Write TensorQTL results in a text file named like cis_tensorQTL_maf05_PC5_sex_(your cohort).txt, e.g. cis_tensorQTL_maf05_PC5_sex_INMA.txt
-cis_df.to_csv('tensorQTL/cis_tensorQTL_maf05_PC5_sex_INMA.txt', header=True, index=True, sep='\t')
+#Write TensorQTL results in a text file named like cis_tensorQTL_maf05_PC5_sex_(your cohort)_(ddmmaaaa).txt, 
+#e.g. cis_tensorQTL_maf05_PC5_sex_INMA_18022021.txt
+cis_df.to_csv('tensorQTL/cis_tensorQTL_maf05_PC5_sex_INMA_18022021.txt', header=True, index=True, sep='\t')
 ```
 Once the mapping has been complete you can close the python module by executing `exit()`
 
 ## Step 6. Send the results
 
-Finally, by using the following RScript, you will correct the results by multiple-testing (Bonferroni) and create two files, one of them will contain the genotype counts and the MAF of the mQTL-participating SNPs, and the other will store the variability information of the mQTL-participating CpGs. The name of these two files should be maf_counts_table_snps_(your cohort abbreviation).txt for the SNPs, and variance_table_cpgs_(your cohort abbreviation).txt. In the case of the INMA cohort, the names should be maf_counts_table_snps_INMA.txt and variance_table_cpgs_INMA.txt. \
+Finally, by using the following RScript, you will correct the results by multiple-testing (Bonferroni) and create two files, one of them will contain the genotype counts and the MAF of the mQTL-participating SNPs, and the other will store the variability information of the mQTL-participating CpGs. The name of these two files should be `maf_counts_table_snps_(your cohort abbreviation)_(ddmmaaaa).txt` for the SNPs, and `variance_table_cpgs_(your cohort abbreviation)_(ddmmaaaa).txt`. In the case of the INMA cohort analysis performed on the day 18-02-2021, the names should be maf_counts_table_snps_INMA_18022021.txt and variance_table_cpgs_INMA_18022021.txt. \
 [analyse_results.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/analyse_results.R)
 
 Send to us the following files: 
-- TensorQTL results (cis_tensorQTL_maf05_PC5_sex_INMA.txt)
-- mQTL-participating CpGs variability information (variance_table_cpgs_INMA.txt)
-- mQTL-participating SNPs MAF and frequency information (maf_counts_table_snps_INMA.txt)
+- TensorQTL results (cis_tensorQTL_maf05_PC5_sex_INMA_18022021.txt)
+- mQTL-participating CpGs variability information (variance_table_cpgs_INMA_18022021.txt)
+- mQTL-participating SNPs MAF and frequency information (maf_counts_table_snps_INMA_18022021.txt)
