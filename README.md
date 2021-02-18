@@ -360,7 +360,7 @@ Once the mapping has been complete you can close the python module by executing 
 
 ## Step 6. Send the results
 
-Finally, by using the following RScript, you will correct the results by multiple-testing (Bonferroni) and create two files, one of them will contain the genotype counts and the MAF of the mQTL-participating SNPs, and the other will store the variability information of the mQTL-participating CpGs. The name of these two files should be `maf_counts_table_snps_(your cohort abbreviation)_(ddmmaaaa).txt` for the SNPs, and `variance_table_cpgs_(your cohort abbreviation)_(ddmmaaaa).txt`. In the case of the INMA cohort analysis performed on the day 18-02-2021, the names should be maf_counts_table_snps_INMA_18022021.txt and variance_table_cpgs_INMA_18022021.txt. \
+Finally, by using the following RScript, you will correct the results by multiple-testing (Bonferroni) and create two files, one of them will contain the genotype counts and the MAF of the mQTL-participating SNPs, and the other will store the variability information of the mQTL-participating CpGs. The name of these two files should be `maf_counts_table_snps_(your cohort abbreviation)_(ddmmaaaa).txt` for the SNPs, and `variance_table_cpgs_(your cohort abbreviation)_(ddmmaaaa).txt`. In the case of the INMA cohort analysis performed on the 18th of February from 2021, the name of the files should be maf_counts_table_snps_INMA_18022021.txt and variance_table_cpgs_INMA_18022021.txt. \
 [analyse_results.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/analyse_results.R)
 
 Send to us the following files: 
