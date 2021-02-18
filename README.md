@@ -126,7 +126,7 @@ Rscript rm-pihat018.R qc/wg-updated-marker-rmhet-ind-fail-IBD-check.txt qc/wg-up
 
 Remove one from each pair: 
 
-`plink1.9 --bfile qc/wg-updated-IBD --remove qc/rmpihat018.txt --make-bed --out qc/clean-PIHAT`
+`plink1.9 --bfile qc/wg-updated-marker-rmhet-ind --remove qc/rmpihat018.txt --make-bed --out qc/clean-PIHAT`
 
 Calculate PCs:
 
