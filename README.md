@@ -82,13 +82,16 @@ Calculate missing call rate: \
 Remove individuals with 0.03 missing markers: \
 `plink1.9 --bfile qc/wg-updated-marker-rmhet --mind 0.03 --make-bed --out qc/wg-updated-marker-rmhet-ind`
 
-Obtain the genotyping sex from the samples: 
+Obtain the genotyping sex from the samples: \ 
 `plink --bfile qc/wg-updated-marker-rmhet-ind --check-sex --out qc/wg-updated-marker-rmhet-ind`
 
 On the previous step, once we have calculated the sex of the samples by [--check-sex](https://www.cog-genomics.org/plink/1.9/basic_stats#check_sex) flag, we should see the consistency that our reported sex has with the new one. 
-`awk '{if ($3 != $4) print $1,"\t",$2,"\t",$3,"\t",$4}' qc/wg-updated-marker-rmhet-ind.sexcheck >> qc/sex_inconsistencies.txt`
+```
+awk '{if ($3 != $4) print $1,"\t",$2,"\t",$3,"\t",$4}' qc/wg-updated-marker-rmhet-ind.sexcheck >> qc/sex_inconsistencies.txt
+```
 
 In case of having sex inconcistencies, before removing them, we recommend you to talk with the technician who obtained the samples and see if there could be a mistake. In the case that you don’t reach any conclusion with the technician, you could reassign the sex of the sample in the .fam file with [--make-just-fam](https://www.cog-genomics.org/plink/2.0/data#make_just_pvar) flag or discard the sample using [--remove](https://www.cog-genomics.org/plink/1.9/filter#indiv) flag from PLINK.
+
 
 Calculate relatedness by [Identity-by-descent (IBD)](https://www.cog-genomics.org/plink/1.9/ibd): \
 `plink1.9 --bfile qc/wg-updated-marker-rmhet-ind --genome --make-bed --out qc/wg-updated-marker-rmhet-ind`
@@ -233,6 +236,8 @@ Zipp BED file: \
 Index BED file: \
 `tabix -p bed EPIC/methylome_sorted.bed.gz`
 
+
+
 ## Step 3. Obtain final format for genotype data
 
 Create folder for the final version of the genotype: \
@@ -245,7 +250,7 @@ plink2 --vcf  imputed-rsq09/chrALL.vcf.gz --maf 0.05 --keep EPIC/final_list_samp
 
 *Sometimes --keep doesn't work and keeps all the samples except the ones listes in final_list_samples.txt, if this is the case, change --keep by --remove:* 
 ```
-plink2 --vcf qc-results/concat-allchr.vcf --maf 0.05 --remove EPIC/final_list_samples.txt --make-bed --out whole_genome_definitive/whole_genome_maf05_filt_samples
+plink2 --vcf imputed-rsq09/chrALL.vcf.gz --maf 0.05 --remove EPIC/final_list_samples.txt --make-bed --out whole_genome_definitive/whole_genome_maf05_filt_samples
 ```
 
 Be careful, when PLINK converts a VCF to a binary PLINK file set, it subsets the name of the samples from the VCF into FID and IID on the binary plink file (.bim, .fam, .bed) by searching a separator which by default is _ . In case of having troubles with it, we leave here a link to [costumize the read of the sample names by PLINK](https://www.cog-genomics.org/plink/2.0/input#sample_id_convert) or [how to change the name of the samples once you already have the binary PLINK file set](https://www.cog-genomics.org/plink/1.9/data#update_indiv). In our case, we always set [--const-fid](https://www.cog-genomics.org/plink/1.9/input#double_id) flag which allows you to set FID as 0 in all the samples and the IID as the whole sample name coming from the VCF. Remember that to run TensorQTL, you should match the IID from PLINK with the sample name on the BED file from the methylome. 
