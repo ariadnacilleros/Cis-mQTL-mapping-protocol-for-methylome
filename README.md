@@ -71,8 +71,10 @@ Calculate missing call rate:
 `plink1.9 --bfile inter/whole_genotype-updated --missing --out inter/whole_genotype-updated`
 
 Remove markers by MAF/geno (missing call rate)/HWE thresholds: 
+```
+plink1.9 --bfile inter/whole_genotype-updated --geno 0.05 --hwe 1e-06 --maf 0.01 --make-bed --out qc/wg-updated-marker
+```
 
-`plink1.9 --bfile inter/whole_genotype-updated --geno 0.05 --hwe 1e-06 --maf 0.01 --make-bed --out qc/wg-updated-marker`
 
 #### Step 1.1.2. Filter samples
 
