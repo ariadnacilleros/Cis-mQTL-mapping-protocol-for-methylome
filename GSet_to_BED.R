@@ -8,7 +8,7 @@ library(IlluminaHumanMethylationEPICanno.ilm10b4.hg19)
 
 #Step 1: Move your working directory to EPIC folder that we created previously. 
 setwd("EPIC/")
-load("ESet_ABinder.RData") #load the ESet object from the QC of Alexandra Binder's
+processedOut <- readRDS("./EPIC/cohort_analysisdate_Output/preproc_exp_idat.RDS") #load the ESet object from the QC of PACEanalysis
 
 #Step 2: Convert pheno data into a data.frame
 pheno <- data.frame(pData(processedOut$mset))
