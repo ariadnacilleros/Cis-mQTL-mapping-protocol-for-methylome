@@ -240,7 +240,8 @@ For the output of these steps, we will create a new directory:
 `mkdir EPIC` 
 
 This script contains an example of the functions, but, as always, you will need to adapt them to your data. 
-(PACEanalysis.R)[https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/PACEanalysis.R]
+
+[PACEanalysis.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/PACEanalysis.R)
 
 
 ### Step 2.2. Prepare BED file for TensorQTL mapping
