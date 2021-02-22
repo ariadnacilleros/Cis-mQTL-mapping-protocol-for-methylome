@@ -235,12 +235,12 @@ The first step to be done with the methylation data is the quality control and t
 - Execute the functions in an R session from the command line, **avoid using RStudio**. 
 - Use a **different R sessions** per function to be executed, saving the R objects with `saveRDS` at the end of it, and loading them with `readRDS` in the next step. If not, your R session could be killed because of the object's size. 
 - As much as possible, use **`screen` method** to execute the functions, in case of losing the connection with the server, the jobs will continue running. 
+
 For the output of these steps, we will create a new directory: 
 
 `mkdir EPIC` 
 
-This script contains an example of the functions, but, as always, you will need to adapt them to your data. 
-
+This script contains an example of the functions, but, as always, you will need to adapt them to your data. \
 [PACEanalysis.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/PACEanalysis.R)
 
 
