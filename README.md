@@ -231,10 +231,20 @@ Obtain the final list of samples of the genotype file:
 
 ## Step 2. Methylome data quality control
 ### Step 2.1. Betas values quality control 
-Alexandra Binder’s R package to be defined. 
+The first step to be done with the methylation data is the quality control and the preprocess of it. To do so, we will use the PACEanalysis R package from A.Binder that must be already installed. The functions that we will execute take a long time and the inputs and the outputs are heavy, therefore we strongly recommend you to consider these advices: 
+- Execute the functions in an R session from the command line, **avoid using RStudio**. 
+- Use a **different R sessions** per function to be executed, saving the R objects with `saveRDS` at the end of it, and loading them with `readRDS` in the next step. If not, your R session could be killed because of the object's size. 
+- As much as possible, use **`screen` method** to execute the functions, in case of losing the connection with the server, the jobs will continue running. 
+For the output of these steps, we will create a new directory: 
+
+`mkdir EPIC` 
+
+This script contains an example of the functions, but, as always, you will need to adapt them to your data. 
+(PACEanalysis.R)[https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/PACEanalysis.R]
+
 
 ### Step 2.2. Prepare BED file for TensorQTL mapping
-In the next R script, you will find the commands used to obtain the final text file filtered with all the annotation data of the CpGs and the samples. As you will see, the following script contains the main commands used by our group to obtain a BED file for our data in a text file, using the data contained in an ExpressionSet R object which is the output from Alexandra Binder's R package. Some of the commands can be used directly, but others will need an adaptation to your data or won't be needed. The main steps are: 
+In the next R script, you will find the commands used to obtain the final text file filtered with all the annotation data of the CpGs and the samples. As you will see, the following script contains the main commands used by our group to obtain a BED file for our data in a text file, using the data contained in an ExpressionSet R object which is the output from `preprocessingofData` function from PACEanalysis package. Some of the commands can be used directly, but others will need an adaptation to your data or won't be needed. The main steps are: 
 - Make sure the same sample names are the same in methylation and genotype files. *Important: in the genotype file, sample name is the IID, not FID_IID!*
 - Remove duplicates (in case it were necessary).
 - Make sure the same samples are present in the methylation and genotype files.
@@ -246,10 +256,6 @@ wget https://ars.els-cdn.com/content/image/1-s2.0-S221359601630071X-mmc3.txt
 ```
 - Annotate the CpGs by chr, start and end. 
 **In the last lines of the script, you will find the code to obtain the variability information of the CpGs that will be subset and sent to us once the mapping has been performed.**
-
-For the output of these steps, we will create a new directory: 
-
-`mkdir EPIC` 
 
 The output of this step should be a text file with the CpGs in the rows and the chr, start, end, CpG ID and beta values per sample in the columns. Here you have an [example](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/example_bed_file_format.txt).\
 [GSet_to_BED.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/GSet_to_BED.R)
