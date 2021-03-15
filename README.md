@@ -282,7 +282,7 @@ Create folder for the final version of the genotype:
 
 `mkdir whole_genome_definitive`
 
-Filter VCF by the 5% MAF and by the final list of samples: 
+Filter VCF by MAF > 5%, HWE p-value > 0.05 and by the final list of samples: 
 ```
 plink2 --vcf  imputed-rsq09/chrALL.vcf.gz --maf 0.05 --hwe 0.05 --keep EPIC/final_list_samples.txt --make-bed --out whole_genome_definitive/whole_genome_maf05_filt_samples
 ```
