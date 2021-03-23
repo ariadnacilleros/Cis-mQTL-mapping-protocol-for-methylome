@@ -6,7 +6,7 @@
 setwd("TensorQTL/")
 
 #Step 1: Read results text file
-results <- read.table("cis_tensorQTL_maf05_PC5_sex_INMA_18022021.txt", header = T, sep = "\t")
+results <- read.table("cis_tensorQTL_maf05_hwe05_PC5_sex_INMA_18022021.txt", header = T, sep = "\t")
 
 #Step 2: Adjust by multiple-testing (Bonferroni)
 results$Bonferroni <- p.adjust(results$pval_beta, method = "bonferroni")
