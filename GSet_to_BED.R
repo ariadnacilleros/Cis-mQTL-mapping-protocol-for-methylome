@@ -68,6 +68,18 @@ df_filt_sex_snp_cross <- subset(df_filt_sex_snp_cross, !(ID %in% nonCpG_cross$V1
 #Step 9: Obtain the final dataframe inside a text file following a BED structure format
 write.table(x = df_filt_sex_snp_cross, file = "./methylome_BED.txt", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
 
+#Step 10: Write Planet values (Omegas) on text file
+omegas <- processedOut$Omega
+#filter by samples
+omegas_filt <- omegas[rownames(no_duplicates),]
+#change sample names 
+for (i in 1:370){ #change 370 for the total ammount of samples that you have at this point
+  rownames(omegas_filt)[i] <- no_duplicates[no_duplicates$Basename == rownames(omegas_filt)[i], "Sample_Name"]
+}
+#write omegas 
+write.table(x = omegas_filt, file = "EPIC/planet_values.txt", quote = FALSE, sep = "\t", row.names = T, col.names = TRUE)
+
+
 #Step 10: Calculate the variance of the probes
 #Step 10.1: Method difference between 10 and 90 percentiles
 Variation<-function(x) {quantile(x, c(0.9), na.rm=T)[[1]]-quantile(x, c(0.1), na.rm=T)[[1]]} #define function
