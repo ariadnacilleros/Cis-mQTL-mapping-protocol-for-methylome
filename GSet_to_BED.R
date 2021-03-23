@@ -80,15 +80,15 @@ for (i in 1:370){ #change 370 for the total ammount of samples that you have at 
 write.table(x = omegas_filt, file = "EPIC/planet_values.txt", quote = FALSE, sep = "\t", row.names = T, col.names = TRUE)
 
 
-#Step 10: Calculate the variance of the probes
-#Step 10.1: Method difference between 10 and 90 percentiles
+#Step 11: Calculate the variance of the probes
+#Step 11.1: Method difference between 10 and 90 percentiles
 Variation<-function(x) {quantile(x, c(0.9), na.rm=T)[[1]]-quantile(x, c(0.1), na.rm=T)[[1]]} #define function
 #apply the function per row (cpg)
 diff_percent <-as.numeric(lapply(1:nrow(df_filt_sex_snp_cross), function(x) Variation(df_filt_sex_snp_cross[x,5:ncol(df_filt_sex_snp_cross)])))
 names(diff_percent) <- df_filt_sex_snp_cross$ID
 df_diff_percent <- data.frame(diff_percent, row.names = names(diff_percent)) #create dataframe for the values
 
-#Step 10.2: Method variances
+#Step 11.2: Method variances
 variances <- as.vector(apply(df_filt_sex_snp_cross[,5:ncol(df_filt_sex_snp_cross)], 1, FUN = var)) #calculate varainces per row (cpg)
 names(variances) <- df_filt_sex_snp_cross$ID
 df_variances <- data.frame(variances, row.names = names(variances)) #create dataframe for the values
