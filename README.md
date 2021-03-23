@@ -246,7 +246,7 @@ This script contains an example of the functions, but, as always, you will need 
 
 ### Step 2.2. Prepare BED file for TensorQTL mapping
 In the next R script, you will find the commands used to obtain the final text file filtered with all the annotation data of the CpGs and the samples. As you will see, the following script contains the main commands used by our group to obtain a BED file for our data in a text file, using the data contained in an ExpressionSet R object which is the output from `preprocessingofData` function from PACEanalysis package. Some of the commands can be used directly, but others will need an adaptation to your data or won't be needed. The main steps are: 
-- Make sure the same sample names are the same in methylation and genotype files. *Important: in the genotype file, sample name is the IID, not FID_IID!*
+- Make sure the sample names are the same in methylation and genotype files. *Important: in the genotype file, sample name is the IID, not FID_IID!*
 - Remove duplicates (in case it were necessary).
 - Make sure the same samples are present in the methylation and genotype files.
 - Filter CpGs with cross-hybridizing potential, with SNPs (European MAF < 5%) and the ones located on sexual chromosomes. *Important: here are the commands to download the CpG lists.*
