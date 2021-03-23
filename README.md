@@ -256,7 +256,7 @@ wget https://ars.els-cdn.com/content/image/1-s2.0-S221359601630071X-mmc2.txt
 wget https://ars.els-cdn.com/content/image/1-s2.0-S221359601630071X-mmc3.txt
 ```
 - Annotate the CpGs by chr, start and end. 
-**In the last lines of the script, you will find the code to obtain the variability information of the CpGs that will be subset and sent to us once the mapping has been performed.**
+**In the last lines of the script, you will find the code to write the Planet values (omegas) in a text file, and to obtain the variability information of the CpGs that will be subset and sent to us once the mapping has been performed on Step 6.**
 
 The output of this step should be a text file with the CpGs in the rows and the chr, start, end, CpG ID and beta values per sample in the columns. Here you have an [example](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/example_bed_file_format.txt).\
 [GSet_to_BED.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/GSet_to_BED.R)
@@ -301,7 +301,7 @@ plink1.9 --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --freqx
 
 
 ## Step 4. Prepare the covariates file for TensorQTL mapping
-In this analysis, the covariates that we are going to use are the sex of the individuals and the first five Principal Components of our genotype. Therefore, we will need to perform a Principal Component Analysis (PCA) with PLINK: 
+In this analysis, the covariates that we are going to use are the sex of the individuals, the Planet values (omegas) and the first five Principal Components of our genotype. Therefore, we will need to perform a Principal Component Analysis (PCA) with PLINK: 
 
 ```
 mkdir covariates
