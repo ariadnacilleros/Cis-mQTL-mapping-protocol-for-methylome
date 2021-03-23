@@ -17,5 +17,12 @@ cov <- merge(x = sex_repor[,c(1,3)], y = PC[,c(2:7)],by.x="IID", by.y="V2")
 #Step 4: Change column names by PC followed by a number
 colnames(cov)[3:7] <- c("PC1","PC2", "PC3", "PC4", "PC5")
 
+#Step 5: Load Planet values (omegas)
+planet <- read.table("../EPIC/planet_values.txt")
+
+#Step 6: Merge Planet values
+cov <- merge(x = cov, y = planet, by.x="IID", by.y="row.names")
+colnames(cov)[1] <- "id"
+
 #Step 5: Write the final text file inside covariates folder
 write.table(x = t(cov), file = "covariates_sex_PC5.txt", quote = F, row.names = T, col.names = F, sep = "\t") 
