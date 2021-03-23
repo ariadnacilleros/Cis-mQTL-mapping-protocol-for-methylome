@@ -361,9 +361,9 @@ phenotype_df = phenotype_df.reindex(sorted(phenotype_df.columns), axis=1)
 #Run TensorQTL
 cis_df = cis.map_cis(genotype_df, variant_df, phenotype_df, phenotype_pos_df, covariates_df=covariates_df, seed=123456789)
 
-#Write TensorQTL results in a text file named like cis_tensorQTL_maf05_PC5_sex_(your cohort)_(ddmmaaaa).txt, 
-#e.g. cis_tensorQTL_maf05_PC5_sex_INMA_18022021.txt
-cis_df.to_csv('tensorQTL/cis_tensorQTL_maf05_PC5_sex_INMA_18022021.txt', header=True, index=True, sep='\t')
+#Write TensorQTL results in a text file named like cis_tensorQTL_maf05_hwe05_PC5_sex_(your cohort)_(ddmmaaaa).txt, 
+#e.g. cis_tensorQTL_maf05_hwe05_PC5_sex_INMA_18022021.txt
+cis_df.to_csv('tensorQTL/cis_tensorQTL_maf05_hwe05_PC5_sex_INMA_18022021.txt', header=True, index=True, sep='\t')
 ```
 Once the mapping has been complete you can close the python module by executing `exit()`
 
@@ -373,6 +373,6 @@ Finally, by using the following RScript, you will correct the p-values for multi
 [analyse_results.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/analyse_results.R)
 
 Send the following files to us: 
-- TensorQTL results (cis_tensorQTL_maf05_PC5_sex_INMA_18022021.txt)
+- TensorQTL results (cis_tensorQTL_maf05_hwe05_PC5_sex_INMA_18022021.txt)
 - mQTL-participating CpGs variability information (variance_table_cpgs_INMA_18022021.txt)
-- mQTL-participating SNPs MAF and frequency information (maf_counts_table_snps_INMA_18022021.txt)
+- mQTL-participating SNPs MAF and counts information (maf_counts_table_snps_INMA_18022021.txt)
