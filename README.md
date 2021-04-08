@@ -180,8 +180,8 @@ Once you have donwloaded the files inside `chr_imp` folder, get out from it by:
 
 Decompress downloaded folders with the corresponding password (you will receive it by email at the address you used for registration):
 ```
-for i in {1..22}; do unzip -P 'PASSWORD' chr_imp/chr_${i}; done
-unzip -P 'PASSWORD' chr_imp/chr_X
+for i in {1..22}; do 7z x -p'PASSWORD' chr_imp/chr_${i}; done
+7z x -p'PASSWORD' chr_imp/chr_X
 ```
 Removing zips: 
 
