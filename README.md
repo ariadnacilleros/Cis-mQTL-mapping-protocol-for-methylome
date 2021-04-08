@@ -150,8 +150,7 @@ Obtain separate VCF files per chromosome:
 for i in {1..23};
 do
   # Split chromosomes
-  plink1.9 --bfile qc/clean-PIHAT --reference-allele inter/Force-Allele1-whole_genome-HRC.txt  \
-  --make-bed --chr $i --out chr/clean-PIHAT-chr$i
+  plink1.9 --bfile qc/clean-PIHAT --make-bed --chr $i --out chr/clean-PIHAT-chr$i
   # Make VCF files per chromosome
   plink1.9 --bfile chr/clean-PIHAT-chr$i --recode vcf --out chr/chr$i
   # Sort and compress VCF files
