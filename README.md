@@ -363,13 +363,18 @@ cis.map_nominal(genotype_df, variant_df,
                 phenotype_pos_df,
                 prefix, covariates_df=covariates_df)
                 
-#Upload the results on the module and change the .parquet file to a text file. The text files must be named like cis_tensorQTL_maf05_hwe05_PC5_sex_planet_NOMINAL_(your cohort)_(ddmmaaaa).chr.txt, 
-#e.g. cis_tensorQTL_maf05_hwe05_PC5_sex_planet_NOMINAL_INMA_18022021.chr1.txt
+# The results will be written in your working directory as a .parquet files (one per chromosome), therefore, 
+# we will upload them in the session and change its format into a text file with the bellow for loop. 
+# Beware, the text files must be named following this pattern:
+# cis_tensorQTL_maf05_hwe05_PC5_sex_planet_NOMINAL_(your cohort)_(ddmmaaaa).chr.txt. 
+# In case the analysis had been performed by INMA cohort on 18/02/21, the file name for chromosome 1 will be: 
+# cis_tensorQTL_maf05_hwe05_PC5_sex_planet_NOMINAL_INMA_18022021.chr1.txt
+
 for x in range(1,23):
   pairs_df = pd.read_parquet(f'{prefix}.cis_qtl_pairs.{x}.parquet')
-  pairs_df.to_csv(f'tensorQTL/cis_tensorQTL_maf05_hwe05_PC5_sex_planet_NOMINAL_INMA_18022021.chr{x}.txt', header=True, index=True, sep='\t') 
+  pairs_df.to_csv(f'tensorQTL/cis_tensorQTL_maf05_hwe05_PC5_sex_planet_NOMINAL_(cohort)_(ddmmaaaa).chr{x}.txt', header=True, index=True, sep='\t') 
 ```
-Once the mapping has been complete you can close the python module by executing `exit()`
+Once the mapping and the results had been written in a text file, you can close the python module by executing `exit()`
 
 ## Step 6. Send the results
 
