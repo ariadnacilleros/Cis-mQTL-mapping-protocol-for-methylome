@@ -358,11 +358,16 @@ variant_df = pr.bim.set_index('snp')[['chrom', 'pos']]
 phenotype_df = phenotype_df.reindex(sorted(phenotype_df.columns), axis=1)
 
 #Run TensorQTL
-cis_df = cis.map_cis(genotype_df, variant_df, phenotype_df, phenotype_pos_df, covariates_df=covariates_df, seed=123456789)
-
-#Write TensorQTL results in a text file named like cis_tensorQTL_maf05_hwe05_PC5_sex_(your cohort)_(ddmmaaaa).txt, 
-#e.g. cis_tensorQTL_maf05_hwe05_PC5_sex_INMA_18022021.txt
-cis_df.to_csv('tensorQTL/cis_tensorQTL_maf05_hwe05_PC5_sex_INMA_18022021.txt', header=True, index=True, sep='\t')
+cis.map_nominal(genotype_df, variant_df,
+                phenotype_df,
+                phenotype_pos_df,
+                prefix, covariates_df=covariates_df)
+                
+#Upload the results on the module and change the .parquet file to a text file. The text files must be named like cis_tensorQTL_maf05_hwe05_PC5_sex_planet_NOMINAL_(your cohort)_(ddmmaaaa).chr.txt, 
+#e.g. cis_tensorQTL_maf05_hwe05_PC5_sex_planet_NOMINAL_INMA_18022021.chr1.txt
+for x in range(1,23):
+  pairs_df = pd.read_parquet(f'{prefix}.cis_qtl_pairs.{x}.parquet')
+  pairs_df.to_csv(f'tensorQTL/cis_tensorQTL_maf05_hwe05_PC5_sex_planet_NOMINAL_INMA_18022021.chr{x}.txt', header=True, index=True, sep='\t') 
 ```
 Once the mapping has been complete you can close the python module by executing `exit()`
 
