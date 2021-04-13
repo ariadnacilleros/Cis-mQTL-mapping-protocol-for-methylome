@@ -361,15 +361,17 @@ phenotype_df = phenotype_df.reindex(sorted(phenotype_df.columns), axis=1)
 cis.map_nominal(genotype_df, variant_df,
                 phenotype_df,
                 phenotype_pos_df,
-                prefix, covariates_df=covariates_df)
-                
-# The results will be written in your working directory as a .parquet files (one per chromosome), therefore, 
-# we will upload them in the session and change its format into a text file with the bellow for loop. 
-# Beware, the text files must be named following this pattern:
-# cis_tensorQTL_maf05_hwe05_PC5_sex_planet_NOMINAL_(your cohort)_(ddmmaaaa).chr.txt. 
-# In case the analysis had been performed by INMA cohort on 18/02/21, the file name for chromosome 1 will be: 
-# cis_tensorQTL_maf05_hwe05_PC5_sex_planet_NOMINAL_INMA_18022021.chr1.txt
+                prefix, covariates_df=covariates_df, window=500000)
+ 
+ #DON'T CLOSE THE PYTHON SESSION
+ ```                
+The results will be written in your working directory as a .parquet files (one per chromosome), therefore, we will upload them in the python3 session and change its format into a text file with the bellow for loop. Beware, the text files must be named following this pattern:
+cis_tensorQTL_maf05_hwe05_PC5_sex_planet_NOMINAL_(your cohort)_(ddmmaaaa).chr.txt 
 
+For example, if the analysis had been performed by INMA cohort on 18/02/21, the file name for chromosome 1 should be: 
+cis_tensorQTL_maf05_hwe05_PC5_sex_planet_NOMINAL_INMA_18022021.chr1.txt
+
+```
 for x in range(1,23):
   pairs_df = pd.read_parquet(f'{prefix}.cis_qtl_pairs.{x}.parquet')
   pairs_df.to_csv(f'tensorQTL/cis_tensorQTL_maf05_hwe05_PC5_sex_planet_NOMINAL_(cohort)_(ddmmaaaa).chr{x}.txt', header=True, index=True, sep='\t') 
@@ -378,10 +380,7 @@ Once the mapping and the results had been written in a text file, you can close 
 
 ## Step 6. Send the results
 
-Finally, by using the following RScript, you will correct the p-values for multiple-testing (Bonferroni) and create two files, one of them will contain the genotype counts and the MAF of the mQTL-participating SNPs, and the other will store the variability information of the mQTL-participating CpGs. The name of these two files should be `maf_counts_table_snps_(your cohort abbreviation)_(ddmmaaaa).txt` for the SNPs, and `variance_table_cpgs_(your cohort abbreviation)_(ddmmaaaa).txt`. In the case of the INMA cohort analysis performed on the 18th of February from 2021, the name of the files should be maf_counts_table_snps_INMA_18022021.txt and variance_table_cpgs_INMA_18022021.txt. \
-[analyse_results.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/analyse_results.R)
-
-Send the following files to us: 
-- TensorQTL results (cis_tensorQTL_maf05_hwe05_PC5_sex_INMA_18022021.txt)
-- mQTL-participating CpGs variability information (variance_table_cpgs_INMA_18022021.txt)
-- mQTL-participating SNPs MAF and counts information (maf_counts_table_snps_INMA_18022021.txt)
+Finally, you have to send us the following files: 
+- TensorQTL results (cis_tensorQTL_maf05_hwe05_PC5_sex_planet_NOMINAL_(cohort)_(ddmmaaaa).chr{1:22}.txt) 
+- CpGs variability information (all_cpg_variances.txt)
+- SNPs MAF and counts information (whole_genome_maf05_filt_samples.frqx)
