@@ -344,6 +344,7 @@ print('Pandas {}'.format(pd.__version__))
 plink_prefix_path = 'whole_genome_definitive/whole_genome_maf05_filt_samples'
 expression_bed = 'EPIC/methylome_sorted.bed.gz'
 covariates_file = 'covariates/covariates_sex_PC5.txt'
+prefix = 'maf05_hwe05_PCs_sex_planet_nominal'
 
 #Load phenotypes and covariates
 phenotype_df, phenotype_pos_df = tensorqtl.read_phenotype_bed(expression_bed)
@@ -366,21 +367,21 @@ cis.map_nominal(genotype_df, variant_df,
  #DON'T CLOSE THE PYTHON SESSION
  ```                
 The results will be written in your working directory as a .parquet files (one per chromosome), therefore, we will upload them in the python3 session and change its format into a text file with the bellow for loop. Beware, the text files must be named following this pattern:
-cis_tensorQTL_maf05_hwe05_PC5_sex_planet_NOMINAL_(your cohort)_(ddmmaaaa).chr.txt 
+cis_tensorQTL_maf05_hwe05_PC_sex_planet_NOMINAL_(your cohort)_(ddmmaaaa).chr.txt 
 
 For example, if the analysis had been performed by INMA cohort on 18/02/21, the file name for chromosome 1 should be: 
-cis_tensorQTL_maf05_hwe05_PC5_sex_planet_NOMINAL_INMA_18022021.chr1.txt
+cis_tensorQTL_maf05_hwe05_PC_sex_planet_NOMINAL_INMA_18022021.chr1.txt
 
 ```
 for x in range(1,23):
   pairs_df = pd.read_parquet(f'{prefix}.cis_qtl_pairs.{x}.parquet')
-  pairs_df.to_csv(f'tensorQTL/cis_tensorQTL_maf05_hwe05_PC5_sex_planet_NOMINAL_(cohort)_(ddmmaaaa).chr{x}.txt', header=True, index=True, sep='\t') 
+  pairs_df.to_csv(f'tensorQTL/cis_tensorQTL_maf05_hwe05_PC_sex_planet_NOMINAL_(cohort)_(ddmmaaaa).chr{x}.txt', header=True, index=True, sep='\t') 
 ```
 Once the mapping and the results had been written in a text file, you can close the python module by executing `exit()`
 
 ## Step 6. Send the results
 
 Finally, you have to send us the following files: 
-- TensorQTL results (cis_tensorQTL_maf05_hwe05_PC5_sex_planet_NOMINAL_(cohort)_(ddmmaaaa).chr{1:22}.txt) 
+- TensorQTL results (cis_tensorQTL_maf05_hwe05_PC_sex_planet_NOMINAL_(cohort)_(ddmmaaaa).chr{1:22}.txt) 
 - CpGs variability information (all_cpg_variances.txt)
 - SNPs MAF and counts information (whole_genome_maf05_filt_samples.frqx)
