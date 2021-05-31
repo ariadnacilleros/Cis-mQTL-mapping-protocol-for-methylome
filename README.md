@@ -315,8 +315,6 @@ plink --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --extract 
 The format of the covariates file should be a text file in which the first line corresponds to the IID of the sample, and the next rows the covariates as in this [example](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/example_covariates_file.txt). In the following script are the main commands used to obtain the text file: \
 [covariates_sex_PC5.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/covariates_sex_PC5.R)
 
-It is not clear if TensorQTL takes into count the sex of the samples provided by the .fam file of the binary PLINK set, in case that you want to take it into count for your analysis, we recommend you to have it described in both places, covariates text file and .fam file. 
-
 ## Step 5. Mapping with [TensorQTL](https://github.com/broadinstitute/tensorqtl)
 
 Change timestamps from index files: 
