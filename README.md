@@ -384,3 +384,4 @@ Finally, you have to send us the following files:
 - TensorQTL results (cis_tensorQTL_maf05_hwe05_PC_sex_planet_NOMINAL_(cohort)_(ddmmaaaa).chr{1:22}.txt) 
 - CpGs variability information (all_cpg_variances.txt)
 - SNPs MAF and counts information (whole_genome_maf05_filt_samples.frqx)
+- SNPs LD information (whole_genome_maf05_filt_samples.ld)
