@@ -343,15 +343,15 @@ print('Pandas {}'.format(pd.__version__))
 plink_prefix_path = 'whole_genome_definitive/whole_genome_maf05_filt_samples'
 expression_bed = 'EPIC/methylome_sorted.bed.gz'
 covariates_file = 'covariates/covariates.txt'
-prefix = 'tensorQTL/maf05_hwe05_PC_sex_planet_nominal_INMA_18022021_A' #For this variable, read bellow this code block
+prefix = 'tensorQTL/maf05_hwe05_nominal_INMA_18022021_A' #For this variable, read bellow this code block
 ```
 The `prefix` variable, should follow the pattern: 
 
-`cis_tensorQTL_maf05_hwe05_PC_sex_planet_NOMINAL_(cohort)_(ddmmaaaa)_(model).chr.txt`
+`cis_tensorQTL_maf05_hwe05_NOMINAL_(cohort)_(ddmmaaaa)_(model).chr.txt`
 
 For example, if the model A of the analysis had been performed by INMA cohort on 18/02/21, the prefix variable should contain: 
 
-`cis_tensorQTL_maf05_hwe05_PC_sex_planet_NOMINAL_INMA_18022021_A`
+`cis_tensorQTL_maf05_hwe05_NOMINAL_INMA_18022021_A`
 
 ```
 #Load phenotypes and covariates
@@ -385,7 +385,7 @@ Once the mapping and the results had been written in a text file, you can close 
 ## Step 6. Send the results
 
 Finally, you have to send us the following files: 
-- TensorQTL results (`cis_tensorQTL_maf05_hwe05_PC_sex_planet_NOMINAL_(cohort)_(ddmmaaaa)_(model).chr{1:22}.txt`) 
+- TensorQTL results (`cis_tensorQTL_maf05_hwe05_NOMINAL_(cohort)_(ddmmaaaa)_(model).chr{1:22}.txt`) 
 - CpGs variability information (`all_cpg_variances.txt`)
 - SNPs MAF and counts information (`whole_genome_maf05_filt_samples.frqx`)
 - SNPs LD information (`whole_genome_maf05_filt_samples.ld`)
