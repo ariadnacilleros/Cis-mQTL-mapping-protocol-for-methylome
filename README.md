@@ -301,7 +301,7 @@ plink1.9 --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --r2 --
 
 
 ## Step 4. Prepare the covariates file for TensorQTL mapping
-In this analysis, the covariates that we are going to use are the sex of the individuals, the Planet values (omegas) and the Principal Components of our genotype. The number of PCs is going to be defined by your data, in this protocol we have used five PCs as an example. Therefore, we will need to perform a Principal Component Analysis (PCA) with PLINK: 
+In this analysis, the covariates that we are going to use are the sex of the individuals, the Planet values (cell type proportions) and the Principal Components of our genotype. The number of PCs is going to be defined by your data, but at least you should include the first five. In this protocol we have used five PCs as an example. Therefore, we had to perform a Principal Component Analysis (PCA) with PLINK considering the last version of the genotype: 
 
 ```
 mkdir covariates
@@ -313,7 +313,7 @@ plink --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --extract 
 ```
 
 The format of the covariates file should be a text file in which the first line corresponds to the IID of the sample, and the next rows the covariates as in this [example](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/example_covariates_file.txt). In the following script are the main commands used to obtain the text file: \
-[covariates_sex_PC5.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/covariates_sex_PC5.R)
+[covariates.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/covariates.R)
 
 ## Step 5. Mapping with [TensorQTL](https://github.com/broadinstitute/tensorqtl)
 
@@ -385,7 +385,7 @@ Once the mapping and the results had been written in a text file, you can close 
 ## Step 6. Send the results
 
 Finally, you have to send us the following files: 
-- TensorQTL results (cis_tensorQTL_maf05_hwe05_PC_sex_planet_NOMINAL_(cohort)_(ddmmaaaa)_(model).chr{1:22}.txt) 
-- CpGs variability information (all_cpg_variances.txt)
-- SNPs MAF and counts information (whole_genome_maf05_filt_samples.frqx)
-- SNPs LD information (whole_genome_maf05_filt_samples.ld)
+- TensorQTL results (`cis_tensorQTL_maf05_hwe05_PC_sex_planet_NOMINAL_(cohort)_(ddmmaaaa)_(model).chr{1:22}.txt`) 
+- CpGs variability information (`all_cpg_variances.txt`)
+- SNPs MAF and counts information (`whole_genome_maf05_filt_samples.frqx`)
+- SNPs LD information (`whole_genome_maf05_filt_samples.ld`)
