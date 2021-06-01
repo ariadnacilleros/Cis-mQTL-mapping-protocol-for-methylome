@@ -25,4 +25,4 @@ cov <- merge(x = cov, y = planet, by.x="IID", by.y="row.names")
 colnames(cov)[1] <- "id"
 
 #Step 5: Write the final text file inside covariates folder
-write.table(x = t(cov), file = "covariates_sex_PC5.txt", quote = F, row.names = T, col.names = F, sep = "\t") 
+write.table(x = t(cov), file = "covariates.txt", quote = F, row.names = T, col.names = F, sep = "\t") 
