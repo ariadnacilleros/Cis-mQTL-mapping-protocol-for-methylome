@@ -346,8 +346,11 @@ covariates_file = 'covariates/covariates_sex_PC5.txt'
 prefix = 'tensorQTL/maf05_hwe05_5PCs_sex_planet_nominal_INMA_18022021_A' #For this variable, read bellow this code block
 ```
 The prefix variable, should follow the pattern: 
-cis_tensorQTL_maf05_hwe05_PC_sex_planet_NOMINAL_(cohort)_(ddmmaaaa)_(model).chr.txt
+
+cis_tensorQTL_maf05_hwe05_PC_sex_planet_NOMINAL_(cohort)_(ddmmaaaa)_(model).chr.txt 
+
 For example, if the model A of the analysis had been performed by INMA cohort on 18/02/21, the prefix variable should contain: 
+
 cis_tensorQTL_maf05_hwe05_PC_sex_planet_NOMINAL_INMA_18022021_A
 
 ```
