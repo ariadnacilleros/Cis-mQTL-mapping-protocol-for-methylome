@@ -20,6 +20,8 @@ Conversion of long format files to PLINK binary format file:
 
 `plink1.9 --file {your filename} --make-bed --out inter/whole_genotype`
 
+**You should adapt this command depending on the [input file](https://www.cog-genomics.org/plink/1.9/input) that do you have.**
+
 To know if the sex of the samples is reported on the [fam file](https://www.cog-genomics.org/plink/1.9/formats#fam): 
 
 `head inter/whole_genotype.fam`
