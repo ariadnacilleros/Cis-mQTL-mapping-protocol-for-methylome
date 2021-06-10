@@ -24,7 +24,7 @@ write.table(x = final_list_samples, file = "./final_list_samples.txt", sep="\t",
 no_duplicates <- no_duplicates[no_duplicates$Sample_Name %in% final_list_samples, ]
 
 #Step 4: Extract beta values and CpG annotation. 
-beta <- getBeta(processedOut$mset)
+beta <- processedOut$processedBetas
 annot <- getAnnotation(processedOut$mset)
 
 #Step 5: Merge annotation and beta data.frames by CpG IDs.
