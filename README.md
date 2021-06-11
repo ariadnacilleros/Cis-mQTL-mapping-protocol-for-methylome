@@ -308,9 +308,9 @@ In this analysis, the covariates that we are going to use are the sex of the ind
 ```
 mkdir covariates
 
-plink1.9 --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --indep-pairwise 50 5 0.2 --out covariates/whole_genome_maf05_filt_samples_prunned --double-id
+plink1.9 --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --indep-pairwise 50 5 0.2 --out covariates/whole_genome_maf05_filt_samples_prunned
 
-plink1.9 --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --extract covariates/whole_genome_maf05_filt_samples_prunned.prune.in --pca --out covariates/whole_genome_maf05_filt_samples_prunned.PCs --double-id 
+plink1.9 --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --extract covariates/whole_genome_maf05_filt_samples_prunned.prune.in --pca --out covariates/whole_genome_maf05_filt_samples_prunned.PCs 
 
 ```
 
