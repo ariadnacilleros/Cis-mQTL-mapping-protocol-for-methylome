@@ -28,7 +28,7 @@ beta <- processedOut$processedBetas
 annot <- getAnnotation(processedOut$mset)
 
 #Step 5: Merge annotation and beta data.frames by CpG IDs.
-annot_beta <- merge(annot[,c(1,2,2)], beta, by=0, all=TRUE)
+annot_beta <- merge(annot[,c(1,2,2)], beta, by=0, all=TRUE) #**
 
 #Step 6: Order the data.frame with first the chr, second the start (pos), third the end (pos.1), 
 #fourth the CpG id (Row names) and the beta values from the filtered samples of the pheno data data.frame.
