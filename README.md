@@ -371,7 +371,7 @@ cis.map_nominal(genotype_df, variant_df,
  ```                
 The results will be written in your working directory as a .parquet files (one per chromosome), therefore, we will upload them in the same python3 session and change its format into a text file with the bellow for loop. 
 ```
-for x in range(1,23):
+for x in range(1,22):
   pairs_df = pd.read_parquet(f'tensorQTL/{prefix}.cis_qtl_pairs.{x}.parquet')
   pairs_df.to_csv(f'tensorQTL/{prefix}.chr{x}.txt', header=True, index=True, sep='\t') 
 ```
