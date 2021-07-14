@@ -264,10 +264,6 @@ Zip BED file:
 
 `bgzip EPIC/methylome_sorted.bed` 
 
-Index BED file: 
-
-`tabix -p bed EPIC/methylome_sorted.bed.gz`
-
 
 
 ## Step 3. Obtain final format for genotype data
