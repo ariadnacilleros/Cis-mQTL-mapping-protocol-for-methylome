@@ -247,7 +247,7 @@ This script contains the functions and its arguments that must be executed, but,
 
 ### Step 2.2. Prepare BED file for TensorQTL mapping
 In the next R script, you will find the example commands used by our group to obtain the final BED file for our data in a .txt using the data contained in the R object `outliers.RDS` which is the output from `outlierprocess()` function from PACEanalysis package. Some of the commands can be used directly, but others will need an adaptation to your data or won't be needed. The main steps are: 
-- Obtain the final sample set intersecting methylation and genotype lists.
+- Obtain the final sample set intersecting methylation and genotype series.
 - Make sure the same sample names are the same in methylation and genotype files. *Important: in the genotype file, sample name is the IID, not FID_IID!*
 - Annotate the CpGs by chr, start and end using the Illumina's R package. 
 - Filter CpGs located on sexual chromosomes. 
