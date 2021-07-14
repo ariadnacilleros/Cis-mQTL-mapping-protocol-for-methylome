@@ -246,9 +246,9 @@ This script contains the functions and its arguments that must be executed, but,
 
 
 ### Step 2.2. Prepare BED file for TensorQTL mapping
-In the next R script, you will find the commands used to obtain the final text file filtered with all the annotation data of the CpGs and the samples. As you will see, the following script contains the main commands used by our group to obtain a BED file for our data in a .txt, using the data contained in the R object `outliers.RDS` which is the output from `outlierprocess()` function from PACEanalysis package. Some of the commands can be used directly, but others will need an adaptation to your data or won't be needed. The main steps are: 
+In the next R script, you will find the commands used by our group to obtain the final BED file for our data in a .txt, using the data contained in the R object `outliers.RDS` which is the output from `outlierprocess()` function from PACEanalysis package. Some of the commands can be used directly, but others will need an adaptation to your data or won't be needed. The main steps are: 
 - Obtain the final sample set intersecting methylation and genotype lists.
-- Change samples' basenames to FID_IID in beta values data.frame. 
+- Make sure that the sample names' of the beta values dataframe are the same as the genotype IID. **(Have a look at the Step 3)* 
 - Annotate the CpGs by chr, start and end using the Illumina's R package. 
 - Filter CpGs located on sexual chromosomes. 
 
@@ -286,7 +286,7 @@ plink2 --vcf  imputed-rsq09/chrALL.vcf.gz --maf 0.05 --hwe 0.05 --keep EPIC/fina
 plink2 --vcf imputed-rsq09/chrALL.vcf.gz --maf 0.05 --hwe 0.05 --remove EPIC/final_list_samples.txt --make-bed --out whole_genome_definitive/whole_genome_maf05_filt_samples
 ```
 
-Be careful, when PLINK converts a VCF to a binary PLINK file set, it subsets the name of the samples from the VCF into FID and IID on the binary plink file (.bim, .fam, .bed) by searching for a separator which by default is __ . In case of troubles with this, we provide links to instruction on how to [customize the way PLINK reads sample names](https://www.cog-genomics.org/plink/2.0/input#sample_id_convert) or [how to change the name of the samples once you already have the binary PLINK file set](https://www.cog-genomics.org/plink/1.9/data#update_indiv). In our case, we always set [--const-fid](https://www.cog-genomics.org/plink/1.9/input#double_id) flag which allows you to set FID as 0 in all the samples and the IID as the whole sample name coming from the VCF. Remember that to run TensorQTL, you should match the IID from PLINK with the sample name on the BED file from the methylome. 
+Be careful, when PLINK converts a VCF to a binary PLINK file set, it subsets the name of the samples from the VCF into FID and IID on the binary plink file (.bim, .fam, .bed) by searching for a separator which by default is __ . In case of troubles with this, we provide links to instruction on how to [customize the way PLINK reads sample names](https://www.cog-genomics.org/plink/2.0/input#sample_id_convert) or [how to change the name of the samples once you already have the binary PLINK file set](https://www.cog-genomics.org/plink/1.9/data#update_indiv). In our case, we tend to use [--const-fid](https://www.cog-genomics.org/plink/1.9/input#double_id) flag, which allows you to set FID as 0 in all the samples and the IID as the whole sample name coming from the VCF, or [--double-id](), which causes both family and individual IDs to be set to the sample ID. Remember that to run TensorQTL, you should match the IID from PLINK with the sample name on the BED file from the methylome. 
 
 An extra step that we will perform at this point is to calculate the homozygous and heterozygous counts, and get the linkage disequilibrium information for each SNP: 
 ```
