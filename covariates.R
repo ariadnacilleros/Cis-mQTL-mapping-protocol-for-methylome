@@ -18,7 +18,12 @@ cov <- merge(x = sex_repor[,c(1,3)], y = PC[,c(2:7)],by.x="IID", by.y="V2")
 colnames(cov)[3:7] <- c("PC1","PC2", "PC3", "PC4", "PC5")
 
 #Step 5: Load Planet values (omegas)
-planet <- read.table("../EPIC/planet_values.txt")
+eda <- readRDS('./EPIC/cohort_analysisdate_Output/exp_idat_diff_samples.RDS')
+planet <- eda$Omega
+rm(eda)
+
+#You will need to filter planet data.frame by the final samples set on ./final_list_basename.txt or ./final_list_samples.txt
+# and change the sample names being the same as the genotype, the PCs' and the sex data.frame...
 
 #Step 6: Merge Planet values
 cov <- merge(x = cov, y = planet, by.x="IID", by.y="row.names")
