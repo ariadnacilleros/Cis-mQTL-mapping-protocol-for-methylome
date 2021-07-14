@@ -70,13 +70,13 @@ write.table(x = annot_beta_sex, file = "./methylome_BED.txt", quote = FALSE, sep
 #Step 7.1: Method difference between 10 and 90 percentiles
 Variation<-function(x) {quantile(x, c(0.9), na.rm=T)[[1]]-quantile(x, c(0.1), na.rm=T)[[1]]} #define function
 #apply the function per row (cpg)
-diff_percent <-as.numeric(lapply(1:nrow(df_filt_sex_snp_cross), function(x) Variation(df_filt_sex_snp_cross[x,5:ncol(df_filt_sex_snp_cross)])))
-names(diff_percent) <- df_filt_sex_snp_cross$ID
+diff_percent <-as.numeric(lapply(1:nrow(annot_beta_sex), function(x) Variation(annot_beta_sex[x,5:ncol(annot_beta_sex)])))
+names(diff_percent) <- annot_beta_sex$ID
 df_diff_percent <- data.frame(diff_percent, row.names = names(diff_percent)) #create dataframe for the values
 
 #Step 7.2: Method variances
-variances <- as.vector(apply(df_filt_sex_snp_cross[,5:ncol(df_filt_sex_snp_cross)], 1, FUN = var)) #calculate varainces per row (cpg)
-names(variances) <- df_filt_sex_snp_cross$ID
+variances <- as.vector(apply(annot_beta_sex[,5:ncol(annot_beta_sex)], 1, FUN = var)) #calculate varainces per row (cpg)
+names(variances) <- annot_beta_sex$ID
 df_variances <- data.frame(variances, row.names = names(variances)) #create dataframe for the values
 
 #Step 7.3: Write variability stats into a text file 
