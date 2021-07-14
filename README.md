@@ -241,23 +241,16 @@ For the output of these steps, we will create a new directory:
 
 `mkdir EPIC` 
 
-This script contains an example of the functions, but, as always, you will need to adapt them to your data. \
+This script contains the functions and its arguments that must be executed, but, as always, you will need to adapt them to your data. \
 [PACEanalysis.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/PACEanalysis.R)
 
 
 ### Step 2.2. Prepare BED file for TensorQTL mapping
-In the next R script, you will find the commands used to obtain the final text file filtered with all the annotation data of the CpGs and the samples. As you will see, the following script contains the main commands used by our group to obtain a BED file for our data in a text file, using the data contained in an ExpressionSet R object which is the output from `preprocessingofData` function from PACEanalysis package. Some of the commands can be used directly, but others will need an adaptation to your data or won't be needed. The main steps are: 
+In the next R script, you will find the commands used to obtain the final text file filtered with all the annotation data of the CpGs and the samples. As you will see, the following script contains the main commands used by our group to obtain a BED file for our data in a text file, using the data contained in the R object `outliers.RDS` which is the output from `outlierprocess()` function from PACEanalysis package. Some of the commands can be used directly, but others will need an adaptation to your data or won't be needed. The main steps are: 
 - Make sure the sample names are the same in methylation and genotype files. *Important: in the genotype file, sample name is the IID, not FID_IID!*
-- Remove duplicates (in case it were necessary).
 - Make sure the same samples are present in the methylation and genotype files.
-- Filter CpGs with cross-hybridizing potential, with SNPs (European MAF < 5%) and the ones located on sexual chromosomes. *Important: here are the commands to download the CpG lists.*
-```
-wget https://ars.els-cdn.com/content/image/1-s2.0-S221359601630071X-mmc1.txt
-wget https://ars.els-cdn.com/content/image/1-s2.0-S221359601630071X-mmc2.txt
-wget https://ars.els-cdn.com/content/image/1-s2.0-S221359601630071X-mmc3.txt
-```
+- Filter CpGs located on sexual chromosomes using the Illumina's R package.
 - Annotate the CpGs by chr, start and end. 
-**In the last lines of the script, you will find the code to write the Planet values (omegas) in a text file, and to obtain the variability information of the CpGs that will be subset and sent to us once the mapping has been performed on Step 6.**
 
 The output of this step should be a text file with the CpGs in the rows and the chr, start, end, CpG ID and beta values per sample in the columns. Here you have an [example](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/example_bed_file_format.txt).\
 [GSet_to_BED.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/GSet_to_BED.R)
