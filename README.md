@@ -6,7 +6,7 @@ In this GitHub repository, you will find the protocol elaborated by the Immunoge
 
 On the other hand, in the [Wiki](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/wiki), you will find each step explained in more detail. To complete the pipeline, you need to have installed: [R and RStudio](https://rstudio-education.github.io/hopr/starting.html), [Plink1.9](https://www.cog-genomics.org/plink/1.9/) and [Plink2](https://www.cog-genomics.org/plink/2.0/), [TensorQTL and its dependencies](https://github.com/broadinstitute/tensorqtl), [bcftools](http://samtools.github.io/bcftools/bcftools.html) and [vcftools](http://vcftools.sourceforge.net/index.html).
 
-**In case you already performed the HRC genotype imputation at the Michigan Server and the preprocessing of the methylome data using PACEanalysis R package by A. Binder, you can jump to Step 2.2.**
+**In case you already performed the HRC genotype imputation at the Michigan Server and the preprocessing of the methylome data using PACEanalysis R package by A. Binder with the arguments specified in Step 2.1., you can jump to Step 2.2.**
 
 ## Step 1. Genotype data quality control 
 
