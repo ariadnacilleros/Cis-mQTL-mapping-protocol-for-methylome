@@ -303,7 +303,7 @@ plink1.9 --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --extra
 
 ```
 
-The format for covariates should be a text file in which the first line corresponds to the IID of the sample, and the next rows the covariates as in this [example](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/example_covariates_file.txt). In the following script are the main commands used by our group to obtain the text file: \
+The format for the covariates should be a text file in which the first line corresponds to the IID of the sample, and the next rows the covariates as in this [example](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/example_covariates_file.txt). In the following script are the main commands used by our group to obtain the text file: \
 [covariates.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/covariates.R)
 
 ## Step 5. Mapping with [TensorQTL](https://github.com/broadinstitute/tensorqtl)
