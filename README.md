@@ -292,7 +292,7 @@ plink1.9 --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --r2 --
 
 
 ## Step 4. Prepare the covariates file for TensorQTL mapping
-In this analysis, the covariates that we are going to use are the sex of the individuals, the Planet values (cell type proportions), coming from the `ExploratoryDataAnalysis()` function (PACEanalysis package), and the Principal Components of our genotype. The number of PCs is going to be defined by your data, but at least you should include the first five. In this protocol we have used five PCs as an example. Therefore, we had to perform a Principal Component Analysis (PCA) with PLINK considering the last version of the genotype: 
+In this analysis, the covariates that we are going to use are the sex of the individuals, the Planet values (cell type proportions), and the Principal Components of our genotype. The number of PCs is going to be defined by your data, but at least you should include the first five. In this protocol we have used five PCs as an example. Therefore, we had to perform a Principal Component Analysis (PCA) with PLINK considering the last version of the genotype: 
 
 ```
 mkdir covariates
