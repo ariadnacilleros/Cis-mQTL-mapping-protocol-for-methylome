@@ -241,7 +241,7 @@ For the output of these steps, we will create a new directory:
 
 `mkdir EPIC` 
 
-This script contains the functions and its arguments that must be executed, but, as always, you will need to adapt them to your data. \
+This script contains **the functions and the specific arguments that must be executed**, but, as always, you will need to adapt them to your data. \
 [PACEanalysis.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/PACEanalysis.R)
 
 
