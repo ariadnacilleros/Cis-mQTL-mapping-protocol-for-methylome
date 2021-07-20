@@ -274,20 +274,20 @@ Create folder for the final version of the genotype:
 
 Filter VCF by MAF > 5%, HWE p-value > 0.05 and by the final list of samples: 
 ```
-plink2 --vcf  imputed-rsq09/chrALL.vcf.gz --maf 0.05 --hwe 0.05 --keep EPIC/final_list_samples.txt --keep-allele-order --make-bed --out whole_genome_definitive/whole_genome_maf05_filt_samples
+plink1.9 --vcf  imputed-rsq09/chrALL.vcf.gz --maf 0.05 --hwe 0.05 --keep EPIC/final_list_samples.txt --keep-allele-order --make-bed --out whole_genome_definitive/whole_genome_maf05_filt_samples
 ```
 
 *Sometimes --keep doesn't work and keeps all the samples except the ones listed in final_list_samples.txt, if this is the case, change --keep by --remove:* 
 ```
-plink2 --vcf imputed-rsq09/chrALL.vcf.gz --maf 0.05 --hwe 0.05 --remove EPIC/final_list_samples.txt --keep-allele-order --make-bed --out whole_genome_definitive/whole_genome_maf05_filt_samples
+plink1.9 --vcf imputed-rsq09/chrALL.vcf.gz --maf 0.05 --hwe 0.05 --remove EPIC/final_list_samples.txt --keep-allele-order --make-bed --out whole_genome_definitive/whole_genome_maf05_filt_samples
 ```
 
 Be careful, when PLINK converts a VCF to a binary PLINK file set, it subsets the name of the samples from the VCF into FID and IID on the binary plink file (.bim, .fam, .bed) by searching for a separator which by default is __ . In case of troubles with this, we provide links to instruction on how to [customize the way PLINK reads sample names](https://www.cog-genomics.org/plink/2.0/input#sample_id_convert) or [how to change the name of the samples once you already have the binary PLINK file set](https://www.cog-genomics.org/plink/1.9/data#update_indiv). In our case, we tend to use [--const-fid](https://www.cog-genomics.org/plink/1.9/input#double_id) flag, which allows you to set FID as 0 in all the samples and the IID as the whole sample name coming from the VCF, or [--double-id](), which causes both family and individual IDs to be set to the sample ID. Remember that to run TensorQTL, you should match the IID from PLINK with the sample name on the BED file from the methylome. 
 
 An extra step that we will perform at this point is to calculate the homozygous and heterozygous counts, and get the linkage disequilibrium information for each SNP: 
 ```
-plink1.9 --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --freqx --out whole_genome_definitive/whole_genome_maf05_filt_samples
-plink1.9 --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --r2 --out whole_genome_definitive/whole_genome_maf05_filt_samples
+plink1.9 --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --freqx --keep-allele-order --out whole_genome_definitive/whole_genome_maf05_filt_samples
+plink1.9 --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --r2 --keep-allele-order --out whole_genome_definitive/whole_genome_maf05_filt_samples
 ```
 
 
