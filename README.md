@@ -363,20 +363,13 @@ cis.map_nominal(genotype_df, variant_df,
                 phenotype_pos_df,
                 prefix, covariates_df=covariates_df, window=500000)
  
- #DON'T CLOSE THE PYTHON SESSION
  ```                
-The results will be written in your working directory as a .parquet files (one per chromosome), therefore, we will upload them in the same python3 session and change its format into a text file with the bellow for loop. 
-```
-for x in range(1,22):
-  pairs_df = pd.read_parquet(f'tensorQTL/{prefix}.cis_qtl_pairs.{x}.parquet')
-  pairs_df.to_csv(f'tensorQTL/{prefix}.chr{x}.txt', header=True, index=True, sep='\t') 
-```
-Once the mapping and the results had been written in a text file, you can close the python module by executing `exit()`
+The results will be written in your working directory as a .parquet files (one per chromosome). 
 
 ## Step 6. Send the results
 
 Finally, you have to send us the following files: 
-- TensorQTL results (`cis_tensorQTL_maf05_hwe05_NOMINAL_(cohort)_(ddmmaaaa)_(model).chr{1:22}.txt`) 
+- TensorQTL results (`cis_tensorQTL_maf05_hwe05_NOMINAL_(cohort)_(ddmmaaaa)_(model).chr{1:22}.parquet`) 
 - CpGs variability information (`all_cpg_variances.txt`)
 - SNPs MAF and counts information (`whole_genome_maf05_filt_samples.frqx`)
 - SNPs LD information (`whole_genome_maf05_filt_samples.ld`)
