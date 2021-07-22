@@ -338,7 +338,7 @@ prefix = 'tensorQTL/maf05_hwe05_nominal_INMA_18022021_A' #For this variable, rea
 ```
 The `prefix` variable, should follow the pattern: 
 
-`cis_tensorQTL_maf05_hwe05_NOMINAL_(cohort)_(ddmmaaaa)_(model).chr.txt`
+`cis_tensorQTL_maf05_hwe05_NOMINAL_(cohort)_(ddmmaaaa)_(model)`
 
 For example, if the model A of the analysis had been performed by INMA cohort on 18/02/21, the prefix variable should contain: 
 
@@ -369,7 +369,7 @@ The results will be written in your working directory as a .parquet files (one p
 ## Step 6. Send the results
 
 Finally, you have to send us the following files: 
-- TensorQTL results (`cis_tensorQTL_maf05_hwe05_NOMINAL_(cohort)_(ddmmaaaa)_(model).chr{1:22}.parquet`) 
+- TensorQTL results (`cis_tensorQTL_maf05_hwe05_NOMINAL_(cohort)_(ddmmaaaa)_(model).cis_qtl_pairs.chr{1:22}.parquet`) 
 - CpGs variability information (`all_cpg_variances.txt`)
 - SNPs MAF and counts information (`whole_genome_maf05_filt_samples.frqx`)
 - SNPs LD information (`whole_genome_maf05_filt_samples.ld`)
