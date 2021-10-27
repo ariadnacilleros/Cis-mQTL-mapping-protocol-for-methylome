@@ -308,10 +308,6 @@ The format for the covariates should be a text file in which the first line corr
 
 ## Step 5. Mapping with [TensorQTL](https://github.com/broadinstitute/tensorqtl)
 
-Change timestamps from index files: 
-
-`touch whole_genome_definitive/whole_genome_maf05_filt_samples.bed.gz.tbi`
-
 Create a folder for TensorQTL results: 
 
 `mkdir tensorQTL`
