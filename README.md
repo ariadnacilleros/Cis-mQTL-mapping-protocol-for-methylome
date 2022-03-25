@@ -249,7 +249,7 @@ This script contains **the functions and the specific arguments that must be exe
 In the next R script, you will find the commands used by our group to obtain the final BED file for our data into a .txt, some of them can be used directly, but others will need an adaptation to your data or won't be needed. The main steps are: 
 - Make sure the same samples are present in the methylation and genotype files.
 - Make sure the same sample names are the same in methylation and genotype files. *Important: in the genotype file, sample name is the IID, not FID_IID!*
-- Annotate the CpGs by chr, start and end using the Illumina's R package. *Important, to define cis-window: end = start + 1*
+- Annotate the CpGs by chr, start and end using the Illumina's R package. **Important, to define cis-window: end = start + 1**
 - Filter CpGs located on sexual chromosomes. 
 
 The output of this step should be a text file with the CpGs in the rows and the chr, start, end, CpG ID and beta values per sample in the columns. Here you have an [example](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/example_bed_file_format.txt).\
