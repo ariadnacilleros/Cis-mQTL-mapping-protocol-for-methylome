@@ -62,6 +62,9 @@ for (i in 5:372){ #change basename to FID_IID
 annot_beta_sex <- annot_beta[annot_beta$`#Chr`!=("Y"),]
 annot_beta_sex <- annot_beta_sex[annot_beta_sex$`#Chr`!=("X"),]
 
+#Step 5.4: Define the cis-window (end = start + 1)
+annot_beta_sex$end <- annot_beta_sex$start + 1
+
 #Step 6: Obtain the final dataframe inside a text file following a BED structure format
 write.table(x = annot_beta_sex, file = "./methylome_BED.txt", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
 
