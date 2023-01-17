@@ -21,7 +21,7 @@ analysisdate <- '03022021' # YearMonthDay
 idat <- loadingSamples(PhenoData = pheno,
                        IDlink = 'FID_IID',
                        BWTvar = 'peso',
-                       BATCHvar = 'Sample_Plate',
+                       BATCHvar = 'Sentrix_ID',
                        SEXvar = 'sex',
                        FemaleInd = 'female',
                        MaleInd = 'male',
