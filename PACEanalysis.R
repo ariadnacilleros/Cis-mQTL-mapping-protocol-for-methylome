@@ -15,7 +15,7 @@ pheno <- read.delim("./Phenodata_basename_EPIC_BMI_all_names.txt", header = T, s
 
 #Step 2: Loading Samples
 cohort <- 'INMA' 
-destf <- './EPIC' 
+destf <- './EPIC' #You should specify the whole path for your EPIC folder
 analysisdate <- '03022021' # YearMonthDay
 
 idat <- loadingSamples(PhenoData = pheno,
