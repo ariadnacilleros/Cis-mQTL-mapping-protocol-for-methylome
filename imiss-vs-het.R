@@ -5,12 +5,10 @@
 library('geneplotter')
 
 arg <- commandArgs(trailingOnly = T)
-imiss_file <- fread(arg[1], sep = '\t')
-het_file <- fread(arg[2], sep = '\t')
 
-imiss <- read.table(imiss_file, header = T) #CHANGE FILE'S NAME
+imiss <- read.table(arg[1], header = T) #CHANGE FILE'S NAME
 imiss$logF_MISS <- log10(imiss[, 6])
-het <-  read.table(het_file, header = T) #CHANGE FILE'S NAME
+het <-  read.table(arg[2], header = T) #CHANGE FILE'S NAME
 het$meanHet <- (het$N.NM. - het$O.HOM.) / het$N.NM.
 colors  <- densCols(imiss$logF_MISS, het$meanHet)
 
