@@ -90,7 +90,7 @@ idat <- readRDS("./EPIC/cohort_analysisdate_Output/idat.RDS")
 
 preproc <- preprocessingofData(RGset = idata,
                                SamplestoRemove = str,
-                               ProbestoRemove = eda$ProbestoRemove,
+                               ProbestoRemove = exp_idat$ProbestoRemove,
                                compositeCellType = 'Placenta',
                                KchooseManual = NULL,
                                cohort = cohort,
