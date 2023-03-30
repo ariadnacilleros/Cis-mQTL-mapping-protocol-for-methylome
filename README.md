@@ -41,16 +41,16 @@ gunzip HRC.r1-1.GRCh37.wgs.mac5.sites.tab.gz
 
 Execute [Will Rayner's pre-imputation check script](https://www.well.ox.ac.uk/~wrayner/tools/): 
 ```
-perl HRC-1000G-check-bim.pl -b inter/whole_genome.bim -f inter/whole_genome.frq -r HRC.r1-1.GRCh37.wgs.mac5.sites.tab -h -v
+perl HRC-1000G-check-bim.pl -b inter/whole_genotype.bim -f inter/whole_genotype.frq -r HRC.r1-1.GRCh37.wgs.mac5.sites.tab -h -v
 ```
 
 Execute Will Rayner’s output bash script: 
 ```
-plink1.9 --bfile inter/whole_genome --exclude inter/Exclude-whole_genome-HRC.txt --make-bed --out inter/TEMP1
-plink1.9 --bfile inter/TEMP1 --update-map inter/Chromosome-whole_genome-HRC.txt --update-chr --make-bed --out inter/TEMP2
-plink1.9 --bfile inter/TEMP2 --update-map inter/Position-whole_genome-HRC.txt --make-bed --out inter/TEMP3
-plink1.9 --bfile inter/TEMP3 --flip inter/Strand-Flip-whole_genome-HRC.txt --make-bed --out inter/TEMP4
-plink1.9 --bfile inter/TEMP4 --a2-allele inter/Force-Allele1-whole_genome-HRC.txt --make-bed --out inter/whole_genome-updated
+plink1.9 --bfile inter/whole_genotype --exclude inter/Exclude-whole_genotype-HRC.txt --make-bed --out inter/TEMP1
+plink1.9 --bfile inter/TEMP1 --update-map inter/Chromosome-whole_genotype-HRC.txt --update-chr --make-bed --out inter/TEMP2
+plink1.9 --bfile inter/TEMP2 --update-map inter/Position-whole_genotype-HRC.txt --make-bed --out inter/TEMP3
+plink1.9 --bfile inter/TEMP3 --flip inter/Strand-Flip-whole_genotype-HRC.txt --make-bed --out inter/TEMP4
+plink1.9 --bfile inter/TEMP4 --a2-allele inter/Force-Allele1-whole_genotype-HRC.txt --make-bed --out inter/whole_genotype-updated
 rm inter/TEMP*
 ```
 
