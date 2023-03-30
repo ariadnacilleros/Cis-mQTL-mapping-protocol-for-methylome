@@ -274,7 +274,7 @@ Create folder for the final version of the genotype:
 
 Filter VCF by MAF > 5%, HWE p-value > 0.05 and by the final list of samples: 
 ```
-plink1.9 --vcf  imputed-rsq09/chrALL.vcf.gz --maf 0.05 --hwe 0.05 --keep EPIC/final_list_samples.txt --keep-allele-order --make-bed --out whole_genome_definitive/whole_genome_maf05_filt_samples
+plink1.9 --vcf  imputed-rsq09/chrALL.vcf.gz --maf 0.05 --hwe 0.05 --double-id --keep EPIC/final_list_samples.txt --keep-allele-order --make-bed --out whole_genome_definitive/whole_genome_maf05_filt_samples
 ```
 
 *Sometimes --keep doesn't work and keeps all the samples except the ones listed in final_list_samples.txt, if this is the case, change --keep by --remove:* 
