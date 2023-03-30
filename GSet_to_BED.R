@@ -21,7 +21,7 @@ pheno <- read.delim("./Phenodata_basename_EPIC_BMI_all_names.txt", header = T, s
 pheno <- pheno[pheno$Basename %in% colnames(betas), ]
 
 #Step 3: Intersection between methylation and genotype samples
-samples_geno <- read.table("../imputed-rsq09/sample_list_geno.txt", quote="\"", comment.char="")
+samples_geno <- read.table("../imputed-rsq09/sample_list_geno.txt", quote="\"", comment.char="", sep = "_")
 
 #Obtain a final list of samples combining the final list of each type of data
 final_list_samples <- intersect(samples_geno$V1, pheno$FID_IID)
