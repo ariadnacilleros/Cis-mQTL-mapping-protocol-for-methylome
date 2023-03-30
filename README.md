@@ -352,6 +352,8 @@ variant_df = pr.bim.set_index('snp')[['chrom', 'pos']]
 
 #Sort phenotype sample names
 phenotype_df = phenotype_df.reindex(sorted(phenotype_df.columns), axis=1)
+genotype_df = genotype_df.reindex(sorted(genotype_df.columns), axis=1)
+covariates_df = covariates_df.sort_index()
 
 #Run TensorQTL
 cis.map_nominal(genotype_df, variant_df,
