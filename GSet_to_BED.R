@@ -31,7 +31,7 @@ pheno <- pheno[pheno$FID_IID %in% final_list_samples, ]
 betas <- betas[,pheno$Basename]
 
 #Write a text file that allows you to filter the genotype data (PLINK) as in the Step 3 from the whole protocol 
-write.table(x = c(final_list_samples,final_list_samples), file = "./final_list_samples.txt", sep="\t", row.names = F, col.names = F)
+write.table(x = cbind(final_list_samples,final_list_samples), file = "./final_list_samples.txt", sep="\t", row.names = F, col.names = F, quote = F)
 
 #Write a text file with the FID_IID and basenames of the final samples dataset
 write.table(x = pheno[,c("FID_IID","Basename")], file = "./final_list_basename.txt", sep="\t", row.names = F, col.names = F, quote = F)
