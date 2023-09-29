@@ -255,7 +255,7 @@ In the next R script, you will find the commands used by our group to obtain the
 The output of this step should be a text file with the CpGs in the rows and the chr, start, end, CpG ID and beta values per sample in the columns. Here you have an [example](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/example_bed_file_format.txt).\
 [GSet_to_BED.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/GSet_to_BED.R)
 
-Additionally, following the code from [Oliva et al.2021](https://www.nature.com/articles/s41588-022-01249-y), we will compute the rank-based inverse normal transformation (RNT) from the beta values. The following script will guide you from the PACEAnalysis final output to the BED file as in the previous example with the beta values.\
+Additionally, following the code from [Oliva et al.2021](https://www.nature.com/articles/s41588-022-01249-y), we will compute the rank-based inverse normal transformation (RNT) from the beta values. The following script will guide you from the PACEAnalysis final output to the BED file as in the previous script with the beta values.\
 [GSet_to_BED_RNT_values.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/GSet_to_BED_RNT_values.R)
 
 Sort BED file: 
