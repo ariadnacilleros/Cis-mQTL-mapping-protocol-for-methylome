@@ -1,4 +1,4 @@
-#Objective: Obtain a BED file from Alexandra Binder's R package output and transform beta-values to inverse variance rank-transform 
+#Objective: Obtain a BED file from Alexandra Binder's R package output and transform beta-values to rank-based inverse normal transformation 
 #Version: 29-09-2023
 #Contact: acilleros001@ikasle.ehu.eus
 
