@@ -1,5 +1,5 @@
-#Objective: Obtain a BED file from the Alexandra Binder's R package output. 
-#Version: 14-07-2021
+#Objective: Obtain a BED file from Alexandra Binder's R package output and transform beta-values to inverse variance rank-transform 
+#Version: 29-09-2023
 #Contact: acilleros001@ikasle.ehu.eus
 
 library(minfi)
@@ -36,52 +36,37 @@ write.table(x = cbind(final_list_samples,final_list_samples), file = "./final_li
 #Write a text file with the FID_IID and basenames of the final samples dataset
 write.table(x = pheno[,c("FID_IID","Basename")], file = "./final_list_basename.txt", sep="\t", row.names = F, col.names = F, quote = F)
 
-#Step 4: Annotate CpGs
+#Step 4: Transform beta values
+rnt=qnorm(t(apply(betas, 1, rank, ties.method = "average"))/ (ncol(betas)+1))
+
+#Step 5: Annotate CpGs
 #Get annotation
 library(IlluminaHumanMethylationEPICanno.ilm10b4.hg19)
 annot <- getAnnotation(IlluminaHumanMethylationEPICanno.ilm10b4.hg19)
   
 #Merge annotation and beta data.frames by CpG IDs
-annot_beta <- merge(x=annot[,c(1,2,2,4)], y=betas, by="row.names")
+annot_rnt <- merge(x=annot[,c(1,2,2,4)], y=rnt, by="row.names")
 rm(annot)
-rownames(annot_beta) <- annot_beta$Row.names #Make CpG names' as row.names of the data.frame 
-annot_beta <- annot_beta[,-1]  #Remove column with CpG names'
+rownames(annot_rnt) <- annot_rnt$Row.names #Make CpG names' as row.names of the data.frame 
+annot_rnt <- annot_rnt[,-1]  #Remove column with CpG names'
 
-#Step 5: Tune the data.frame according to a BED format.
-#Step 5.1: Change "chr1" by "1" 
-annot_beta$chr <- str_remove(annot_beta$chr, "chr")
+#Step 6: Tune the data.frame according to a BED format.
+#Step 6.1: Change "chr1" by "1" 
+annot_rnt$chr <- str_remove(annot_rnt$chr, "chr")
 
-#Step 5.2: Change column names
-colnames(annot_beta)[1:4] <- c("#Chr", "start", "end", "ID")
+#Step 6.2: Change column names
+colnames(annot_rnt)[1:4] <- c("#Chr", "start", "end", "ID")
 
 for (i in 5:372){ #change basename to FID_IID 
-  colnames(annot_beta)[i] <- pheno[pheno$Basename == colnames(annot_beta)[i], "FID_IID"]
+  colnames(annot_rnt)[i] <- pheno[pheno$Basename == colnames(annot_rnt)[i], "FID_IID"]
 }
 
-#Step 5.3: Remove CpGs on sexual Chr
-annot_beta_sex <- annot_beta[annot_beta$`#Chr`!=("Y"),]
-annot_beta_sex <- annot_beta_sex[annot_beta_sex$`#Chr`!=("X"),]
+#Step 6.3: Remove CpGs on sexual Chr
+annot_rnt_sex <- annot_rnt[annot_rnt$`#Chr`!=("Y"),]
+annot_rnt_sex <- annot_rnt_sex[annot_rnt_sex$`#Chr`!=("X"),]
 
-#Step 5.4: Define the cis-window (end = start + 1)
-annot_beta_sex$end <- annot_beta_sex$start + 1
+#Step 6.4: Define the cis-window (end = start + 1)
+annot_rnt_sex$end <- annot_rnt_sex$start + 1
 
-#Step 6: Obtain the final dataframe inside a text file following a BED structure format
-write.table(x = annot_beta_sex, file = "./methylome_BED.txt", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
-
-#############################################################################################################################################################################
-#Step 7: Calculate the variance of the probes
-#Step 7.1: Method difference between 10 and 90 percentiles
-Variation<-function(x) {quantile(x, c(0.9), na.rm=T)[[1]]-quantile(x, c(0.1), na.rm=T)[[1]]} #define function
-#apply the function per row (cpg)
-diff_percent <-as.numeric(lapply(1:nrow(annot_beta_sex), function(x) Variation(annot_beta_sex[x,5:ncol(annot_beta_sex)])))
-names(diff_percent) <- annot_beta_sex$ID
-df_diff_percent <- data.frame(diff_percent, row.names = names(diff_percent)) #create dataframe for the values
-
-#Step 7.2: Method variances
-variances <- as.vector(apply(annot_beta_sex[,5:ncol(annot_beta_sex)], 1, FUN = var)) #calculate varainces per row (cpg)
-names(variances) <- annot_beta_sex$ID
-df_variances <- data.frame(variances, row.names = names(variances)) #create dataframe for the values
-
-#Step 7.3: Write variability stats into a text file 
-df <- merge(df_diff_percent, df_variances, by ="row.names")
-write.table(file = "EPIC/all_cpg_variances.txt", x = df, sep = "\t", quote = F, row.names = F, col.names = T, dec = ".", na = "NA")
+#Step 7: Obtain the final dataframe inside a text file following a BED structure format
+write.table(x = annot_rnt_sex, file = "./methylome_BED_rnt.txt", quote = FALSE, sep = "\t", row.names = FALSE, col.names = TRUE)
