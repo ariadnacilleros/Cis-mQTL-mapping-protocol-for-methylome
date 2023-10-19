@@ -255,9 +255,6 @@ In the next R script, you will find the commands used by our group to obtain the
 The output of this step should be a text file with the CpGs in the rows and the chr, start, end, CpG ID and beta values per sample in the columns. Here you have an [example](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/example_bed_file_format.txt).\
 [GSet_to_BED.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/GSet_to_BED.R)
 
-Additionally, following the code from [Oliva et al.2021](https://www.nature.com/articles/s41588-022-01249-y), we will compute the rank-based inverse normal transformation (RNT) from the beta values. The following script will guide you from the PACEAnalysis final output to the BED file as in the previous script with the beta values.\
-[GSet_to_BED_RNT_values.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/GSet_to_BED_RNT_values.R)
-
 Sort BED file: 
 ```
 (head -n1 EPIC/methylome_BED.txt && sort -k1,1V -k2,2n -k3,3n <(tail -n+2 EPIC/methylome_BED.txt)) > EPIC/methylome_sorted.bed
@@ -309,7 +306,11 @@ plink1.9 --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --extra
 The format for the covariates should be a text file in which the first line corresponds to the IID of the sample, and the next rows the covariates as in this [example](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/example_covariates_file.txt). In the following script are the main commands used by our group to obtain the text file: \
 [covariates.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/covariates.R)
 
-## Step 5. Mapping with [TensorQTL](https://github.com/broadinstitute/tensorqtl)
+## Step 5. Additional analysis with rank-based inverse normal transformed beta values
+
+...
+
+## Step 6. Mapping with [TensorQTL](https://github.com/broadinstitute/tensorqtl)
 
 Create a folder for TensorQTL results: 
 
