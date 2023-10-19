@@ -374,7 +374,7 @@ The results will be written in your working directory as a .parquet files (one p
 
 ...
 
-## Step 6. Send the results
+## Step 7. Send the results
 
 Finally, you have to send us the following files: 
 - TensorQTL results (`cis_tensorQTL_maf05_hwe05_NOMINAL_(cohort)_(ddmmaaaa)_(model).cis_qtl_pairs.chr{1:22}.parquet`) 
