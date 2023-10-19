@@ -312,6 +312,8 @@ The format for the covariates should be a text file in which the first line corr
 
 ## Step 6. Mapping with [TensorQTL](https://github.com/broadinstitute/tensorqtl)
 
+### Step 6.1. Compute mQTLs with the main model 
+
 Create a folder for TensorQTL results: 
 
 `mkdir tensorQTL`
@@ -334,13 +336,13 @@ print('Pandas {}'.format(pd.__version__))
 plink_prefix_path = 'whole_genome_definitive/whole_genome_maf05_filt_samples'
 expression_bed = 'EPIC/methylome_sorted.bed.gz'
 covariates_file = 'covariates/covariates.txt'
-prefix = 'tensorQTL/maf05_hwe05_nominal_INMA_18022021_A' #For this variable, read bellow this code block
+prefix = 'tensorQTL/maf05_hwe05_nominal_INMA_18022021_A' #For this variable, read below this code block
 ```
 The `prefix` variable, should follow the pattern: 
 
 `cis_tensorQTL_maf05_hwe05_NOMINAL_(cohort)_(ddmmyyyy)_(model)`
 
-For example, if the model A of the analysis had been performed by INMA cohort on 18/02/21, the prefix variable should contain: 
+For example, if model A of the analysis had been performed by the INMA cohort on 18/02/21, the prefix variable should contain: 
 
 `cis_tensorQTL_maf05_hwe05_NOMINAL_INMA_18022021_A`
 
@@ -367,6 +369,10 @@ cis.map_nominal(genotype_df, variant_df,
  
  ```                
 The results will be written in your working directory as a .parquet files (one per chromosome). 
+
+### Step 6.2. Compute mQTLs with RNT values 
+
+...
 
 ## Step 6. Send the results
 
