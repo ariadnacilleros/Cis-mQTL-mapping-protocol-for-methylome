@@ -331,21 +331,21 @@ Once you have obtained the BED file, you have to sort it and zip it as we did pr
 bgzip rnt_model/methylome_sorted_RNT.bed
 ```
 
-#### Step 5.2. Get residualized mPCs 
+### Step 5.2. Get residualized mPCs 
 
 To get the mPCs avoiding any correlation with the known confounders (sex, genotype PCs, and very especially, Planet cell type estimations) and therefore, multicollinearity, we will perform the PCA on the residuals from multiple linear regression. This regression will consider the transformed methylation values as the outcome, and the known confounders as predictors. Once we get the residuals, we will perform a PCA on them, and select only those mPCs individually explaining > 1% of the variance. All these steps are included in the following script, which should be easy to execute since all the inputs have been obtained in previous steps. \
 [get_residualized_mPCs.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/get_residualized_mPCs.R)
 
 Make sure that all the variables from the multiple regression are detected as numeric, this will allow you to get a matrix of residuals (Nº samples x Nº CpGs) with continuous values. 
 
-#### Step 5.3. Perform a GWAS with the mPCs
+### Step 5.3. Perform a GWAS with the mPCs
 
 We also want to avoid potential correlations of the mPCs with the genotype, to be sure of this, we will perform a GWAS with our final genotype ([Step 3](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/tree/main#step-3-obtain-final-format-for-genotype-data)) and each of the mPCs calculated in the previous step as phenotypes. We have prepared a script that will allow you to create a new PLINK fam file per mPC and perform the GWAS. \
 [gwas_mPCs.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/gwas_mPCs.R)
 
 In the case that any SNP is associated with a particular mPC (p-value < 1e-7), we will exclude that mPC. 
 
-#### Step 5.4. Get covariate file
+### Step 5.4. Get covariate file
 
 Finally, we will include the selected mPCs in a new covariate file. With this aim, we have developed a simple script, where we add the mPCs to the previous covariates.txt file obtained in [Step 4](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/tree/main#step-4-prepare-the-covariates-file-for-tensorqtl-mapping). \
 [covariates_RNT.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/covariates_RNT.R)
