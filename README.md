@@ -467,6 +467,7 @@ Finally, you have to send us the following files:
 - SNPs MAF and counts information (`whole_genome_maf05_filt_samples.frqx`)
 - SNPs LD information (`whole_genome_maf05_filt_samples.ld`)
 
-### Step 7.1. 
+### Step 7.1. Send the results of the RNT analysis
+
 For the RNT analysis, you only have to send the TensorQTL results of this part of the README: `cis_tensorQTL_maf05_hwe05_NOMINAL_(cohort)_(ddmmaaaa)_RNT.cis_qtl_pairs.chr{1:22}.parquet`
 
