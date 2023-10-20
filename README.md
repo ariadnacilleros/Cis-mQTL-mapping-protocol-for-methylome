@@ -292,6 +292,7 @@ plink1.9 --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --r2 --
 
 
 ## Step 4. Prepare the covariates file for TensorQTL mapping
+
 In this analysis, the covariates that we are going to use are the sex of the individuals, the Planet values (cell type proportions), and the Principal Components of our genotype. The number of PCs is going to be defined by your data, but at least you should include the first five. In this protocol we have used five PCs as an example. Therefore, we had to perform a Principal Component Analysis (PCA) with PLINK considering the last version of the genotype: 
 
 ```
@@ -306,9 +307,51 @@ plink1.9 --bfile whole_genome_definitive/whole_genome_maf05_filt_samples --extra
 The format for the covariates should be a text file in which the first line corresponds to the IID of the sample, and the next rows the covariates as in this [example](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/example_covariates_file.txt). In the following script are the main commands used by our group to obtain the text file: \
 [covariates.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/covariates.R)
 
+
 ## Step 5. Additional analysis with rank-based inverse normal transformed beta values
 
-...
+We will also run an additional model; this will use the rank-based inverse normal transformed beta values (RNT). And as covariates we will consider the known confounders from the previous model (sex, genotype PCs and Planet cell type estimations) and the methylation PCs (mPCs) calculated in the residualized methylation data, with the aim of correcting for extra technical variation. We have generated the code to perform this step based on outputs that you have already obtained in the previous steps. We hope that this will ensure the simplicity of this extra analysis and its execution.
+
+To perform this extra analysis, we will create a new folder: 
+
+`mkdir rnt_model`
+
+### Step 5.1. Obtention of the RNT values and the corresponding bed file
+
+To get the RNT values from the methylation beta values, we have prepared a new R script based on [GSet_to_Bed.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/GSet_to_BED.R) from [Step 2.2](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/tree/main#step-22-prepare-bed-file-for-tensorqtl-mapping). The new R script allows you to transform the methylation values and to get the preliminary BED file with the CpGs in the rows and the chr, start, end, CpG ID and RNT values per sample in the columns.\
+[GSet_to_Bed_RNT.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/GSet_to_BED_RNT.R)
+
+Please notice that the transformation of the methylation values is in line 40 of the script, and the rest remains as it was. There is no need to calculate the variance of these values as we did with the betas.  
+
+Once you have obtained the BED file, you have to sort it and zip it as we did previously:
+
+```
+(head -n1 rnt_model/methylome_BED_RNT.txt && sort -k1,1V -k2,2n -k3,3n <(tail -n+2 rnt_model/methylome_BED_RNT.txt)) > rnt_model/methylome_sorted_RNT.bed
+
+bgzip rnt_model/methylome_sorted_RNT.bed
+```
+
+#### Step 5.2. Get residualized mPCs 
+
+To get the mPCs avoiding any correlation with the known confounders (sex, genotype PCs, and very especially, Planet cell type estimations) and therefore, multicollinearity, we will perform the PCA on the residuals from multiple linear regression. This regression will consider the transformed methylation values as the outcome, and the known confounders as predictors. Once we get the residuals, we will perform a PCA on them, and select only those mPCs individually explaining > 1% of the variance. All these steps are included in the following script, which should be easy to execute since all the inputs have been obtained in previous steps. \
+[get_residualized_mPCs.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/get_residualized_mPCs.R)
+
+Make sure that all the variables from the multiple regression are detected as numeric, this will allow you to get a matrix of residuals (Nº samples x Nº CpGs) with continuous values. 
+
+#### Step 5.3. Perform a GWAS with the mPCs
+
+We also want to avoid potential correlations of the mPCs with the genotype, to be sure of this, we will perform a GWAS with our final genotype ([Step 3](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/tree/main#step-3-obtain-final-format-for-genotype-data)) and each of the mPCs calculated in the previous step as phenotypes. We have prepared a script that will allow you to create a new PLINK fam file per mPC and perform the GWAS. \
+[gwas_mPCs.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/gwas_mPCs.R)
+
+In the case that any SNP is associated with a particular mPC (p-value < 1e-7), we will exclude that mPC. 
+
+#### Step 5.4. Get covariate file
+
+Finally, we will include the selected mPCs in a new covariate file. With this aim, we have developed a simple script, where we add the mPCs to the previous covariates.txt file obtained in [Step 4](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/tree/main#step-4-prepare-the-covariates-file-for-tensorqtl-mapping). \
+[covariates_RNT.R](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/covariates_RNT.R)
+
+The output from this script should be the same table as covariates.txt, but containing the values from the selected mPCs. 
+
 
 ## Step 6. Mapping with [TensorQTL](https://github.com/broadinstitute/tensorqtl)
 
@@ -368,11 +411,53 @@ cis.map_nominal(genotype_df, variant_df,
                 prefix, covariates_df=covariates_df, window=500000)
  
  ```                
-The results will be written in your working directory as a .parquet files (one per chromosome). 
+The results will be written in your working directory as parquet files (one per chromosome). 
 
 ### Step 6.2. Compute mQTLs with RNT values 
 
-...
+For the computation of the mQTLs for this additional model, we will also work on the root directory, and the prefix variable will specify “RNT” as the model, for example, if the analysis had been performed in the INMA cohort on 18/02/21, the prefix variable should contain: \
+`cis_tensorQTL_maf05_hwe05_NOMINAL_INMA_18022021_RNT`
+
+Finally, here is the code with the input files and the command to run TensorQTL. Please note that now, the covariate file and the bed file are as follows: covariates_RNT.txt and methylome_sorted_RNT.bed.gz. 
+
+```
+#Load packages
+import pandas as pd
+import torch
+import tensorqtl
+from tensorqtl import genotypeio, cis, trans
+print('PyTorch {}'.format(torch.__version__))
+print('Pandas {}'.format(pd.__version__))
+
+#Define paths to data
+plink_prefix_path = 'whole_genome_definitive/whole_genome_maf05_filt_samples'
+expression_bed = 'rnt_model/methylome_sorted_RNT.bed.gz'
+covariates_file = 'rnt_model/covariates_RNT.txt'
+prefix = 'tensorQTL/maf05_hwe05_nominal_INMA_18022021_RNT' 
+
+#Load phenotypes and covariates
+phenotype_df, phenotype_pos_df = tensorqtl.read_phenotype_bed(expression_bed)
+covariates_df = pd.read_csv(covariates_file, sep='\t', index_col=0).T
+
+#PLINK reader for genotypes
+pr = genotypeio.PlinkReader(plink_prefix_path)
+genotype_df = pr.load_genotypes()
+variant_df = pr.bim.set_index('snp')[['chrom', 'pos']]
+
+#Sort phenotype sample names
+phenotype_df = phenotype_df.reindex(sorted(phenotype_df.columns), axis=1)
+genotype_df = genotype_df.reindex(sorted(genotype_df.columns), axis=1)
+covariates_df = covariates_df.sort_index()
+
+#Run TensorQTL
+cis.map_nominal(genotype_df, variant_df,
+                phenotype_df,
+                phenotype_pos_df,
+                prefix, covariates_df=covariates_df, window=500000)
+```
+
+Again, the results will be written in the tensorQTL folder as parquet files (one per chromosome).
+
 
 ## Step 7. Send the results
 
@@ -381,3 +466,7 @@ Finally, you have to send us the following files:
 - CpGs variability information (`all_cpg_variances.txt`)
 - SNPs MAF and counts information (`whole_genome_maf05_filt_samples.frqx`)
 - SNPs LD information (`whole_genome_maf05_filt_samples.ld`)
+
+### Step 7.1. 
+For the RNT analysis, you only have to send the TensorQTL results of this part of the README: `cis_tensorQTL_maf05_hwe05_NOMINAL_(cohort)_(ddmmaaaa)_RNT.cis_qtl_pairs.chr{1:22}.parquet`
+
