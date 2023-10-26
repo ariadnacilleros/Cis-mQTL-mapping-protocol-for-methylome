@@ -65,10 +65,10 @@ pcn<-c("mPC1","mPC2","mPC3","mPC4","mPC5","mPC6","mPC7","mPC8","mPC9","mPC10","m
        "mPC21","mPC22","mPC23","mPC24","mPC25")
 pc<-data.frame(pcn,prop,cumprop)
 
-#Step 8.2: Select PCs explaining individually at least 1% of variance
-pc <- pc[prop > 1, ]
+#Step 8.2: Select PCs explaining 80% of the accumulative variance 
+pc <- pc[cumprop > 80, ]
 
-#Step 9: Write text file with the mPCs
-pca6 <- pca$x[,c(1:6)]
+#Step 9: Write text file with the mPCs (select a maximum of 20 mPCs)
+pca6 <- pca$x[,c(1:20)]
 write.table(x = pca6, file = "./residualized_mPCs.txt", col.names = T, row.names = T, sep="\t", quote = F)
 
