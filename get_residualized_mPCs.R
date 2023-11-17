@@ -64,7 +64,7 @@ pcn<-paste("mPC", 1:length(prop), sep="")
 pc<-data.frame(pcn,prop,cumprop)
 
 #Step 8.2: Select PCs explaining 80% of the accumulative variance 
-pc <- pc[cumprop > 80, ]
+pc <- pc[cumprop <= 80, ]
 
 #Step 9: Write text file with the mPCs (select a maximum of 20 mPCs)
 pca6 <- pca$x[,c(1:20)]
