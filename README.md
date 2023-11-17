@@ -433,7 +433,7 @@ print('Pandas {}'.format(pd.__version__))
 #Define paths to data
 plink_prefix_path = 'whole_genome_definitive/whole_genome_maf05_filt_samples'
 expression_bed = 'rnt_model/methylome_sorted_RNT.bed.gz'
-covariates_file = 'covariates/covariates.txt'
+covariates_file = 'rnt_model/covariates_RNT.txt'
 prefix = 'tensorQTL/maf05_hwe05_nominal_INMA_18022021_RNT' 
 
 #Load phenotypes and covariates
@@ -471,7 +471,7 @@ print('Pandas {}'.format(pd.__version__))
 #Define paths to data
 plink_prefix_path = 'whole_genome_definitive/whole_genome_maf05_filt_samples'
 expression_bed = 'rnt_model/methylome_sorted_RNT.bed.gz'
-covariates_file = 'rnt_model/covariates_RNT.txt'
+covariates_file = 'covariates/covariates.txt'
 prefix = 'tensorQTL/maf05_hwe05_nominal_INMA_18022021_RNT_wo_mPCs' 
 
 #Load phenotypes and covariates
