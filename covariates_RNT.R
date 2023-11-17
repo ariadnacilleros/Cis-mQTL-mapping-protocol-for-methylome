@@ -10,7 +10,7 @@ mpcs <- fread("./reisudalized_mPCs.txt")
 colnames(mpcs)[1] <- "FID_IID"
 
 #Step 2: Load covariates file (obtained by covariates.R, Step 4 from GitHub) 
-cov <- fread("../covariates/covariates.txt")
+cov <- fread("../covariates/covariates.txt", header = T)
 cov_t <- t(as.matrix(cov[,-c(1)])) # transpose datatable excluding id column
 colnames(cov_t) <- cov$id # assign colnames as the names of the variables
 cov_t <- as.data.frame(cov_t) # convert to dataframe
