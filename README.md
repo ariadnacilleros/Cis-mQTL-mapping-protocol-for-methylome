@@ -415,11 +415,11 @@ The results will be written in your working directory as parquet files (one per 
 
 ### Step 6.2. Compute mQTLs with RNT values 
 
-For the computation of the mQTLs for these additional models, we will also work on the root directory, and the prefix variable will specify “RNT” for the model adjusted by the known confounders and the residualized mPCs, and "RNT_wo_mPCs" for the model adjusted by only the known confounders. For example, if the analyses had been performed in the INMA cohort on 18/02/21, the prefix variable should contain: \
+For the computation of the mQTLs for these additional models, we will also work on the root directory, and the prefix variable will specify "RNT_wo_mPCs" for the model adjusted by only the known confounders, and “RNT” for the model adjusted by both the known confounders and the residualized mPCs. For example, if the analyses had been performed in the INMA cohort on 18/02/21, the prefix variable should contain: \
+`cis_tensorQTL_maf05_hwe05_NOMINAL_INMA_18022021_RNT_wo_mPCs` \
 `cis_tensorQTL_maf05_hwe05_NOMINAL_INMA_18022021_RNT`
-`cis_tensorQTL_maf05_hwe05_NOMINAL_INMA_18022021_RNT_wo_mPCs`
 
-Here is the code with the input files and the command to run TensorQTL for the "RNT" model. Please note that now, the covariate file and the bed file are as follows: covariates_RNT.txt and methylome_sorted_RNT.bed.gz. 
+Here is the code with the input files and the command to run TensorQTL for the **"RNT" model**. *Please note that now, the covariate file and the bed file are as follows: covariates_RNT.txt and methylome_sorted_RNT.bed.gz.* 
 
 ```
 #Load packages
@@ -457,7 +457,7 @@ cis.map_nominal(genotype_df, variant_df,
                 prefix, covariates_df=covariates_df, window=500000)
 ```
 
-Finally, here is the code with the input files and the command to run TensorQTL for the "RNT_wo_RNT" model. Please note that now, the covariate file and the bed file are as follows: covariates.txt and methylome_sorted_RNT.bed.gz. 
+Finally, here is the code with the input files and the command to run TensorQTL for the **"RNT_wo_RNT" model**. *Please note that now, the covariate file and the bed file are as follows: covariates.txt and methylome_sorted_RNT.bed.gz.* 
 
 ```
 #Load packages
