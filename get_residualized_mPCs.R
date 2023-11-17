@@ -18,7 +18,7 @@ rownames(rnt) <- cpgs # set rownames as CpG's ID
 pheno <- fread("./final_list_basename.txt")
 
 #Step 4: Load covariates files (obtained by covariates.R, Step 4 from GitHub)
-cov <- fread("../covariates/covariates.txt")
+cov <- fread("../covariates/covariates.txt", header = T)
 
 #Step 5: Create a matrix with methylation values and known confounders (being columns the variables; methylation values-CpGs, sex, planet, genotype PCs; and rows the samples)
 #Step 5.1: Covariates file
