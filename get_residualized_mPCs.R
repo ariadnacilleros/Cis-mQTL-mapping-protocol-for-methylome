@@ -58,11 +58,9 @@ pca <- prcomp((na.omit(residuals)))
 colnames(pca$x) <- paste("m", colnames(pca$x), sep="")
 
 #Step 8.1: Get variance explained per PC 
-prop<-pca$sdev[1:25]^2/sum(pca$sdev^2)*100
-cumprop<-cumsum(pca$sdev[1:25]^2)/sum(pca$sdev^2)*100
-pcn<-c("mPC1","mPC2","mPC3","mPC4","mPC5","mPC6","mPC7","mPC8","mPC9","mPC10","mPC11",
-       "mPC12","mPC13","mPC14","mPC15","mPC16","mPC17","mPC18","mPC19","mPC20",
-       "mPC21","mPC22","mPC23","mPC24","mPC25")
+prop<-pca$sdev^2/sum(pca$sdev^2)*100
+cumprop<-cumsum(pca$sdev^2)/sum(pca$sdev^2)*100
+pcn<-paste("mPC", 1:length(prop), sep="")
 pc<-data.frame(pcn,prop,cumprop)
 
 #Step 8.2: Select PCs explaining 80% of the accumulative variance 
