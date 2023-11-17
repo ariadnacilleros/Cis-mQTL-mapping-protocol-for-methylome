@@ -6,7 +6,7 @@ setwd("./rnt_model")
 library(data.table)
 
 #Step 1: Load methyaltion PCs
-mpcs <- fread("./reisudalized_mPCs.txt")
+mpcs <- fread("./residualized_mPCs.txt")
 colnames(mpcs)[1] <- "FID_IID"
 
 #Step 2: Load covariates file (obtained by covariates.R, Step 4 from GitHub) 
