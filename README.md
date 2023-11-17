@@ -310,9 +310,9 @@ The format for the covariates should be a text file in which the first line corr
 
 ## Step 5. Additional analysis with rank-based inverse normal transformed beta values
 
-We will also run an additional model; this will use the rank-based inverse normal transformed beta values (RNT). And as covariates we will consider the known confounders from the previous model (sex, genotype PCs and Planet cell type estimations) and the methylation PCs (mPCs) calculated in the residualized methylation data, with the aim of correcting for extra technical variation. We have generated the code to perform this step based on outputs that you have already obtained in the previous steps. We hope that this will ensure the simplicity of this extra analysis and its execution.
+We will also run two additional models; these will use the rank-based inverse normal transformed beta values (RNT). As covariates, the first model will only consider the known confounders from the previous model (sex, genotype PCs and Planet cell type estimations), and the second model will additionally take in count methylation PCs (mPCs) calculated in the residualized methylation data, with the aim of correcting for extra technical variation. We have generated the code to perform these steps based on outputs that you have already obtained in the previous steps. We hope that this will ensure the simplicity of these extra analyses and their execution.
 
-To perform this extra analysis, we will create a new folder: 
+To perform these extra analyses, we will create a new folder: 
 
 `mkdir rnt_model`
 
@@ -415,10 +415,11 @@ The results will be written in your working directory as parquet files (one per 
 
 ### Step 6.2. Compute mQTLs with RNT values 
 
-For the computation of the mQTLs for this additional model, we will also work on the root directory, and the prefix variable will specify “RNT” as the model, for example, if the analysis had been performed in the INMA cohort on 18/02/21, the prefix variable should contain: \
+For the computation of the mQTLs for these additional models, we will also work on the root directory, and the prefix variable will specify “RNT” for the model adjusted by the known confounders and the residualized mPCs, and "RNT_wo_mPCs" for the model adjusted by only the known confounders. For example, if the analyses had been performed in the INMA cohort on 18/02/21, the prefix variable should contain: \
 `cis_tensorQTL_maf05_hwe05_NOMINAL_INMA_18022021_RNT`
+`cis_tensorQTL_maf05_hwe05_NOMINAL_INMA_18022021_RNT_wo_mPCs`
 
-Finally, here is the code with the input files and the command to run TensorQTL. Please note that now, the covariate file and the bed file are as follows: covariates_RNT.txt and methylome_sorted_RNT.bed.gz. 
+Here is the code with the input files and the command to run TensorQTL for the "RNT" model. Please note that now, the covariate file and the bed file are as follows: covariates_RNT.txt and methylome_sorted_RNT.bed.gz. 
 
 ```
 #Load packages
@@ -432,7 +433,7 @@ print('Pandas {}'.format(pd.__version__))
 #Define paths to data
 plink_prefix_path = 'whole_genome_definitive/whole_genome_maf05_filt_samples'
 expression_bed = 'rnt_model/methylome_sorted_RNT.bed.gz'
-covariates_file = 'rnt_model/covariates_RNT.txt'
+covariates_file = 'covariates/covariates.txt'
 prefix = 'tensorQTL/maf05_hwe05_nominal_INMA_18022021_RNT' 
 
 #Load phenotypes and covariates
@@ -456,7 +457,46 @@ cis.map_nominal(genotype_df, variant_df,
                 prefix, covariates_df=covariates_df, window=500000)
 ```
 
-Again, the results will be written in the tensorQTL folder as parquet files (one per chromosome).
+Finally, here is the code with the input files and the command to run TensorQTL for the "RNT_wo_RNT" model. Please note that now, the covariate file and the bed file are as follows: covariates.txt and methylome_sorted_RNT.bed.gz. 
+
+```
+#Load packages
+import pandas as pd
+import torch
+import tensorqtl
+from tensorqtl import genotypeio, cis, trans
+print('PyTorch {}'.format(torch.__version__))
+print('Pandas {}'.format(pd.__version__))
+
+#Define paths to data
+plink_prefix_path = 'whole_genome_definitive/whole_genome_maf05_filt_samples'
+expression_bed = 'rnt_model/methylome_sorted_RNT.bed.gz'
+covariates_file = 'rnt_model/covariates_RNT.txt'
+prefix = 'tensorQTL/maf05_hwe05_nominal_INMA_18022021_RNT_wo_mPCs' 
+
+#Load phenotypes and covariates
+phenotype_df, phenotype_pos_df = tensorqtl.read_phenotype_bed(expression_bed)
+covariates_df = pd.read_csv(covariates_file, sep='\t', index_col=0).T
+
+#PLINK reader for genotypes
+pr = genotypeio.PlinkReader(plink_prefix_path)
+genotype_df = pr.load_genotypes()
+variant_df = pr.bim.set_index('snp')[['chrom', 'pos']]
+
+#Sort phenotype sample names
+phenotype_df = phenotype_df.reindex(sorted(phenotype_df.columns), axis=1)
+genotype_df = genotype_df.reindex(sorted(genotype_df.columns), axis=1)
+covariates_df = covariates_df.sort_index()
+
+#Run TensorQTL
+cis.map_nominal(genotype_df, variant_df,
+                phenotype_df,
+                phenotype_pos_df,
+                prefix, covariates_df=covariates_df, window=500000)
+```
+
+
+**Again, the results will be written in the tensorQTL folder as parquet files (one per chromosome).**
 
 
 ## Step 7. Send the results
@@ -469,5 +509,6 @@ Finally, you have to send us the following files:
 
 ### Step 7.1. Send the results of the RNT analysis
 
-For the RNT analysis, you only have to send the TensorQTL results of this part of the README: `cis_tensorQTL_maf05_hwe05_NOMINAL_(cohort)_(ddmmaaaa)_RNT.cis_qtl_pairs.chr{1:22}.parquet`
+For the RNT analyses, you only have to send the TensorQTL results of this part of the README: `cis_tensorQTL_maf05_hwe05_NOMINAL_(cohort)_(ddmmaaaa)_RNT.cis_qtl_pairs.chr{1:22}.parquet`
+`cis_tensorQTL_maf05_hwe05_NOMINAL_(cohort)_(ddmmaaaa)_RNT_wo_mPCs.cis_qtl_pairs.chr{1:22}.parquet`
 
