@@ -10,7 +10,7 @@ setwd("./rnt_model")
 fam <- fread("../whole_genome_definitive/whole_genome_maf05_filt_samples.fam", col.names = c("FID","IID","fID","mID","sex","pheno"))
 
 #Step 2: Load mPCs
-mpcs <- fread("./reisudalized_mPCs.txt")
+mpcs <- fread("./residualized_mPCs.txt")
 colnames(mpcs)[1] <- "FID"
 
 #Step 3: Merge fam file with mPCs
