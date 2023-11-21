@@ -457,7 +457,7 @@ cis.map_nominal(genotype_df, variant_df,
                 prefix, covariates_df=covariates_df, window=500000)
 ```
 
-Finally, here is the code with the input files and the command to run TensorQTL for the **"RNT_wo_RNT" model**. *Please note that now, the covariate file and the bed file are as follows: covariates.txt and methylome_sorted_RNT.bed.gz.* 
+Finally, here is the code with the input files and the command to run TensorQTL for the **"RNT_wo_mPCs" model**. *Please note that now, the covariate file and the bed file are as follows: covariates.txt and methylome_sorted_RNT.bed.gz.* 
 
 ```
 #Load packages
