@@ -1,5 +1,7 @@
 # Cis-mQTL mapping protocol for placental methylome
 
+[![DOI](https://zenodo.org/badge/304346824.svg)](https://doi.org/10.5281/zenodo.14198426)
+
 In this GitHub repository, you will find the protocol elaborated by the Immunogenetics Research Lab (IRLab) from the University of the Basque Country (UPV/EHU), to map placental cis-mQTLs using the command-line program TensorQTL. On the one hand, all the commands and scripts used are available in the Readme but be careful, you will need to custom some of them, mainly the Rscripts executed from RStudio and not from the command line. **Also, during the pipeline, we will be creating new directories for the outputs, but you should always work from outside of them! Have a look at the [diagram below](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/directory_diagram_v2_21112023.jpg).** 
 
 ![Image of the working directory](https://github.com/ariadnacilleros/Cis-mQTL-mapping-protocol-for-methylome/blob/main/directory_diagram_v2_21112023.jpg)
